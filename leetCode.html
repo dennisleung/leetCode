@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<body>
+<script>
+
+function ListNode(val) {
+    this.val = val;
+    this.next = null;
+}
+const makeLink = (arr)=>{
+    if(!arr.length) {
+        return null;
+    }
+    let head = cur = new ListNode();
+    arr.forEach((v)=>{
+        cur.next = new ListNode(v);
+        cur = cur.next;
+    });
+
+    return head.next;
+}
+
+const parse = (n)=>{
+    let nn = n;
+    let n2 = 0;
+    let n5 = 0;
+    while(nn%2==0) {
+        n2++;
+        nn /= 2;
+    }
+
+    nn = n;
+    while(nn%5==0) {
+        n5++;
+        nn /= 5;
+    }
+
+    return [n2, n5];
+};
+
+var trailingZeroes = function(n) {
+    let n2 = 0;
+    let n5 = 0;
+    while(n>0) {
+        let [nn2, nn5] = parse(n--);
+        n2 += nn2;
+        n5 += nn5;
+    }
+    return Math.min(n2, n5);
+};
+
+console.log(trailingZeroes(30));
+
+// console.log(hasCycle({
+//     val : 1,
+//     left : {
+//         val : 2,
+//         left : {
+//             val : 3,
+//             left : {
+//                 val : 4,
+//                 left : {
+//                     val : 5
+//                 }
+//             }
+//         }
+//     }
+// }));
+
+</script>
+</body>
