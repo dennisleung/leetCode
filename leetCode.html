@@ -6,6 +6,13 @@ function ListNode(val) {
     this.val = val;
     this.next = null;
 }
+
+function TreeNode(val) {
+    this.val = val;
+    this.left = null;
+    this.right = null;
+}
+
 const makeLink = (arr)=>{
     if(!arr.length) {
         return null;
@@ -19,36 +26,67 @@ const makeLink = (arr)=>{
     return head.next;
 }
 
-const parse = (n)=>{
-    let nn = n;
-    let n2 = 0;
-    let n5 = 0;
-    while(nn%2==0) {
-        n2++;
-        nn /= 2;
+const makeTree = (arr)=>{
+    let head = new TreeNode(arr.shift());
+    let nodes = [head];
+    while(arr.length) {
+        let node = nodes.shift();
+        let left = arr.shift();
+        let right = arr.shift();
+        if(left) {
+            node.left = new TreeNode(left);
+            nodes.push(node.left);
+        }
+        if(right) {
+            node.right = new TreeNode(right);
+            nodes.push(node.right);
+        }
     }
 
-    nn = n;
-    while(nn%5==0) {
-        n5++;
-        nn /= 5;
+    return head;
+}
+
+var lowestCommonAncestor = function(root, p, q) {
+    let arr = [root]
+    let pNode;
+    let qNode;
+    while(arr.length && (!pNode || !qNode)) {
+        let parent = arr.pop();
+        let left = parent.left;
+        let right = parent.right;
+        if(left) {
+            left.parent = parent;
+            arr.push(left);
+        }
+        if(right) {
+            right.parent = parent;
+            arr.push(right);
+        }
+        if(parent.val==p.val) {
+            pNode = parent;
+        }
+        if(parent.val==q.val) {
+            qNode = parent;
+        }
     }
 
-    return [n2, n5];
+    let pMap = {};
+    while(pNode) {
+        pMap[pNode.val] = pNode;
+        pNode = pNode.parent;
+    }
+    
+    while(qNode) {
+        if(pMap[qNode.val]) {
+            return pMap[qNode.val];
+        }
+        qNode = qNode.parent;
+    }
+
+    return null;
 };
 
-var trailingZeroes = function(n) {
-    let n2 = 0;
-    let n5 = 0;
-    while(n>0) {
-        let [nn2, nn5] = parse(n--);
-        n2 += nn2;
-        n5 += nn5;
-    }
-    return Math.min(n2, n5);
-};
-
-console.log(trailingZeroes(30));
+console.log(lowestCommonAncestor(makeTree([1, 2, 3]), new TreeNode(2), new TreeNode(1)));
 
 // console.log(hasCycle({
 //     val : 1,
