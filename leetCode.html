@@ -46,63 +46,37 @@ const makeTree = (arr)=>{
     return head;
 }
 
-var lowestCommonAncestor = function(root, p, q) {
-    let arr = [root]
-    let pNode;
-    let qNode;
-    while(arr.length && (!pNode || !qNode)) {
-        let parent = arr.pop();
-        let left = parent.left;
-        let right = parent.right;
-        if(left) {
-            left.parent = parent;
-            arr.push(left);
+var wordPattern = function(pattern, str) {
+    const aArr = pattern.split("");
+    const bArr = str.split(" ");
+    const aMap = {};
+    const bMap = {};
+    if(aArr.length!=bArr.length) {
+        return false;
+    }
+    for(let i = 0, len = aArr.length; i<len; i++) {
+        let a = aArr[i];
+        let aIndex = aMap[a];
+        if(aIndex===void 0) {
+            aIndex = i;
+            aMap[a] = i;
         }
-        if(right) {
-            right.parent = parent;
-            arr.push(right);
+
+        let b = bArr[i];
+        let bIndex = bMap[b];
+        if(bIndex===void 0) {
+            bIndex = i;
+            bMap[b] = i;
         }
-        if(parent.val==p.val) {
-            pNode = parent;
-        }
-        if(parent.val==q.val) {
-            qNode = parent;
+
+        if(aIndex!=bIndex) {
+            return false;
         }
     }
 
-    let pMap = {};
-    while(pNode) {
-        pMap[pNode.val] = pNode;
-        pNode = pNode.parent;
-    }
-    
-    while(qNode) {
-        if(pMap[qNode.val]) {
-            return pMap[qNode.val];
-        }
-        qNode = qNode.parent;
-    }
-
-    return null;
+    return true;
 };
 
-console.log(lowestCommonAncestor(makeTree([1, 2, 3]), new TreeNode(2), new TreeNode(1)));
-
-// console.log(hasCycle({
-//     val : 1,
-//     left : {
-//         val : 2,
-//         left : {
-//             val : 3,
-//             left : {
-//                 val : 4,
-//                 left : {
-//                     val : 5
-//                 }
-//             }
-//         }
-//     }
-// }));
-
+console.log(wordPattern('aaaa', 'dog cat cat dog'));
 </script>
 </body>
