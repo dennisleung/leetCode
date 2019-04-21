@@ -46,37 +46,18 @@ const makeTree = (arr)=>{
     return head;
 }
 
-var wordPattern = function(pattern, str) {
-    const aArr = pattern.split("");
-    const bArr = str.split(" ");
-    const aMap = {};
-    const bMap = {};
-    if(aArr.length!=bArr.length) {
-        return false;
-    }
-    for(let i = 0, len = aArr.length; i<len; i++) {
-        let a = aArr[i];
-        let aIndex = aMap[a];
-        if(aIndex===void 0) {
-            aIndex = i;
-            aMap[a] = i;
-        }
-
-        let b = bArr[i];
-        let bIndex = bMap[b];
-        if(bIndex===void 0) {
-            bIndex = i;
-            bMap[b] = i;
-        }
-
-        if(aIndex!=bIndex) {
-            return false;
+var firstUniqChar = function(s) {
+    const cache = [];
+    for(let i = 0, len = s.length; i<len; i++) {
+        let ch = s[i];
+        if(!cache[ch] && s.lastIndexOf(ch)==i) {
+            return i;
+        }else {
+            cache[ch] = 1;
         }
     }
-
-    return true;
+    return -1;
 };
-
-console.log(wordPattern('aaaa', 'dog cat cat dog'));
+console.log(firstUniqChar('cc'));
 </script>
 </body>
