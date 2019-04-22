@@ -55,6 +55,7 @@ better solution:
 var toHex = function(num) {
     return [...'76543210'].map(x => '0123456789abcdef'[(num >>> (x * 4)) & 15]).join('').replace(/^0+(?!$)/g, '');
 };
+>>> 为无符号右移，>> 为有符号右移
 果然大神都是位运算6得飞起。。这里转16进制的方法非常巧妙（&15然后map index），而不是用常见的if(digit>9){String.fromCharCode('a'.charCodeAt(0)+digit-10)}
 */
 
