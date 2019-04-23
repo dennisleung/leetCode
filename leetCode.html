@@ -63,54 +63,24 @@ var getCom = function(len, numOfOne) {
 };
 
 /**
- * @param {number} num
- * @return {string}
+ * @param {string} s
+ * @return {number}
  */
-var toHex = function(num) {
-    //先转成二进制
-    let n = Math.abs(num);
-    let twoArr = [];
-    while(n>=1) {
-        twoArr.unshift(n%2);
-        n = ~~(n/2);
-    }
-
-    twoArr = Array(33).join("0").split("").concat(twoArr).slice(-32);
-    
-    //如果是负数，求补码
-    if(num<0) {
-        twoArr = twoArr.map(v=>v==0?1:0);
-        let i = 31;
-        let carry = 1;
-        while(i>=0) {
-            if(twoArr[i] && carry) {
-                twoArr[i] = 0;
-                carry = 1;
-            }else {
-                if(carry) {
-                    twoArr[i] = 1;
-                }
-                break;
-            }
-            i--;
+ var longestPalindrome = function(s) {
+    const cache = {};
+    let length = 0;
+    for(let ch of s) {
+        if(cache[ch]) {
+            delete cache[ch];
+            length += 2;
+        }else {
+            cache[ch] = 1;
         }
     }
-
-    let hexArr = [];
-    while(twoArr.length) {
-        let digit = parseInt(twoArr.slice(0, 4).join(""), 2);
-        twoArr = twoArr.slice(4);
-        if(digit>9) {
-            digit = String.fromCharCode('a'.charCodeAt(0)+digit-10);
-        }
-        hexArr.push(digit);
-    }
-
-    let result = hexArr.join("").replace(/^0+/, "");
-    return result || "0";
+    return length + (Object.keys(cache).length ? 1 : 0);
 };
 
 
-//console.log(toHex(1));
+console.log(longestPalindrome("ccccdd"));
 </script>
 </body>
