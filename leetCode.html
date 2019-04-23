@@ -63,24 +63,27 @@ var getCom = function(len, numOfOne) {
 };
 
 /**
- * @param {string} s
- * @return {number}
+ * @param {number} n
+ * @return {string[]}
  */
- var longestPalindrome = function(s) {
-    const cache = {};
-    let length = 0;
-    for(let ch of s) {
-        if(cache[ch]) {
-            delete cache[ch];
-            length += 2;
+ var addStrings = function(num1, num2) {
+    num1 = Array.from(num1).reverse();
+    num2 = Array.from(num2).reverse();
+    let carry = 0;
+    let result = [];
+    for(let i = 0, len = Math.max(num1.length, num2.length); i<len; i++) {
+        let cur = parseInt('0'+num1[i]) + parseInt('0'+num2[i]) + carry;
+        if(cur>9) {
+            cur = cur % 10;
+            carry = 1;
         }else {
-            cache[ch] = 1;
+            carry = 0;
         }
+        result.push(cur);
     }
-    return length + (Object.keys(cache).length ? 1 : 0);
+    return (carry?"1":"") + result.reverse().join("");
 };
 
-
-console.log(longestPalindrome("ccccdd"));
+console.log(addStrings('0', '0'));
 </script>
 </body>
