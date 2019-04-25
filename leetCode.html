@@ -76,38 +76,47 @@ function TreeNode2(val, children) {
     this.children = children;
 }
 
-var levelOrder = function(root) {
-    let result1 = [];
-    let result2 = []
-    let queue1 = [];//根
-    let queue2 = [root];//子
-    while(queue2.length) {
-        queue1 = queue2;
-        queue2 = [];
-        result2 = [];
-        while(queue1.length) {
-            let rootNode = queue1.shift();
-            result2.push(rootNode.val);
-            if(rootNode.children) {
-                for(let childNode of rootNode.children) {
-                    queue2.push(childNode);
-                }
-            }
+const travels = function(root) {
+    let nodes = [];
+    let queue = [root];
+    while(queue.length) {
+        let node = queue.shift();
+        nodes.push(node);
+        if(node.left) {
+            queue.push(node.left);
         }
-        result1.push(result2);
+        if(node.right) {
+            queue.push(node.right);
+        }
     }
 
-    return result1;
+    return nodes;
 };
 
-const root = new TreeNode2(1, [
-    new TreeNode2(3, [
-        new TreeNode2(5),
-        new TreeNode2(6)
-    ]),
-    new TreeNode2(2),
-    new TreeNode2(4)
-])
-console.log(levelOrder(root));
+var pathSum = function(root, sum) {
+    let count = 0;
+    let nodes = travels(root);
+    const _pathSum = function(node, sum) {
+        let count = 0;
+        if(node.val==sum) {
+            count++;
+        }
+        if(node.left) {
+            count += _pathSum(node.left, sum-node.val);
+        }
+        if(node.right) {
+            count += _pathSum(node.right, sum-node.val);
+        }
+        return count;
+    }
+
+    for(let node of nodes) {
+        count += _pathSum(node, sum);
+    }
+
+    return count;
+};
+
+console.log(pathSum(makeTree([10,5,-3,3,2,null,11,3,-2,null,1]), 8));
 </script>
 </body>
