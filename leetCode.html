@@ -71,51 +71,43 @@ function Node(val,isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
     this.bottomRight = bottomRight;
 };
 
-//我们假设传过来的肯定都是n*n的格子
-const isLeaf = function(grid) {
-    let first = grid[0][0];
-    for(let row of grid) {
-        for(let col of row) {
-            if(col!=first) {
-                return [false];
-            }
-        }
-    }
-
-    return [true, !!first];
-};
-
-const sliceGrip = function(grid, rowStart, rowEnd, colStart, colEnd) {
-    let result = [];
-    for(let i = rowStart; i<rowEnd; i++) {
-        result.push(grid[i].slice(colStart, colEnd));
-    }
-
-    return result;
+function TreeNode2(val, children) {
+    this.val = val;
+    this.children = children;
 }
 
-/**
- * @param {number[][]} grid
- * @return {Node}
- */
- var construct = function(grid) {
-    const [_isLeaf, val] = isLeaf(grid);
-    const root = new Node(val, _isLeaf);
-    if(_isLeaf) {
-        return root;
+var levelOrder = function(root) {
+    let result1 = [];
+    let result2 = []
+    let queue1 = [];//根
+    let queue2 = [root];//子
+    while(queue2.length) {
+        queue1 = queue2;
+        queue2 = [];
+        result2 = [];
+        while(queue1.length) {
+            let rootNode = queue1.shift();
+            result2.push(rootNode.val);
+            if(rootNode.children) {
+                for(let childNode of rootNode.children) {
+                    queue2.push(childNode);
+                }
+            }
+        }
+        result1.push(result2);
     }
 
-    const rowCount = grid.length;
-    const colCount = grid[0].length;
-    root.topLeft = construct(sliceGrip(grid, 0, rowCount/2, 0, colCount/2));
-    root.topRight = construct(sliceGrip(grid, 0, rowCount/2, colCount/2, colCount));
-    root.bottomLeft = construct(sliceGrip(grid, rowCount/2, rowCount, 0, colCount/2));
-    root.bottomRight = construct(sliceGrip(grid, rowCount/2, rowCount, colCount/2, colCount));
-
-    return root;
+    return result1;
 };
 
-const grid = [[1,1,1,1,0,0,0,0],[1,1,1,1,0,0,0,0],[1,1,1,1,1,1,1,1],[1,1,1,1,1,1,1,1],[1,1,1,1,0,0,0,0],[1,1,1,1,0,0,0,0],[1,1,1,1,0,0,0,0],[1,1,1,1,0,0,0,0]];
-console.log(construct(grid));
+const root = new TreeNode2(1, [
+    new TreeNode2(3, [
+        new TreeNode2(5),
+        new TreeNode2(6)
+    ]),
+    new TreeNode2(2),
+    new TreeNode2(4)
+])
+console.log(levelOrder(root));
 </script>
 </body>
