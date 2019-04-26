@@ -46,22 +46,6 @@ const makeTree = (arr)=>{
     return head;
 }
 
-//求所有组合
-var getCom = function(len, numOfOne) {
-    let result = [];
-    if(len<=1) {
-        result.push(numOfOne>0?"1":"0");
-    }else if(numOfOne<=0) {
-        result.push(Array(len+1).join("0"));
-    }else if(len<=numOfOne) {
-        result.push(Array(numOfOne+1).join("1"));
-    }else {
-        result = result.concat(getCom(len-1, numOfOne-1).map(v=>"1"+v));
-        result = result.concat(getCom(len-1, numOfOne).map(v=>"0"+v));
-    }
-    return result;
-};
-
 function Node(val,isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
     this.val = val;
     this.isLeaf = isLeaf;
@@ -93,30 +77,73 @@ const travels = function(root) {
     return nodes;
 };
 
-var pathSum = function(root, sum) {
-    let count = 0;
-    let nodes = travels(root);
-    const _pathSum = function(node, sum) {
-        let count = 0;
-        if(node.val==sum) {
-            count++;
-        }
-        if(node.left) {
-            count += _pathSum(node.left, sum-node.val);
-        }
-        if(node.right) {
-            count += _pathSum(node.right, sum-node.val);
-        }
-        return count;
-    }
 
-    for(let node of nodes) {
-        count += _pathSum(node, sum);
-    }
-
-    return count;
+const getCombinations = function(arr) {
+    const result = [];
+    
 };
 
-console.log(pathSum(makeTree([10,5,-3,3,2,null,11,3,-2,null,1]), 8));
+const isAnagrams = function(aStr, bStr) {
+    let aMap = {};
+    for(let ch of aStr) {
+        aMap[ch] = (aMap[ch] || 0) + 1;
+    }
+    
+    for(let ch of bStr) {
+        aMap[ch] = (aMap[ch] || 0) - 1;
+        if(aMap[ch]<0) {
+            return false;
+        }
+    }
+
+    for(let ch in aMap) {
+        if(aMap[ch]) {
+            return false;
+        }
+    }
+
+    return true;
+};
+
+
+/**
+ * @param {string} s
+ * @param {string} p
+ * @return {number[]}
+ */
+var findAnagrams = function(s, p) {
+    const pMap = {};
+    for(let ch of p) {
+        pMap[ch] = 1;
+    }
+
+    const _findAnagrams = function(s, startIndex) {
+        if(!s.length || !p.length || s.length<p.length) {
+            return [];
+        }
+
+        const result = [];
+        for(let i = 0, max = s.length-p.length; i<=max; i++) {
+            if(isAnagrams(s.slice(i, i+p.length), p)) {
+                result.push(startIndex+i);
+            }
+        }
+
+        return result;
+    };
+
+    let result = [];
+    let preNotMatch = 0;
+    for(let i = 0, len = s.length; i<len; i++) {
+        if(!pMap[s[i]] || i==s.length-1) {
+            result = result.concat(_findAnagrams(s.slice(preNotMatch, i+1), preNotMatch));
+            preNotMatch = i;
+        }
+    }
+
+    return result;
+};
+
+console.log(findAnagrams('cbaebabacd', 'abc'));
 </script>
 </body>
