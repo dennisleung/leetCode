@@ -107,43 +107,13 @@ const isAnagrams = function(aStr, bStr) {
 
 
 /**
- * @param {string} s
- * @param {string} p
- * @return {number[]}
+* @param {number} n
+ * @return {number}
  */
-var findAnagrams = function(s, p) {
-    const pMap = {};
-    for(let ch of p) {
-        pMap[ch] = 1;
-    }
-
-    const _findAnagrams = function(s, startIndex) {
-        if(!s.length || !p.length || s.length<p.length) {
-            return [];
-        }
-
-        const result = [];
-        for(let i = 0, max = s.length-p.length; i<=max; i++) {
-            if(isAnagrams(s.slice(i, i+p.length), p)) {
-                result.push(startIndex+i);
-            }
-        }
-
-        return result;
-    };
-
-    let result = [];
-    let preNotMatch = 0;
-    for(let i = 0, len = s.length; i<len; i++) {
-        if(!pMap[s[i]] || i==s.length-1) {
-            result = result.concat(_findAnagrams(s.slice(preNotMatch, i+1), preNotMatch));
-            preNotMatch = i;
-        }
-    }
-
-    return result;
+var arrangeCoins = function(n) {
+    return ~~(Math.sqrt(2*n+0.25)-0.5);
 };
 
-console.log(findAnagrams('cbaebabacd', 'abc'));
+console.log(arrangeCoins(0));
 </script>
 </body>
