@@ -107,13 +107,36 @@ const isAnagrams = function(aStr, bStr) {
 
 
 /**
-* @param {number} n
+ * @param {character[]} chars
  * @return {number}
  */
-var arrangeCoins = function(n) {
-    return ~~(Math.sqrt(2*n+0.25)-0.5);
+ var compress = function(chars) {
+    let cur = 0;
+    for(let i = cur; i<chars.length;) {
+        let ch = chars[cur];
+        let count = 1;
+        while(chars[i+1]==ch) {
+            count++;
+            i++;
+        }
+        if(count>1) {
+            count = "" + count;
+            chars.splice(cur+1, i-cur, ...count);
+            cur = i = cur + count.length + 1;
+        }else {
+            cur = ++i;
+        }
+    }
+
+    if(cur<chars.length) {
+        chars.splice(cur, chars.length-cur);
+    }
+
+    return chars.length;
 };
 
-console.log(arrangeCoins(0));
+const arr = ["a","a","a","b","b","a","a"];
+console.log(compress(arr));
+console.log(arr);
 </script>
 </body>
