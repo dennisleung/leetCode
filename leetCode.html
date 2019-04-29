@@ -105,38 +105,30 @@ const isAnagrams = function(aStr, bStr) {
     return true;
 };
 
-
 /**
- * @param {character[]} chars
+ * @param {number[][]} points
  * @return {number}
  */
- var compress = function(chars) {
-    let cur = 0;
-    for(let i = cur; i<chars.length;) {
-        let ch = chars[cur];
-        let count = 1;
-        while(chars[i+1]==ch) {
-            count++;
-            i++;
-        }
-        if(count>1) {
-            count = "" + count;
-            chars.splice(cur+1, i-cur, ...count);
-            cur = i = cur + count.length + 1;
-        }else {
-            cur = ++i;
+var numberOfBoomerangs = function(points) {
+    let count = 0;
+    for(let i = 0, len = points.length; i<len; i++) {
+        const cache = {};//注意cache初始化的位置
+        for(let j = 0; j<len; j++) {
+            if(i==j) {
+                continue;
+            }
+            const dist = Math.pow((points[i][0]-points[j][0]), 2) + Math.pow((points[i][0]-points[j][0]), 2);
+            if(cache[dist]) {
+                count += cache[dist] * 2;
+            }
+            cache[dist] = (cache[dist] || 0) + 1;
         }
     }
 
-    if(cur<chars.length) {
-        chars.splice(cur, chars.length-cur);
-    }
-
-    return chars.length;
+    return count;
 };
 
-const arr = ["a","a","a","b","b","a","a"];
-console.log(compress(arr));
-console.log(arr);
+const arr = [[0,0],[1,0],[2,0]];
+console.log(numberOfBoomerangs(arr));
 </script>
 </body>
