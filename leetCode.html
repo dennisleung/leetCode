@@ -104,35 +104,11 @@ const isAnagrams = function(aStr, bStr) {
 
     return true;
 };
-
-/**
- * @param {number[]} nums
- * @return {number[]}
- */
-var findDisappearedNumbers = function(nums) {
-    for(let i = 0, len = nums.length; i<len; i++) {
-        while(true) {//索引不正确
-            let swapIndex = nums[i]-1;
-            if(nums[swapIndex]==swapIndex+1) {//要换的地方已经正确
-                break;
-            }
-            let tmp = nums[swapIndex];
-            nums[swapIndex] = nums[i];
-            nums[i] = tmp;
-        }
-    }
-
-    let result = [];
-    for(let i = 0, len = nums.length; i<len; i++) {
-        if(nums[i]!=i+1) {
-            result.push(i+1);
-        }
-    }
-
-    return result;
+var minMoves = function(nums) {
+    return nums.reduce((a,b) => {return a+b}, -nums.length * Math.min(...nums));
 };
 
-const arr = [4,3,2,7,8,2,3,1];
-//console.log(findDisappearedNumbers(arr));
+const arr = [1, 2, 3];
+//console.log(minMoves(arr));
 </script>
 </body>
