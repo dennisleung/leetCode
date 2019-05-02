@@ -104,11 +104,25 @@ const isAnagrams = function(aStr, bStr) {
 
     return true;
 };
-var minMoves = function(nums) {
-    return nums.reduce((a,b) => {return a+b}, -nums.length * Math.min(...nums));
+var findContentChildren = function(g, s) {
+    let count = 0;
+    g.sort((a, b)=>{return a-b});
+    for(let si of s) {
+        for(var i = 0, len = g.length; i<len-1; i++) {
+            if(g[i]<=si && si<g[i+1]) {
+                break;
+            }
+        }
+        if(si>=g[i]) {
+            count++;
+            g.splice(i, 1);
+        }
+    }
+
+    return count;
 };
 
 const arr = [1, 2, 3];
-//console.log(minMoves(arr));
+console.log(findContentChildren([10,9,8,7], [10,9,8,7]));
 </script>
 </body>
