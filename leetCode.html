@@ -83,46 +83,49 @@ const getCombinations = function(arr) {
     
 };
 
-const isAnagrams = function(aStr, bStr) {
-    let aMap = {};
-    for(let ch of aStr) {
-        aMap[ch] = (aMap[ch] || 0) + 1;
-    }
-    
-    for(let ch of bStr) {
-        aMap[ch] = (aMap[ch] || 0) - 1;
-        if(aMap[ch]<0) {
-            return false;
-        }
-    }
-
-    for(let ch in aMap) {
-        if(aMap[ch]) {
-            return false;
-        }
-    }
-
-    return true;
-};
-var findContentChildren = function(g, s) {
-    let count = 0;
-    g.sort((a, b)=>{return a-b});
-    for(let si of s) {
-        for(var i = 0, len = g.length; i<len-1; i++) {
-            if(g[i]<=si && si<g[i+1]) {
+/**
+ * @param {string} s
+ * @return {boolean}
+ */
+var repeatedSubstringPattern = function(s) {
+    const isRepeatedSubStr = function(subStr) {
+        let ss = s;
+        while(true) {
+            let slicePart = ss.slice(0, subStr.length);
+            if(slicePart!=subStr) {
+                return false;
+            }
+            ss = ss.slice(subStr.length);
+            if(!ss) {
                 break;
             }
         }
-        if(si>=g[i]) {
-            count++;
-            g.splice(i, 1);
+
+        return true;
+    }
+
+    if(!s) {
+        return false;
+    }
+    let lastLetter = s[s.length-1];
+    let cursor = -1;
+    let indexArr = s.split(lastLetter).map(v=>{
+        cursor = cursor + v.length + 1
+        return cursor;
+    });
+    for(let index of indexArr) {
+        if(index>=s.length-1) {
+            break;
+        }
+        if(isRepeatedSubStr(s.slice(0, index+1))) {
+            return true;
         }
     }
 
-    return count;
+    return false;
 };
 
 const arr = [1, 2, 3];
-console.log(findContentChildren([10,9,8,7], [10,9,8,7]));
+console.log(repeatedSubstringPattern("abac"));
 </script>
 </body>
