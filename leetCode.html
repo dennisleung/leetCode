@@ -77,55 +77,47 @@ const travels = function(root) {
     return nodes;
 };
 
+const getComplement = function(num, bit=32) {
+    let x = Math.abs(num).toString(2);
+    x = ((new Array(bit)).fill("0").join("") + x).slice(-32)
+    if(num<0) {
+        let xArr = x.split("");
+        let caret = 1;
+        for(let i = xArr.length-1; i>=0; i--) {
+            xArr[i] = xArr[i]==="1" ? "0" : "1";
+            if(caret) {
+                if(xArr[i]==="1") {
+                    xArr[i] = "0";
+                }else {
+                    caret = 0;
+                    xArr[i] = "1";
+                }
+            }
+        }
 
-const getCombinations = function(arr) {
-    const result = [];
-    
+        x = xArr.join("");
+    }
+
+    return x;
 };
 
-/**
- * @param {string} s
- * @return {boolean}
- */
-var repeatedSubstringPattern = function(s) {
-    const isRepeatedSubStr = function(subStr) {
-        let ss = s;
-        while(true) {
-            let slicePart = ss.slice(0, subStr.length);
-            if(slicePart!=subStr) {
-                return false;
-            }
-            ss = ss.slice(subStr.length);
-            if(!ss) {
-                break;
-            }
-        }
-
-        return true;
-    }
-
-    if(!s) {
-        return false;
-    }
-    let lastLetter = s[s.length-1];
-    let cursor = -1;
-    let indexArr = s.split(lastLetter).map(v=>{
-        cursor = cursor + v.length + 1
-        return cursor;
-    });
-    for(let index of indexArr) {
-        if(index>=s.length-1) {
-            break;
-        }
-        if(isRepeatedSubStr(s.slice(0, index+1))) {
-            return true;
+var hammingDistance = function(x, y) {
+    let xCom = x.toString(2);
+    let yCom = y.toString(2);
+    let maxLength = Math.max(xCom.length, yCom.length);
+    xCom = (new Array(maxLength).join("0") + xCom).slice(-maxLength);
+    yCom = (new Array(maxLength).join("0") + yCom).slice(-maxLength);
+    let count = 0;
+    for(let i = 0, len = Math.min(xCom.length, yCom.length); i<len; i++) {
+        if(xCom[i]!==yCom[i]) {
+            count++;
         }
     }
 
-    return false;
+    return count;
 };
 
 const arr = [1, 2, 3];
-console.log(repeatedSubstringPattern("abac"));
+console.log(hammingDistance(1, 4));
 </script>
 </body>
