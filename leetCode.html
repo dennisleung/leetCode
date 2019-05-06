@@ -102,44 +102,39 @@ const getComplement = function(num, bit=32) {
 };
 
 /**
- * @param {number[][]} grid
+ * @param {number[]} houses
+ * @param {number[]} heaters
  * @return {number}
  */
-var islandPerimeter = function(grid) {
-    let count = 0;
-    for(let i = 0, iLen = grid.length; i<iLen; i++) {
-        for(let j = 0, jLen = grid[i].length; j<jLen; j++) {
-            if(grid[i][j]==0) {
-                continue;
-            }
-
-            //top
-            if(i-1<0 || grid[i-1][j]==0) {
-                count++;
-            }
-            //right
-            if(j+1>=jLen || grid[i][j+1]==0) {
-                count++;
-            }
-            //bottom
-            if(i+1>=iLen || grid[i+1][j]==0) {
-                count++;
-            }
-            //left
-            if(j-1<0 || grid[i][j-1]==0) {
-                count++;
-            }
-        }
+ var findRadius = function(houses, heaters) {
+    if(!houses.length || !heaters.length) {//sanity check
+        return 0;
     }
 
-    return count;
+    houses.sort((a,b)=>a-b);
+    heaters.sort((a,b)=>a-b);
+
+    let radis = 0;
+    for(let i = 0, len = houses.length; i<len; i++) {
+        let house = houses[i];
+        let tmp;
+        if(house<=heaters[0]) {
+            tmp = heaters[0]-house;
+        }else if(house>=heaters[heaters.length-1]) {
+            tmp = house-heaters[heaters.length-1];
+        }else {
+            for(let j = 0, jLen = heaters.length; j<jLen-1; j++) {
+                if(heaters[j]<=house && house<heaters[j+1]) {
+                    tmp = Math.min(house-heaters[j], heaters[j+1]-house);
+                }
+            }
+        }
+        radis = Math.max(radis, tmp);
+    }
+    return radis;
 };
 
+console.log(findRadius([282475249,622650073,984943658,144108930,470211272,101027544,457850878,458777923], [823564440,115438165,784484492,74243042,114807987,137522503,441282327,16531729,823378840,143542612]));
 
-const arr = [[0,0,0,0],
- [1,0,0,0],
- [0,0,0,0],
- [0,0,0,0]];
-console.log(islandPerimeter(arr));
 </script>
 </body>
