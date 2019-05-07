@@ -102,15 +102,22 @@ const getComplement = function(num, bit=32) {
 };
 
 /**
- * @param {number} num
- * @return {number}
+ * @param {string} S
+ * @param {number} K
+ * @return {string}
  */
-var findComplement = function(num) {
-    let xorNum = parseInt(new Array(num.toString(2).length+1).join("1"), 2);
-    return num ^ xorNum;
+var licenseKeyFormatting = function(S, K) {
+    S = S.replace(/\-/g, "").toUpperCase();
+    let result = [];
+    let length = S.length;
+    while(length>0) {
+        result.unshift(S.substring(length-K, length));//注意这里不能用slice，substring的第一个参数为负数的时候会从0开始取，但是slice不是
+        length -= K;
+    }
+    return result.join("-");
 };
 
-console.log(findComplement(5));
+console.log(licenseKeyFormatting("2-5g-3-J", 2));
 
 </script>
 </body>
