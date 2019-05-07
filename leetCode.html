@@ -102,39 +102,15 @@ const getComplement = function(num, bit=32) {
 };
 
 /**
- * @param {number[]} houses
- * @param {number[]} heaters
+ * @param {number} num
  * @return {number}
  */
- var findRadius = function(houses, heaters) {
-    if(!houses.length || !heaters.length) {//sanity check
-        return 0;
-    }
-
-    houses.sort((a,b)=>a-b);
-    heaters.sort((a,b)=>a-b);
-
-    let radis = 0;
-    for(let i = 0, len = houses.length; i<len; i++) {
-        let house = houses[i];
-        let tmp;
-        if(house<=heaters[0]) {
-            tmp = heaters[0]-house;
-        }else if(house>=heaters[heaters.length-1]) {
-            tmp = house-heaters[heaters.length-1];
-        }else {
-            for(let j = 0, jLen = heaters.length; j<jLen-1; j++) {
-                if(heaters[j]<=house && house<heaters[j+1]) {
-                    tmp = Math.min(house-heaters[j], heaters[j+1]-house);
-                }
-            }
-        }
-        radis = Math.max(radis, tmp);
-    }
-    return radis;
+var findComplement = function(num) {
+    let xorNum = parseInt(new Array(num.toString(2).length+1).join("1"), 2);
+    return num ^ xorNum;
 };
 
-console.log(findRadius([282475249,622650073,984943658,144108930,470211272,101027544,457850878,458777923], [823564440,115438165,784484492,74243042,114807987,137522503,441282327,16531729,823378840,143542612]));
+console.log(findComplement(5));
 
 </script>
 </body>
