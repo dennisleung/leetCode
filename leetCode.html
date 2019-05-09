@@ -102,22 +102,29 @@ const getComplement = function(num, bit=32) {
 };
 
 /**
- * @param {string} S
- * @param {number} K
- * @return {string}
+ * @param {number[]} nums
+ * @return {number}
  */
-var licenseKeyFormatting = function(S, K) {
-    S = S.replace(/\-/g, "").toUpperCase();
-    let result = [];
-    let length = S.length;
-    while(length>0) {
-        result.unshift(S.substring(length-K, length));//注意这里不能用slice，substring的第一个参数为负数的时候会从0开始取，但是slice不是
-        length -= K;
+var findMaxConsecutiveOnes = function(nums) {
+    let flag = false;
+    let max = 0;
+    let count = 0;
+    for(let num of nums) {
+        flag = num==1;
+        if(flag) {
+            count++;
+            if(count>max) {
+                max = count;
+            }
+        }else {
+            count = 0;
+        }
     }
-    return result.join("-");
+
+    return max;
 };
 
-console.log(licenseKeyFormatting("2-5g-3-J", 2));
+console.log(findMaxConsecutiveOnes([1,0,1,1,0,1]));
 
 </script>
 </body>
