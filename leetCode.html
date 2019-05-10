@@ -129,7 +129,33 @@ const isPrime = (num)=>{
     return true;
 };
 
-console.log(findMaxConsecutiveOnes([1,0,1,1,0,1]));
+/**
+ * @param {number[]} nums1
+ * @param {number[]} nums2
+ * @return {number[]}
+ */
+var nextGreaterElement = function(nums1, nums2) {
+    const result = [];
+    for(let num of nums1) {
+        let index = nums2.indexOf(num);
+        if(index===-1) {
+            result.push(-1);
+        }else {
+            let g = -1;
+            while(++index<nums2.length) {
+                if(nums2[index]>num) {
+                    g = nums2[index];
+                    break;
+                }
+            }
+            result.push(g);
+        }
+    }
+
+    return result;
+};
+
+console.log(nextGreaterElement([2,4], [1,2,3,4]));
 
 </script>
 </body>
