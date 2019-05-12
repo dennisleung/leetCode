@@ -129,33 +129,53 @@ const isPrime = (num)=>{
     return true;
 };
 
+const keyboardMap = {
+    "A":2,
+    "B":1,
+    "C":1,
+    "D":2,
+    "E":3,
+    "F":2,
+    "G":2,
+    "H":2,
+    "I":3,
+    "J":2,
+    "K":2,
+    "L":2,
+    "M":1,
+    "N":1,
+    "O":3,
+    "P":3,
+    "Q":3,
+    "R":3,
+    "S":2,
+    "T":3,
+    "U":3,
+    "V":1,
+    "W":3,
+    "X":1,
+    "Y":3,
+    "Z":1,
+};
 /**
- * @param {number[]} nums1
- * @param {number[]} nums2
- * @return {number[]}
+ * @param {string[]} words
+ * @return {string[]}
  */
-var nextGreaterElement = function(nums1, nums2) {
-    const result = [];
-    for(let num of nums1) {
-        let index = nums2.indexOf(num);
-        if(index===-1) {
-            result.push(-1);
-        }else {
-            let g = -1;
-            while(++index<nums2.length) {
-                if(nums2[index]>num) {
-                    g = nums2[index];
-                    break;
-                }
+var findWords = function(words) {
+    return words.filter(function(word) {
+        word = word.toUpperCase();
+        let firstLetterPos = keyboardMap[word[0]];
+        for(let ch of word) {
+            if(firstLetterPos!=keyboardMap[ch]) {
+                return false;
             }
-            result.push(g);
         }
-    }
 
-    return result;
+        return true;
+    });
 };
 
-console.log(nextGreaterElement([2,4], [1,2,3,4]));
+console.log(findWords(["Hello", "Alaska", "Dad", "Peace"]));
 
 </script>
 </body>
