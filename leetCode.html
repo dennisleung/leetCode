@@ -129,53 +129,36 @@ const isPrime = (num)=>{
     return true;
 };
 
-const keyboardMap = {
-    "A":2,
-    "B":1,
-    "C":1,
-    "D":2,
-    "E":3,
-    "F":2,
-    "G":2,
-    "H":2,
-    "I":3,
-    "J":2,
-    "K":2,
-    "L":2,
-    "M":1,
-    "N":1,
-    "O":3,
-    "P":3,
-    "Q":3,
-    "R":3,
-    "S":2,
-    "T":3,
-    "U":3,
-    "V":1,
-    "W":3,
-    "X":1,
-    "Y":3,
-    "Z":1,
-};
 /**
- * @param {string[]} words
- * @return {string[]}
+ * @param {TreeNode} root
+ * @return {number[]}
  */
-var findWords = function(words) {
-    return words.filter(function(word) {
-        word = word.toUpperCase();
-        let firstLetterPos = keyboardMap[word[0]];
-        for(let ch of word) {
-            if(firstLetterPos!=keyboardMap[ch]) {
-                return false;
-            }
+var findMode = function(root) {
+    let nodesMap = [];
+    let queue = [root];
+    while(queue.length) {
+        let node = queue.shift();
+        nodesMap[node.val] = (nodesMap[node.val] || 0) + 1;
+        if(node.left) {
+            queue.push(node.left);
         }
+        if(node.right) {
+            queue.push(node.right);
+        }
+    }
 
-        return true;
-    });
+    let mostNodeVal = Math.max(...Object.values(nodesMap));
+    let result = [];
+    for(let nodeVal in nodesMap) {
+        if(nodesMap[nodeVal]==mostNodeVal) {
+            result.push(parseInt(nodeVal));
+        }
+    }
+
+    return result;
 };
 
-console.log(findWords(["Hello", "Alaska", "Dad", "Peace"]));
+console.log(findMode(makeTree([1,null,2,2])));
 
 </script>
 </body>
