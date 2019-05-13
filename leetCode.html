@@ -130,35 +130,14 @@ const isPrime = (num)=>{
 };
 
 /**
- * @param {TreeNode} root
- * @return {number[]}
+ * @param {number} num
+ * @return {string}
  */
-var findMode = function(root) {
-    let nodesMap = [];
-    let queue = [root];
-    while(queue.length) {
-        let node = queue.shift();
-        nodesMap[node.val] = (nodesMap[node.val] || 0) + 1;
-        if(node.left) {
-            queue.push(node.left);
-        }
-        if(node.right) {
-            queue.push(node.right);
-        }
-    }
-
-    let mostNodeVal = Math.max(...Object.values(nodesMap));
-    let result = [];
-    for(let nodeVal in nodesMap) {
-        if(nodesMap[nodeVal]==mostNodeVal) {
-            result.push(parseInt(nodeVal));
-        }
-    }
-
-    return result;
+var convertToBase7 = function(num) {
+    return num.toString(7);
 };
 
-console.log(findMode(makeTree([1,null,2,2])));
+console.log(convertToBase7(0));
 
 </script>
 </body>
