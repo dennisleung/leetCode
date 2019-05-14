@@ -130,14 +130,41 @@ const isPrime = (num)=>{
 };
 
 /**
- * @param {number} num
- * @return {string}
+ * @param {number[]} nums
+ * @return {string[]}
  */
-var convertToBase7 = function(num) {
-    return num.toString(7);
+var findRelativeRanks = function(nums) {
+    const rankDesMap = {};
+    let rank = 0;
+    let tNums = [].concat(nums);
+    tNums.sort((a,b)=>{return b-a});
+    for(let i = 0, len = tNums.length; i<len; i++) {
+        let rankDes = "";
+        switch(++rank) {
+            case 1:
+                rankDes = "Gold Medal";
+                break;
+            case 2:
+                rankDes = "Silver Medal";
+                break;
+            case 3:
+                rankDes = "Bronze Medal";
+                break;
+            default:
+                rankDes = ""+rank;
+                break;
+        }
+        rankDesMap[tNums[i]] = rankDes;
+    }
+    
+    const result = [];
+    for(let num of nums) {
+        result.push(rankDesMap[num]);
+    }
+    return result;
 };
 
-console.log(convertToBase7(0));
+console.log(findRelativeRanks([10,3,8,9,4]));
 
 </script>
 </body>
