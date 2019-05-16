@@ -142,18 +142,29 @@ const getDivisors = function(num) {
     return Object.keys(result);
 };
 
+const fibCache = {};
+
 /**
- * @param {number} num
- * @return {boolean}
+ * @param {number} N
+ * @return {number}
  */
-var checkPerfectNumber = function(num) {
-    if(num<=0) {
-        return false;
+var fib = function(N) {
+    if(fibCache[N]!==void 0) {
+        return fibCache[N];
     }
-    return getDivisors(num).filter((a)=>num!=a).reduce((a, b)=>parseInt(a)+parseInt(b), 0) == num;
+
+    let result = N<2 ? N : fib(N-1) + fib(N-2);
+    fibCache[N] = result;
+    return result;
 };
 
-console.log(checkPerfectNumber(-28));
+console.log(fib(0));//0
+console.log(fib(1));//1
+console.log(fib(2));//1
+console.log(fib(3));//2
+console.log(fib(4));//3
+
+
 
 </script>
 </body>
