@@ -142,27 +142,19 @@ const getDivisors = function(num) {
     return Object.keys(result);
 };
 
-const fibCache = {};
-
 /**
- * @param {number} N
- * @return {number}
+ * @param {string} word
+ * @return {boolean}
  */
-var fib = function(N) {
-    if(fibCache[N]!==void 0) {
-        return fibCache[N];
-    }
-
-    let result = N<2 ? N : fib(N-1) + fib(N-2);
-    fibCache[N] = result;
-    return result;
+var detectCapitalUse = function(word) {
+    return /(^[A-Z]+$)|(^[a-z]+$)|(^[A-Z][a-z]+$)/.test(word);
 };
 
-console.log(fib(0));//0
-console.log(fib(1));//1
-console.log(fib(2));//1
-console.log(fib(3));//2
-console.log(fib(4));//3
+console.log(detectCapitalUse('USA'));//0
+console.log(detectCapitalUse('FlaG'));//1
+console.log(detectCapitalUse('leetcode'));//1
+console.log(detectCapitalUse('Google'));//2
+console.log(detectCapitalUse(''));//2
 
 
 
