@@ -143,18 +143,40 @@ const getDivisors = function(num) {
 };
 
 /**
- * @param {string} word
- * @return {boolean}
+ * @param {string} a
+ * @param {string} b
+ * @return {number}
  */
-var detectCapitalUse = function(word) {
-    return /(^[A-Z]+$)|(^[a-z]+$)|(^[A-Z][a-z]+$)/.test(word);
+var findLUSlength = function(a, b) {
+    if(a.length<b.length) {
+        [a, b] = [b, a];
+    }
+    const find = (str)=>{
+        if(str==b) {
+            return "";
+        }
+        if(b.indexOf(str)==-1) {
+            return str;
+        }
+        if(str.length<=1) {
+            return "";
+        }
+        let leftStr = find(str.slice(0, -1));
+        let rightStr = find(str.slice(1));
+        return leftStr.length>rightStr.length ? leftStr : rightStr;
+    };
+
+    return find(a).length || -1;
 };
 
-console.log(detectCapitalUse('USA'));//0
-console.log(detectCapitalUse('FlaG'));//1
-console.log(detectCapitalUse('leetcode'));//1
-console.log(detectCapitalUse('Google'));//2
-console.log(detectCapitalUse(''));//2
+console.log(findLUSlength("aba", "cdc"));
+console.log(findLUSlength("aba", "cdcc"));
+console.log(findLUSlength("a", "cdc"));
+console.log(findLUSlength("cdc", "a"));
+console.log(findLUSlength("cdc", "c"));
+console.log(findLUSlength("", ""));
+console.log(findLUSlength("aefawfawfawfaw", "aefawfeawfwafwaef"));
+console.log(findLUSlength("ecyhzhrreknnlslstqtsvwrwnxcmjkdfdqtmnapngpjqobzaom", "ecyhzhrreknnlslstqtsvwrwnxcmjkdfdqtmnapngpjqobzaom"));
 
 
 
