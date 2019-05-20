@@ -143,40 +143,26 @@ const getDivisors = function(num) {
 };
 
 /**
- * @param {string} a
- * @param {string} b
+ * @param {TreeNode} root
  * @return {number}
  */
-var findLUSlength = function(a, b) {
-    if(a.length<b.length) {
-        [a, b] = [b, a];
+var getMinimumDifference = function(root) {
+    if(!root) {//sanity check, there are at least 2 nodes in BST, so this check is unnessesary
+        return 0;
     }
-    const find = (str)=>{
-        if(str==b) {
-            return "";
+    let nodes = travels(root).sort((a, b)=>a.val-b.val);
+    let minDistance = Infinity;
+    for(let i = 0, len = nodes.length; i<len-1; i++) {
+        let tmp = nodes[i+1].val-nodes[i].val;
+        if(minDistance>tmp) {
+            minDistance = tmp;
         }
-        if(b.indexOf(str)==-1) {
-            return str;
-        }
-        if(str.length<=1) {
-            return "";
-        }
-        let leftStr = find(str.slice(0, -1));
-        let rightStr = find(str.slice(1));
-        return leftStr.length>rightStr.length ? leftStr : rightStr;
-    };
+    }
 
-    return find(a).length || -1;
+    return minDistance;
 };
 
-console.log(findLUSlength("aba", "cdc"));
-console.log(findLUSlength("aba", "cdcc"));
-console.log(findLUSlength("a", "cdc"));
-console.log(findLUSlength("cdc", "a"));
-console.log(findLUSlength("cdc", "c"));
-console.log(findLUSlength("", ""));
-console.log(findLUSlength("aefawfawfawfaw", "aefawfeawfwafwaef"));
-console.log(findLUSlength("ecyhzhrreknnlslstqtsvwrwnxcmjkdfdqtmnapngpjqobzaom", "ecyhzhrreknnlslstqtsvwrwnxcmjkdfdqtmnapngpjqobzaom"));
+console.log(getMinimumDifference(makeTree([1, null, 3, 2])));
 
 
 
