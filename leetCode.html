@@ -77,6 +77,27 @@ const travels = function(root) {
     return nodes;
 };
 
+//先序遍历
+const preorderTraversal = function(root) {
+    const getLeftChildren = function(node) {
+        if(node.left) {
+            return preorderTraversal(node.left);
+        }else {
+            return [];
+        }
+    };
+
+    const getRightChildren = function(node) {
+        if(node.right) {
+            return preorderTraversal(node.right);
+        }else {
+            return [];
+        }
+    };
+
+    return getLeftChildren(root).concat([root]).concat(getRightChildren(root));
+};
+
 const getComplement = function(num, bit=32) {
     let x = Math.abs(num).toString(2);
     x = ((new Array(bit)).fill("0").join("") + x).slice(-32)
@@ -143,32 +164,26 @@ const getDivisors = function(num) {
 };
 
 /**
- * @param {number[]} nums
- * @param {number} k
- * @return {number}
+ * @param {TreeNode} root
+ * @return {TreeNode}
  */
-var findPairs = function(nums, k) {
-    let cache = {};
-    let count = 0;
-    for(let num of nums) {
-        cache[num] = (cache[num] || 0)+1;
+var convertBST = function(root) {
+    if(!root) {//sanity check
+        return root;
     }
-    for(let num in cache) {
-        if(k==0) {
-            if(cache[num]>1) {
-                count++;
-            }
-        }else if(cache[parseInt(num)+k]) {
-            count++;
-        }
+    
+    const nodes = preorderTraversal(root);
+    let sum = 0;
+    for(let i = nodes.length-1; i>=0; i--) {
+        sum += nodes[i].val;
+        nodes[i].val = sum;
     }
 
-    return count;
+    return root;
 };
 
-console.log(findPairs([3, 1, 4, 1, 5], 2));
-console.log(findPairs([1, 2, 3, 4, 5], 1));
-console.log(findPairs([1, 3, 1, 5, 4], 0));
+console.log(convertBST(makeTree([5, 2, 13])));
+//console.log(preorderTraversal(makeTree([5, 2, 13])));
 
 
 
