@@ -164,22 +164,33 @@ const getDivisors = function(num) {
 };
 
 /**
- * @param {string} s
- * @param {number} k
- * @return {string}
+ * @param {TreeNode} root
+ * @return {number}
  */
-var reverseStr = function(s, k) {
-    s = s.split("");
-    let i = 0;
-    while(i<s.length) {
-        let tmp = s.slice(i, i+k);
-        s.splice(i, k, ...tmp.reverse());
-        i += 2*k;
-    }
-    return s.join("");
+var diameterOfBinaryTree = function(root) {
+    let maxDiameter = 0;
+    const getDepth = function(node) {
+        if(!node) {
+            return 0;
+        }
+
+        let leftDepth = getDepth(node.left);
+        let rightDepth = getDepth(node.right);
+        let tmp = leftDepth + rightDepth;
+        if(tmp>maxDiameter) {
+            maxDiameter = tmp;
+        }
+        return 1 + Math.max(leftDepth, rightDepth);
+    };
+
+     getDepth(root);
+
+     return maxDiameter;
 };
 
-console.log(reverseStr("abcdefgjshdgaks", 2));
+console.log(diameterOfBinaryTree(makeTree([1, 2, 3, 4, 5])));
+console.log(diameterOfBinaryTree(makeTree([1])));
+console.log(diameterOfBinaryTree(makeTree([1, 2])));
 //console.log(preorderTraversal(makeTree([5, 2, 13])));
 
 
