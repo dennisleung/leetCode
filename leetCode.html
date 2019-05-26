@@ -164,16 +164,20 @@ const getDivisors = function(num) {
 };
 
 /**
- * @param {string} s
- * @return {boolean}
+ * @param {number} area
+ * @return {number[]}
  */
-var checkRecord = function(s) {
-    return (s.match(/L{3,}/g) || []).length<=0 && (s.match(/A/g) || []).length<=1;
+var constructRectangle = function(area) {
+    for(let l = Math.ceil(Math.sqrt(area)); l<=area; l++) {
+        if(area%l==0) {
+            return [l, area/l];
+        }
+    }
 };
 
-//console.log(checkRecord("PPALLP"));
-console.log(checkRecord("PPALLL"));
-console.log(checkRecord("LALL"));
+console.log(constructRectangle(4));
+console.log(constructRectangle(5));
+console.log(constructRectangle(6));
 
 
 
