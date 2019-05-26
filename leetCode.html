@@ -164,20 +164,15 @@ const getDivisors = function(num) {
 };
 
 /**
- * @param {number} area
- * @return {number[]}
+ * @param {string} s
+ * @return {string}
  */
-var constructRectangle = function(area) {
-    for(let l = Math.ceil(Math.sqrt(area)); l<=area; l++) {
-        if(area%l==0) {
-            return [l, area/l];
-        }
-    }
+var reverseWords = function(s) {
+    return s.split(/ /g).map(v=>v.split("").reverse().join("")).join(" ");
 };
 
-console.log(constructRectangle(4));
-console.log(constructRectangle(5));
-console.log(constructRectangle(6));
+console.log(reverseWords("Let's take LeetCode contest"));
+console.log(reverseWords("abc    def"));
 
 
 
