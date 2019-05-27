@@ -163,14 +163,29 @@ const getDivisors = function(num) {
     return Object.keys(result);
 };
 
-/**
- * @param {string} s
- * @return {string}
- */
-var reverseWords = function(s) {
-    return s.split(/ /g).map(v=>v.split("").reverse().join("")).join(" ");
+function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
+    this.val = val;
+    this.isLeaf = isLeaf;
+    this.topLeft = topLeft;
+    this.topRight = topRight;
+    this.bottomLeft = bottomLeft;
+    this.bottomRight = bottomRight;
 };
+/**
+ * @param {Node} quadTree1
+ * @param {Node} quadTree2
+ * @return {Node}
+ */
+var intersect = function(quadTree1, quadTree2) {
+    if((quadTree1.isLeaf&&quadTree1.val) || (quadTree2.isLeaf&&quadTree2.val)) {
+        return new Node(true, isLeaf);
+    }
 
+    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
+    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
+    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
+    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
+};
 console.log(reverseWords("Let's take LeetCode contest"));
 console.log(reverseWords("abc    def"));
 
