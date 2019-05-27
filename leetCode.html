@@ -177,17 +177,47 @@ function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
  * @return {Node}
  */
 var intersect = function(quadTree1, quadTree2) {
-    if((quadTree1.isLeaf&&quadTree1.val) || (quadTree2.isLeaf&&quadTree2.val)) {
-        return new Node(true, isLeaf);
+    if(quadTree1.isLeaf) {
+        if(quadTree1.val) {
+            return new Node(true, true)
+        }else {
+            return quadTree2;
+        }
+    }
+
+    if(quadTree2.isLeaf) {
+        if(quadTree2.val) {
+            return new Node(true, true)
+        }else {
+            return quadTree1;
+        }
     }
 
     quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
-    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
-    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
-    quadTree1.topLeft = intersect(quadTree1.topLeft, quadTree2.topLeft);
+    quadTree1.topRight = intersect(quadTree1.topRight, quadTree2.topRight);
+    quadTree1.bottomLeft = intersect(quadTree1.bottomLeft, quadTree2.bottomLeft);
+    quadTree1.bottomRight = intersect(quadTree1.bottomRight, quadTree2.bottomRight);
+    
+    return quadTree1;
 };
-console.log(reverseWords("Let's take LeetCode contest"));
-console.log(reverseWords("abc    def"));
+
+var quadTree1 = new Node(null, false, new Node(true, true), new Node(true, true), new Node(false, true), new Node(false, true));
+var quadTree2 = new Node(
+    null, 
+    false, 
+    new Node(true, true),
+    new Node(
+        null, 
+        false,
+        new Node(false, true),
+        new Node(false, true),
+        new Node(true, true),
+        new Node(true, true)
+    ),
+    new Node(true, true),
+    new Node(false, true)
+);
+console.log(intersect(quadTree1, quadTree2));
 
 
 
