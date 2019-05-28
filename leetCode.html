@@ -172,16 +172,23 @@ function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
     this.bottomRight = bottomRight;
 };
 
-var maxDepth = function(root) {
-    if(!root) {
-        return 0;
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var arrayPairSum = function(nums) {
+    nums.sort((a, b)=>{return a-b});
+    let sum = 0;
+    for(let i = 0, len = nums.length; i<len; i++) {
+        if(i%2==0) {
+            sum += nums[i];
+        }
     }
 
-    return 1 + (root.children&&root.children.length ? Math.max(...root.children.map(child=>maxDepth(child))) : 0);
+    return sum;
 };
 
-const root = {"$id":"1","children":[{"$id":"2","children":[{"$id":"5","children":[],"val":5},{"$id":"6","children":[],"val":6}],"val":3},{"$id":"3","children":[],"val":2},{"$id":"4","children":[],"val":4}],"val":1};
-console.log(maxDepth(root));
+console.log(arrayPairSum([1,4,3,2]));
 
 
 
