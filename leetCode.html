@@ -173,22 +173,50 @@ function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
 };
 
 /**
- * @param {number[]} nums
+ * @param {TreeNode} root
  * @return {number}
  */
-var arrayPairSum = function(nums) {
-    nums.sort((a, b)=>{return a-b});
+var findTilt = function(root) {
+    if(!root) {
+        return 0;
+    }
+
+    const map = new Map();
+    const _getSum = (node)=>{
+        if(!node) {
+            return 0;
+        }
+
+        let result = map.get(node);
+        if(result!==void 0) {
+            return result;
+        }
+
+        result = node.val + _getSum(node.left) + _getSum(node.right);
+        map.set(node, result);
+
+        return result;
+    }
+
     let sum = 0;
-    for(let i = 0, len = nums.length; i<len; i++) {
-        if(i%2==0) {
-            sum += nums[i];
+    let nodes = [];
+    let queue = [root];
+    while(queue.length) {
+        let node = queue.shift();
+        sum += Math.abs(_getSum(node.left)-_getSum(node.right));
+        nodes.push(node);
+        if(node.left) {
+            queue.push(node.left);
+        }
+        if(node.right) {
+            queue.push(node.right);
         }
     }
 
     return sum;
 };
 
-console.log(arrayPairSum([1,4,3,2]));
+console.log(findTilt(makeTree([1,2,3])));
 
 
 
