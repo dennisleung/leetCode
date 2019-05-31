@@ -33,11 +33,11 @@ const makeTree = (arr)=>{
         let node = nodes.shift();
         let left = arr.shift();
         let right = arr.shift();
-        if(left) {
+        if(left||left===0) {
             node.left = new TreeNode(left);
             nodes.push(node.left);
         }
-        if(right) {
+        if(right||right===0) {
             node.right = new TreeNode(right);
             nodes.push(node.right);
         }
@@ -60,7 +60,7 @@ function TreeNode2(val, children) {
     this.children = children;
 }
 
-const travels = function(root) {
+const bfs = function(root) {
     let nodes = [];
     let queue = [root];
     while(queue.length) {
@@ -172,32 +172,33 @@ function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
     this.bottomRight = bottomRight;
 };
 
-/**
- * @param {number[][]} nums
- * @param {number} r
- * @param {number} c
- * @return {number[][]}
- */
-var matrixReshape = function(nums, r, c) {
-    if(!nums || !nums.length || !nums[0].length || nums.length*nums[0].length!=r*c) {
-        return nums;
+const dfs = (root)=>{
+    if(!root) {
+        return [];
     }
-
-    nums = nums.reduce((a, b)=>a.concat(b), []);
-    const result = [];
-    let row = [];
-    for(let i = 0, len = nums.length; i<len; i++) {
-        row.push(nums[i]);
-        if(row.length>=c) {
-            result.push(row);
-            row = [];
-        }
-    }
-
-    return result;
+    return [root].concat(dfs(root.left), dfs(root.right));
 };
 
-console.log(matrixReshape(null, 2, 4));
+/**
+ * @param {TreeNode} s
+ * @param {TreeNode} t
+ * @return {boolean}
+ */
+var isSubtree = function(s, t) {
+    s = dfs(s);
+    const validRoots = s.filter(node=>node.val==t.val);
+    t = dfs(t).map(node=>node.val).join(",");
+    for(let validRoot of validRoots) {
+        s = dfs(validRoot);
+        s = s.map(node=>node.val).join(",");
+        if(s==t) {
+            return true;
+        }
+    }
+    return false;
+};
+console.log(isSubtree(makeTree([3,4,5,1,2]), makeTree([4,1,2])));
+console.log(isSubtree(makeTree([3,4,5,1,2,null,null,null,null,0]), makeTree([4,1,2])));
 
 
 
