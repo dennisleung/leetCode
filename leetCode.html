@@ -173,50 +173,31 @@ function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
 };
 
 /**
- * @param {TreeNode} root
- * @return {number}
+ * @param {number[][]} nums
+ * @param {number} r
+ * @param {number} c
+ * @return {number[][]}
  */
-var findTilt = function(root) {
-    if(!root) {
-        return 0;
+var matrixReshape = function(nums, r, c) {
+    if(!nums || !nums.length || !nums[0].length || nums.length*nums[0].length!=r*c) {
+        return nums;
     }
 
-    const map = new Map();
-    const _getSum = (node)=>{
-        if(!node) {
-            return 0;
-        }
-
-        let result = map.get(node);
-        if(result!==void 0) {
-            return result;
-        }
-
-        result = node.val + _getSum(node.left) + _getSum(node.right);
-        map.set(node, result);
-
-        return result;
-    }
-
-    let sum = 0;
-    let nodes = [];
-    let queue = [root];
-    while(queue.length) {
-        let node = queue.shift();
-        sum += Math.abs(_getSum(node.left)-_getSum(node.right));
-        nodes.push(node);
-        if(node.left) {
-            queue.push(node.left);
-        }
-        if(node.right) {
-            queue.push(node.right);
+    nums = nums.reduce((a, b)=>a.concat(b), []);
+    const result = [];
+    let row = [];
+    for(let i = 0, len = nums.length; i<len; i++) {
+        row.push(nums[i]);
+        if(row.length>=c) {
+            result.push(row);
+            row = [];
         }
     }
 
-    return sum;
+    return result;
 };
 
-console.log(findTilt(makeTree([1,2,3])));
+console.log(matrixReshape(null, 2, 4));
 
 
 
