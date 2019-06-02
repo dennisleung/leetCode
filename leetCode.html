@@ -180,25 +180,20 @@ const dfs = (root)=>{
 };
 
 /**
- * @param {TreeNode} s
- * @param {TreeNode} t
- * @return {boolean}
+ * @param {number[]} candies
+ * @return {number}
  */
-var isSubtree = function(s, t) {
-    s = dfs(s);
-    const validRoots = s.filter(node=>node.val==t.val);
-    t = dfs(t).map(node=>node.val).join(",");
-    for(let validRoot of validRoots) {
-        s = dfs(validRoot);
-        s = s.map(node=>node.val).join(",");
-        if(s==t) {
-            return true;
-        }
+var distributeCandies = function(candies) {
+    const typeMap = {};
+    for(let candy of candies) {
+        typeMap[candy] = 1;
     }
-    return false;
+    const typeCount = Object.keys(typeMap).length;
+    
+    return Math.min(typeCount, candies.length/2);
 };
-console.log(isSubtree(makeTree([3,4,5,1,2]), makeTree([4,1,2])));
-console.log(isSubtree(makeTree([3,4,5,1,2,null,null,null,null,0]), makeTree([4,1,2])));
+console.log(distributeCandies([1,1,2,2,3,3]));
+console.log(distributeCandies([1,1,2,3]));
 
 
 
