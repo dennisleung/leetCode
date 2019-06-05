@@ -183,16 +183,23 @@ const dfs = (root)=>{
  * @param {Node} root
  * @return {number[]}
  */
-var preorder = function(root) {
-    const dfs = (root)=>{
-        if(!root) {
-            return [];
+var postorder = function(root) {
+    const result = [];
+    const travels = (node) => {
+        if(!node) {
+            return;
         }
-        return [root].concat(...(root.children&&root.children.length?root.children.map(child=>dfs(child)):[]));
+        (node.children||[]).forEach((child)=>{
+            travels(child);
+        });
+        result.push(node.val);
     };
-    return dfs(root).map(node=>node.val);
+
+    travels(root);
+    return result;
 };
-console.log(preorder({
+
+console.log(postorder({
     val : 1,
     children : [
         {
