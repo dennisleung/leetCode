@@ -200,25 +200,37 @@ var postorder = function(root) {
 };
 
 /**
- * @param {number} m
- * @param {number} n
- * @param {number[][]} ops
- * @return {number}
+ * @param {string[]} list1
+ * @param {string[]} list2
+ * @return {string[]}
  */
-var maxCount = function(m, n, ops) {
-    const is = [m];
-    const js = [n];
-    for(let op of ops) {
-        if(!op[0]||!op[1]) {
+var findRestaurant = function(list1, list2) {
+    const cache = {};
+    let min = Infinity;
+    let minArr = [];
+    for(let i = 0, len = list1.length; i<len; i++) {
+        cache[list1[i]] = i;
+    }
+
+    for(let j = 0, len = list2.length; j<len; j++) {
+        let i = cache[list2[j]];
+        if(i===void 0) {
             continue;
         }
 
-        is.push(op[0]);
-        js.push(op[1]);
+        let tmp = i+j;
+        if(tmp<min) {
+            min = tmp;
+            minArr = [list2[j]];
+        }else if(tmp==min) {
+            minArr.push(list2[j]);
+        }
     }
 
-    return Math.min(...is) * Math.min(...js);
+    return minArr;
 };
-console.log(maxCount(3,3, [[2,2],[0,3]]));
+console.log(findRestaurant(["Shogun", "Tapioca Express", "Burger King", "KFC"], ["Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun"]));
+console.log(findRestaurant(["Shogun", "Tapioca Express", "Burger King", "KFC"], ["KFC", "Shogun", "Burger King"]));
+console.log(findRestaurant(["Shogun", "Tapioca Express", "Burger King", "KFC"], ["Burger King", "KFC", "Shogun"]));
 </script>
 </body>
