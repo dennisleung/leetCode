@@ -200,35 +200,46 @@ var postorder = function(root) {
 };
 
 /**
- * @param {number[]} flowerbed
- * @param {number} n
- * @return {boolean}
+ * @param {TreeNode} t
+ * @return {string}
  */
-var canPlaceFlowers = function(flowerbed, n) {
-    let maxCount = 0;
-    let cur = -1;
-    while(++cur<flowerbed.length) {
-        if(flowerbed[cur]) {
-            continue;
-        }
-        
-        if(cur && flowerbed[cur-1]) {
-            continue;
-        }
-
-        if(cur<flowerbed.length-1 && flowerbed[cur+1]) {
-            continue;
-        }
-
-        flowerbed[cur] = 1;
-        maxCount++;
+var tree2str = function(t) {
+    if(!t) {
+        return "";
     }
 
-    return maxCount>=n;
+    let leftStr = t.left ? `(${tree2str(t.left)})` : "";
+    let rightStr = t.right ? `(${tree2str(t.right)})` : "";
+    if(rightStr && !leftStr) {
+        leftStr = "()";
+    }
+
+    return `${t.val}${leftStr}${rightStr}`
 };
-console.log(canPlaceFlowers([1,0,0,0,1], 1));//true
-console.log(canPlaceFlowers([1,0,0,0,1], 2));//false
-console.log(canPlaceFlowers([1,0,0,0,0,1], 2));//false
-console.log(canPlaceFlowers([0,0,1,0,1], 1));//true
+console.log(tree2str({
+    val : 1,
+    left : {
+        val : 2,
+        left : {
+            val : 4
+        }
+    },
+    right : {
+        val : 3
+    }
+}));//1(2(4))(3)
+
+console.log(tree2str({
+    val : 1,
+    left : {
+        val : 2,
+        right : {
+            val : 4
+        }
+    },
+    right : {
+        val : 3
+    }
+}));//1(2()(4))(3)
 </script>
 </body>
