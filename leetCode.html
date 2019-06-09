@@ -200,37 +200,35 @@ var postorder = function(root) {
 };
 
 /**
- * @param {string[]} list1
- * @param {string[]} list2
- * @return {string[]}
+ * @param {number[]} flowerbed
+ * @param {number} n
+ * @return {boolean}
  */
-var findRestaurant = function(list1, list2) {
-    const cache = {};
-    let min = Infinity;
-    let minArr = [];
-    for(let i = 0, len = list1.length; i<len; i++) {
-        cache[list1[i]] = i;
-    }
-
-    for(let j = 0, len = list2.length; j<len; j++) {
-        let i = cache[list2[j]];
-        if(i===void 0) {
+var canPlaceFlowers = function(flowerbed, n) {
+    let maxCount = 0;
+    let cur = -1;
+    while(++cur<flowerbed.length) {
+        if(flowerbed[cur]) {
+            continue;
+        }
+        
+        if(cur && flowerbed[cur-1]) {
             continue;
         }
 
-        let tmp = i+j;
-        if(tmp<min) {
-            min = tmp;
-            minArr = [list2[j]];
-        }else if(tmp==min) {
-            minArr.push(list2[j]);
+        if(cur<flowerbed.length-1 && flowerbed[cur+1]) {
+            continue;
         }
+
+        flowerbed[cur] = 1;
+        maxCount++;
     }
 
-    return minArr;
+    return maxCount>=n;
 };
-console.log(findRestaurant(["Shogun", "Tapioca Express", "Burger King", "KFC"], ["Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun"]));
-console.log(findRestaurant(["Shogun", "Tapioca Express", "Burger King", "KFC"], ["KFC", "Shogun", "Burger King"]));
-console.log(findRestaurant(["Shogun", "Tapioca Express", "Burger King", "KFC"], ["Burger King", "KFC", "Shogun"]));
+console.log(canPlaceFlowers([1,0,0,0,1], 1));//true
+console.log(canPlaceFlowers([1,0,0,0,1], 2));//false
+console.log(canPlaceFlowers([1,0,0,0,0,1], 2));//false
+console.log(canPlaceFlowers([0,0,1,0,1], 1));//true
 </script>
 </body>
