@@ -200,46 +200,58 @@ var postorder = function(root) {
 };
 
 /**
- * @param {TreeNode} t
- * @return {string}
+ * @param {TreeNode} t1
+ * @param {TreeNode} t2
+ * @return {TreeNode}
  */
-var tree2str = function(t) {
-    if(!t) {
-        return "";
+var mergeTrees = function(t1, t2) {
+    if(!t1) {
+        return t2 || null;
     }
 
-    let leftStr = t.left ? `(${tree2str(t.left)})` : "";
-    let rightStr = t.right ? `(${tree2str(t.right)})` : "";
-    if(rightStr && !leftStr) {
-        leftStr = "()";
+    if(!t2) {
+        return t1 || null;
     }
 
-    return `${t.val}${leftStr}${rightStr}`
+    t1.val += t2.val;
+    t1.left = mergeTrees(t1.left, t2.left);
+    t1.right = mergeTrees(t1.right, t2.right);
+
+    return t1;
 };
-console.log(tree2str({
+
+var t1 = {
     val : 1,
     left : {
-        val : 2,
+        val : 3,
         left : {
-            val : 4
+            val : 5
         }
     },
     right : {
-        val : 3
+        val : 2
     }
-}));//1(2(4))(3)
+};
 
-console.log(tree2str({
-    val : 1,
+var t2 = {
+    val : 2,
     left : {
-        val : 2,
+        val : 1,
         right : {
             val : 4
         }
     },
     right : {
-        val : 3
+        val : 3,
+        right : {
+            val : 7
+        }
     }
-}));//1(2()(4))(3)
+};
+//console.log(mergeTrees(t1, null));
+//console.log(mergeTrees(null, null));
+//console.log(mergeTrees(null, t2));
+console.log(mergeTrees(t1, t2));
+
 </script>
 </body>
