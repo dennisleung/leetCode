@@ -200,22 +200,27 @@ var postorder = function(root) {
 };
 
 /**
- * @param {number} c
- * @return {boolean}
+ * @param {TreeNode} root
+ * @return {number[]}
  */
-var judgeSquareSum = function(c) {
-    for(let i = 0, max = Math.sqrt(Math.round(c/2)); i<=max; i++) {
-        if(Math.sqrt(c-i*i)%1==0) {
-            return true;
+var averageOfLevels = function(root) {
+    const sum = [];
+    const num = [];
+    const travel = (node, level)=>{
+        if(!node) {
+            return;
         }
-    }
+        sum[level] = (sum[level] || 0) + node.val;
+        num[level] = (num[level] || 0) + 1;
+        travel(node.left, level+1);
+        travel(node.right, level+1);
+    };
 
-    return false;
+    travel(root, 0);
+
+    return sum.map((v, i)=>v/num[i]);
 };
-console.log(judgeSquareSum(2));
-//console.log(judgeSquareSum(4));
-//console.log(judgeSquareSum(3));
-//console.log(judgeSquareSum(3736255162552));
+console.log(averageOfLevels(makeTree([3,9,20,null,null,15,7])));
 
 </script>
 </body>
