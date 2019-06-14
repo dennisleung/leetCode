@@ -200,27 +200,29 @@ var postorder = function(root) {
 };
 
 /**
- * @param {TreeNode} root
- * @return {number[]}
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
  */
-var averageOfLevels = function(root) {
-    const sum = [];
-    const num = [];
-    const travel = (node, level)=>{
-        if(!node) {
-            return;
-        }
-        sum[level] = (sum[level] || 0) + node.val;
-        num[level] = (num[level] || 0) + 1;
-        travel(node.left, level+1);
-        travel(node.right, level+1);
-    };
+var findMaxAverage = function(nums, k) {
+    if(nums.length<k) {
+        return nums.reduce((a,b)=>a+b, 0)/k;
+    }
 
-    travel(root, 0);
+    let max = 0;
+    for(let i = 0; i<k; i++) {
+        max += nums[i];
+    }
+    
+    let sum = max;
+    for(let i = k, len = nums.length; i<len; i++) {
+        sum = sum - nums[i-k] + nums[i];
+        max = Math.max(sum, max);
+    }
 
-    return sum.map((v, i)=>v/num[i]);
+    return max/k;
 };
-console.log(averageOfLevels(makeTree([3,9,20,null,null,15,7])));
+console.log(findMaxAverage([1,12,-5,-6,50,3], 4));
 
 </script>
 </body>
