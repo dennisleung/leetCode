@@ -200,39 +200,33 @@ var postorder = function(root) {
 };
 
 /**
- * @param {TreeNode} root
- * @param {number} k
+ * @param {string} moves
  * @return {boolean}
  */
-var findTarget = function(root, k) {
-    const cache = {};
-    const travels = (node)=>{
-        if(!node) {
-            return;
-        }
-        cache[node.val] = (cache[node.val] || 0) + 1;
-        travels(node.left);
-        travels(node.right);
-    };
-    travels(root);
-    
-    for(let key in cache) {
-        let anotherKey = k - key;
-        if(key==anotherKey) {
-            if(cache[key]>1) {
-                return true;
-            }
-        }else {
-            if(cache[anotherKey]) {
-                return true;
-            }
+var judgeCircle = function(moves) {
+    let x = 0;
+    let y = 0;
+    for(let move of moves) {
+        switch(move) {
+            case "L":
+                x -= 1;
+                break;
+            case "R":
+                x += 1;
+                break;   
+            case "U":
+                y += 1;
+                break;
+            default:
+                y -= 1;
+                break;
         }
     }
 
-    return false;
+    return !x && !y;
 };
-console.log(findTarget(makeTree([5,3,6,2,4,null,7]), 9));
-console.log(findTarget(makeTree([5,3,6,2,4,null,7]), 28));
+console.log(judgeCircle("UD"));
+console.log(judgeCircle("LL"));
 
 </script>
 </body>
