@@ -200,50 +200,32 @@ var postorder = function(root) {
 };
 
 /**
- * @param {number[][]} M
- * @return {number[][]}
+ * @param {number[]} nums
+ * @return {boolean}
  */
-var imageSmoother = function(M) {
-    const result = [];
-    const getCellAvg = (row, col)=>{
-        let sum = 0;
-        let count = 0;
-        for(let i = row-1, iLen = Math.min(row+1, M.length-1); i<=iLen; i++) {
-            if(i<0) {
-                continue;
+var checkPossibility = function(nums) {
+    let count = 0;
+    for(let i = 0, len = nums.length; i<len-1; i++) {
+        if(nums[i]>nums[i+1]) {
+            if(!i || nums[i+1]>nums[i-1]) {
+                nums[i] = nums[i+1];
+            }else {
+                nums[i+1] = nums[i];
             }
-            for(let j = col-1, jLen = Math.min(col+1, M[i].length-1); j<=jLen;j++) {
-                if(j<0) {
-                    continue;
-                }
-                if(!M[i][j]) {
-                    return 0;
-                }
+            if(++count>1) {
+                return false;
             }
-        }
-
-        return 1;
-    };
-    for(let i = 0, iLen = M.length; i<iLen; i++) {
-        for(let j = 0, jLen = M[i].length; j<jLen; j++) {
-            result[i] = result[i] || [];
-            result[i][j] = getCellAvg(i, j);
         }
     }
 
-    return result;
+    return true;
 };
-console.log(imageSmoother([
-    [1,1,1],
-    [1,0,1],
-    [1,1,1]
-]));
+console.log(checkPossibility([4,2,3]));//true
+console.log(checkPossibility([4,2,1]));//false
+console.log(checkPossibility([1,2,3]));//true
+console.log(checkPossibility([3,4,2,3]));//false
+console.log(checkPossibility([2,3,3,2,4]));//true
 
-console.log(imageSmoother([
-    [1,0,1],
-    [1,1,1],
-    [1,1,0]
-]));//[[0,0,0],[0,0,0],[1,0,0]]
 
 </script>
 </body>
