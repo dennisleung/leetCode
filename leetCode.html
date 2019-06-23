@@ -200,31 +200,39 @@ var postorder = function(root) {
 };
 
 /**
- * @param {number[]} nums
- * @return {number}
+ * @param {string} s
+ * @return {boolean}
  */
-var findLengthOfLCIS = function(nums) {
-    if(!nums.length) {//sanity check
-        return 0;
-    }
-
-    let max = 1;
-    for(let start = 0, len = nums.length; start<len-1; start++) {
-        let count = 1;
-        for(let i = start; i<len-1; i++) {
-            if(nums[i+1]>nums[i]) {
-                count++;
-            }else {
-                break;
+var validPalindrome = function(s) {
+    const isPalindrome = (strArr)=>{
+        for(let i = 0, len = strArr.length; i<len/2; i++) {
+            if(strArr[i]!=strArr[len-1-i]) {
+                return false;
             }
         }
-        max = Math.max(max, count);
+        return true;
+    };
+
+    for(let i = 0, len = s.length; i<len/2; i++) {
+        if(s[i]!=s[len-1-i]) {
+            let ss1 = s.split("");
+            ss1.splice(i, 1);
+            let ss2 = s.split("");
+            ss2.splice(len-1-i, 1)
+            if(isPalindrome(ss1) || isPalindrome(ss2)) {
+                return true;
+            }else {
+                return false;
+            }
+        }
     }
 
-    return max;
+    return true;
 };
-console.log(findLengthOfLCIS([1,3,5,4,7]));//3
-console.log(findLengthOfLCIS([2,2,2,2,2]));//3
+//console.log(validPalindrome("aba"));//true
+//console.log(validPalindrome("abca"));//true
+//console.log(validPalindrome("abcd"));//false
+console.log(validPalindrome("atbbga"));//false
 
 
 </script>
