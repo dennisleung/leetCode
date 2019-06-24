@@ -200,39 +200,32 @@ var postorder = function(root) {
 };
 
 /**
- * @param {string} s
- * @return {boolean}
+ * @param {string[]} ops
+ * @return {number}
  */
-var validPalindrome = function(s) {
-    const isPalindrome = (strArr)=>{
-        for(let i = 0, len = strArr.length; i<len/2; i++) {
-            if(strArr[i]!=strArr[len-1-i]) {
-                return false;
-            }
-        }
-        return true;
-    };
-
-    for(let i = 0, len = s.length; i<len/2; i++) {
-        if(s[i]!=s[len-1-i]) {
-            let ss1 = s.split("");
-            ss1.splice(i, 1);
-            let ss2 = s.split("");
-            ss2.splice(len-1-i, 1)
-            if(isPalindrome(ss1) || isPalindrome(ss2)) {
-                return true;
-            }else {
-                return false;
-            }
+var calPoints = function(ops) {
+    let scores = [];
+    for(let op of ops) {
+        switch(op) {
+            case "+":
+                scores.push(scores.slice(-2).reduce((a,b)=>a+b, 0));
+                break;
+            case "D":
+                scores.push((scores[scores.length-1]||0)*2);
+                break;
+            case "C":
+                scores.pop();
+                break;
+            default:
+                scores.push(parseInt(op));
+                break;
         }
     }
 
-    return true;
+    return scores.reduce((a,b)=>a+b, 0);
 };
-//console.log(validPalindrome("aba"));//true
-//console.log(validPalindrome("abca"));//true
-//console.log(validPalindrome("abcd"));//false
-console.log(validPalindrome("atbbga"));//false
+console.log(calPoints(["5","2","C","D","+"]));//30
+console.log(calPoints(["5","-2","4","C","D","9","+","+"]));//27
 
 
 </script>
