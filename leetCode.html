@@ -200,33 +200,38 @@ var postorder = function(root) {
 };
 
 /**
- * @param {string[]} ops
+ * @param {string} A
+ * @param {string} B
  * @return {number}
  */
-var calPoints = function(ops) {
-    let scores = [];
-    for(let op of ops) {
-        switch(op) {
-            case "+":
-                scores.push(scores.slice(-2).reduce((a,b)=>a+b, 0));
-                break;
-            case "D":
-                scores.push((scores[scores.length-1]||0)*2);
-                break;
-            case "C":
-                scores.pop();
-                break;
-            default:
-                scores.push(parseInt(op));
-                break;
+var repeatedStringMatch = function(A, B) {
+    if(!B) {
+        return 1;
+    }
+    if(!A) {
+        return -1;
+    }
+    let count = 1;
+    let newStr = A;
+    while(true) {
+        if(newStr.indexOf(B)!==-1) {
+            return count;
         }
+        if(newStr.length>A.length+B.length) {
+            break;
+        }
+        newStr += A;
+        count++;
     }
 
-    return scores.reduce((a,b)=>a+b, 0);
+    return -1;
 };
-console.log(calPoints(["5","2","C","D","+"]));//30
-console.log(calPoints(["5","-2","4","C","D","9","+","+"]));//27
+console.log(repeatedStringMatch("abcd", "cdabcdab"));
+console.log(repeatedStringMatch("abc", "cabcabca"));
 
 
 </script>
 </body>
+
+abcabcabcabc
+cabcabca
