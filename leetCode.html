@@ -200,45 +200,18 @@ var postorder = function(root) {
 };
 
 /**
- * @param {TreeNode} root
- * @return {number}
+ * @param {number} n
+ * @return {boolean}
  */
-var longestUnivaluePath = function(root) {
-    let max = 0;
-    const getLongestPath = (node)=> {
-        if(!node) {
-            return 0;
-        }
-        let leftVal = node.left&&node.left.val==node.val ? 1+getLongestPath(node.left) : 0;
-        let rightVal = node.right&&node.right.val==node.val ? 1+getLongestPath(node.right) : 0;
-        return Math.max(leftVal, rightVal);
-    };
-
-    const travels = (node)=>{
-        if(!node) {
-            return;
-        }
-        
-        let leftVal = 0;
-        if(node.left&&node.left.val==node.val) {
-            leftVal = getLongestPath(node.left) + 1;
-        }
-        let rightVal = 0;
-        if(node.right&&node.right.val==node.val) {
-            rightVal = getLongestPath(node.right) + 1;
-        }
-        max = Math.max(max, leftVal+rightVal);
-        node.left && travels(node.left);
-        node.right && travels(node.right);
-    }
-    travels(root);
-
-    return max;
+ var hasAlternatingBits = function(n) {
+    let pow = ~~(Math.log(n)/Math.log(5));
+    let base = Math.pow(5, pow);
+    return base==n || base*2==n;
 };
-console.log(longestUnivaluePath(makeTree([5,4,5,1,1,null,5])));
-console.log(longestUnivaluePath(makeTree([1,4,5,4,4,null,5])));
-console.log(longestUnivaluePath(makeTree([1,4,5,4,4,null,5,4])));
-console.log(longestUnivaluePath(makeTree([5,4,5,4,4,5,3,4,4,null,null,null,4,null,null,4,null,null,4,null,4,4,null,null,4,4])));
+console.log(hasAlternatingBits(5));//true
+console.log(hasAlternatingBits(7));//false
+console.log(hasAlternatingBits(11));//false
+console.log(hasAlternatingBits(10));//true
 
 
 </script>
