@@ -200,22 +200,19 @@ var postorder = function(root) {
 };
 
 /**
- * @param {string} str
- * @return {string}
+ * @param {number[]} bits
+ * @return {boolean}
  */
-var toLowerCase = function(str) {
-    return str.split("").map(v=>{
-        let charCode = v.charCodeAt(0);
-        if(charCode>=65 && charCode<=90) {
-            return String.fromCharCode(charCode+32);
-        }else {
-            return v;
-        }
-    }).join("");
+var isOneBitCharacter = function(bits) {
+    let last = bits.join("").split(/1\d/g).pop();
+    return last[last.length-1] === '0';
 };
-console.log(toLowerCase("Hello"));
-console.log(toLowerCase("here"));
-console.log(toLowerCase("LOVELY"));
-console.log(toLowerCase("1OVELY"));
+//console.log(isOneBitCharacter([0]));//true
+//console.log(isOneBitCharacter([1, 0]));//false
+//console.log(isOneBitCharacter([1, 0, 0]));//true
+//console.log(isOneBitCharacter([0, 0]));//true
+//console.log(isOneBitCharacter([1, 1, 1, 1]));//false
+console.log(isOneBitCharacter([1, 1, 0, 1, 1]));//false
+//console.log(isOneBitCharacter([1, 1, 1, 1, 0]));//true
 </script>
 </body>
