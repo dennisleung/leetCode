@@ -198,21 +198,42 @@ var postorder = function(root) {
     travels(root);
     return result;
 };
-
 /**
- * @param {number[]} bits
- * @return {boolean}
+ * @param {string[]} words
+ * @return {string}
  */
-var isOneBitCharacter = function(bits) {
-    let last = bits.join("").split(/1\d/g).pop();
-    return last[last.length-1] === '0';
+var longestWord = function(words) {
+    words.sort((a, b)=>{
+        if(a.length<b.length) {
+            return 1;
+        }else if(a.length>b.length) {
+            return -1;
+        }else {
+            return a>b ? 1 : -1;
+        }
+    });
+
+    const map = {};
+    for(let word of words) {
+        map[word] = 1;
+    }
+
+    for(let word of words) {
+        let flag = true;
+        for(let i = 1, len = word.length; i<len; i++) {
+            if(!map[word.slice(0, i)]) {
+                flag = false;
+                break;
+            }
+        }
+        if(flag) {
+            return word;
+        }
+    }
+
+    return "";
 };
-//console.log(isOneBitCharacter([0]));//true
-//console.log(isOneBitCharacter([1, 0]));//false
-//console.log(isOneBitCharacter([1, 0, 0]));//true
-//console.log(isOneBitCharacter([0, 0]));//true
-//console.log(isOneBitCharacter([1, 1, 1, 1]));//false
-console.log(isOneBitCharacter([1, 1, 0, 1, 1]));//false
-//console.log(isOneBitCharacter([1, 1, 1, 1, 0]));//true
+console.log(longestWord(["w","wo","wor","worl", "world"]));//world
+console.log(longestWord(["a", "banana", "app", "appl", "ap", "apply", "apple"]));//apple
 </script>
 </body>
