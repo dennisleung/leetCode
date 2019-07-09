@@ -199,41 +199,36 @@ var postorder = function(root) {
     return result;
 };
 /**
- * @param {string[]} words
- * @return {string}
+ * @param {number[]} nums
+ * @return {number}
  */
-var longestWord = function(words) {
-    words.sort((a, b)=>{
-        if(a.length<b.length) {
-            return 1;
-        }else if(a.length>b.length) {
-            return -1;
-        }else {
-            return a>b ? 1 : -1;
-        }
-    });
+var pivotIndex = function(nums) {
+    const arr = [];
+    const rArr = [];
 
-    const map = {};
-    for(let word of words) {
-        map[word] = 1;
+    let sum = 0;
+    for(let i = 0, len = nums.length; i<len; i++) {
+        arr[i] = sum;
+        sum += nums[i];
     }
 
-    for(let word of words) {
-        let flag = true;
-        for(let i = 1, len = word.length; i<len; i++) {
-            if(!map[word.slice(0, i)]) {
-                flag = false;
-                break;
-            }
-        }
-        if(flag) {
-            return word;
+    sum = 0;
+    for(let i = nums.length-1; i>=0; i--) {
+        rArr[i] = sum;
+        sum += nums[i];
+    }
+
+    for(let i = 0, len = nums.length; i<len; i++) {
+        if(arr[i]==rArr[i]) {
+            return i;
         }
     }
 
-    return "";
+    return -1;
 };
-console.log(longestWord(["w","wo","wor","worl", "world"]));//world
-console.log(longestWord(["a", "banana", "app", "appl", "ap", "apply", "apple"]));//apple
+console.log(pivotIndex([1, 7, 3, 6, 5, 6]));//3
+console.log(pivotIndex([1, 2, 3]));//1
+console.log(pivotIndex([2, 2, 2, 2]));//-1
+console.log(pivotIndex([1]));//-1
 </script>
 </body>
