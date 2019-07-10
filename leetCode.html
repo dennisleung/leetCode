@@ -198,37 +198,36 @@ var postorder = function(root) {
     travels(root);
     return result;
 };
-/**
- * @param {number[]} nums
- * @return {number}
- */
-var pivotIndex = function(nums) {
-    const arr = [];
-    const rArr = [];
 
-    let sum = 0;
-    for(let i = 0, len = nums.length; i<len; i++) {
-        arr[i] = sum;
-        sum += nums[i];
-    }
-
-    sum = 0;
-    for(let i = nums.length-1; i>=0; i--) {
-        rArr[i] = sum;
-        sum += nums[i];
-    }
-
-    for(let i = 0, len = nums.length; i<len; i++) {
-        if(arr[i]==rArr[i]) {
-            return i;
+var isSelfDividingNumbers = function(num) {
+    let digits = `${num}`.split("");
+    for(let digit of digits) {
+        if(digit==="0") {
+            return false;
+        }
+        if(num%digit!==0) {
+           return false; 
         }
     }
 
-    return -1;
+    return true;
 };
-console.log(pivotIndex([1, 7, 3, 6, 5, 6]));//3
-console.log(pivotIndex([1, 2, 3]));//1
-console.log(pivotIndex([2, 2, 2, 2]));//-1
-console.log(pivotIndex([1]));//-1
+
+/**
+ * @param {number} left
+ * @param {number} right
+ * @return {number[]}
+ */
+var selfDividingNumbers = function(left, right) {
+    let result = [];
+    for(let i = left; i<=right; i++) {
+        if(isSelfDividingNumbers(i)) {
+            result.push(i);
+        }
+    }
+
+    return result;
+};
+console.log(selfDividingNumbers(1, 22));//[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 22]
 </script>
 </body>
