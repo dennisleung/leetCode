@@ -214,36 +214,24 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {number[][]} image
- * @param {number} sr
- * @param {number} sc
- * @param {number} newColor
- * @return {number[][]}
+ * @param {character[]} letters
+ * @param {character} target
+ * @return {character}
  */
-var floodFill = function(image, sr, sc, newColor, oldColor, cache={}) {
-    if(sr<0 || sr>=image.length) {//行超出
-        return image;
-    }
-    if(sc<0 || sc>=image[0].length) {//列超出
-        return image;
-    }
-    if(cache[`${sr}_${sc}`]) {
-        return image;
-    }
-    if(oldColor===void 0 || image[sr][sc]==oldColor) {
-        oldColor = image[sr][sc];
-        image[sr][sc] = newColor;
-        cache[`${sr}_${sc}`] = true;//已经处理标记
-        floodFill(image, sr-1, sc, newColor, oldColor, cache);
-        floodFill(image, sr, sc-1, newColor, oldColor, cache);
-        floodFill(image, sr+1, sc, newColor, oldColor, cache);
-        floodFill(image, sr, sc+1, newColor, oldColor, cache);
+var nextGreatestLetter = function(letters, target) {
+    for(let letter of letters) {
+        if(letter>target) {
+            return letter;
+        }
     }
 
-    return image;
+    return letters[0];
 };
-console.log(floodFill([[1,1,1],[1,1,0],[1,0,1]], 1, 1, 2));//[[2,2,2],[2,2,0],[2,0,1]]
-console.log(floodFill([], 1, 1, 2));
-console.log(floodFill([[0,0,0],[0,1,1]], 1, 1, 1));
+console.log(nextGreatestLetter(["c", "f", "j"], "a"));//c
+console.log(nextGreatestLetter(["c", "f", "j"], "c"));//f
+console.log(nextGreatestLetter(["c", "f", "j"], "d"));//f
+console.log(nextGreatestLetter(["c", "f", "j"], "g"));//j
+console.log(nextGreatestLetter(["c", "f", "j"], "j"));//c
+console.log(nextGreatestLetter(["c", "f", "j"], "k"));//c
 </script>
 </body>
