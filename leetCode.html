@@ -214,36 +214,47 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {number[]} cost
- * @return {number}
+ * @param {string} licensePlate
+ * @param {string[]} words
+ * @return {string}
  */
-var dominantIndex = function(nums) {
-    if(nums.length<1) {
-        return -1;
-    }
+var shortestCompletingWord = function(licensePlate, words) {
+    const getMap = function(str) {
+        const map = {};
+        for(let ch of str.split("")) {
+            if(ch>="a"&&ch<="z" || ch>="A"&&ch<="Z") {
+                ch = ch.toLocaleLowerCase();
+                map[ch] = (map[ch]||0) + 1;
+            }
+        }
+        return map;
+    };
+    
+    const templateMap = getMap(licensePlate);
+    const isComplete = function(word) {
+        const map = getMap(word);
+        for(let ch in templateMap) {
+            if(!templateMap.hasOwnProperty(ch)) {
+                continue;
+            }
+            if((map[ch]||0)<templateMap[ch]) {
+                return false;
+            }
+        }
+        return true;
+    };
 
-    let max = -Infinity;
-    let maxIndex;
-    for(let i = 0, len = nums.length; i<len; i++) {
-        if(nums[i]>max) {
-            max = nums[i];
-            maxIndex = i;
+    let minWord = "";
+    for(let word of words) {
+        if(isComplete(word) && (!minWord || word.length<minWord.length)) {
+            minWord = word;
         }
     }
 
-    for(let i = 0, len = nums.length; i<len; i++) {
-        if(i==maxIndex) {
-            continue;
-        }
-        if(nums[i]*2>max) {
-            return -1;
-        }
-    }
-
-    return maxIndex;
+    return minWord;
 };
-//console.log(dominantIndex([3, 6, 1, 0]));//1
-//console.log(dominantIndex([1, 2, 3, 4]));//-1
-console.log(dominantIndex([0, 0, 3, 2]));//-1
+//console.log(shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]));//steps
+//console.log(shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]));//pest
+console.log(shortestCompletingWord("Ah71752", ["suggest","letter","of","husband","easy","education","drug","prevent","writer","old"]));//husband
 </script>
 </body>
