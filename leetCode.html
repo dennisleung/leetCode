@@ -214,47 +214,25 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {string} licensePlate
- * @param {string[]} words
- * @return {string}
+ * @param {number} target
+ * @return {number}
  */
-var shortestCompletingWord = function(licensePlate, words) {
-    const getMap = function(str) {
-        const map = {};
-        for(let ch of str.split("")) {
-            if(ch>="a"&&ch<="z" || ch>="A"&&ch<="Z") {
-                ch = ch.toLocaleLowerCase();
-                map[ch] = (map[ch]||0) + 1;
-            }
-        }
-        return map;
-    };
-    
-    const templateMap = getMap(licensePlate);
-    const isComplete = function(word) {
-        const map = getMap(word);
-        for(let ch in templateMap) {
-            if(!templateMap.hasOwnProperty(ch)) {
-                continue;
-            }
-            if((map[ch]||0)<templateMap[ch]) {
-                return false;
-            }
-        }
-        return true;
-    };
-
-    let minWord = "";
-    for(let word of words) {
-        if(isComplete(word) && (!minWord || word.length<minWord.length)) {
-            minWord = word;
+var reachNumber = function(target) {
+    target = Math.abs(target);
+    let index = Math.floor(Math.sqrt(target * 2));
+    let sum = index * (index - 1) / 2;
+    for(; ; ++index){
+        sum += index;
+        if(sum == target || (sum > target && ((sum - target) & 1) == 0)){
+            return index;
         }
     }
-
-    return minWord;
 };
-//console.log(shortestCompletingWord("1s3 PSt", ["step", "steps", "stripe", "stepple"]));//steps
-//console.log(shortestCompletingWord("1s3 456", ["looks", "pest", "stew", "show"]));//pest
-console.log(shortestCompletingWord("Ah71752", ["suggest","letter","of","husband","easy","education","drug","prevent","writer","old"]));//husband
+console.log(reachNumber(3));//2
+console.log(reachNumber(2));//3
+console.log(reachNumber(5));//5
+console.log(reachNumber(-1));//1
+console.log(reachNumber(-2));//3
+console.log(reachNumber(4));//3
 </script>
 </body>
