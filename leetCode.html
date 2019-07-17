@@ -138,6 +138,9 @@ const deconstructToPrimie = (num)=>{
 };
 
 const isPrime = (num)=>{
+    if(num==1) {
+        return false;
+    }
     let cursor = 2;
     const sqrt = ~~Math.sqrt(num);
     while(num>1 && cursor<=sqrt) {
@@ -214,25 +217,25 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {number} target
+ * @param {number} L
+ * @param {number} R
  * @return {number}
  */
-var reachNumber = function(target) {
-    target = Math.abs(target);
-    let index = Math.floor(Math.sqrt(target * 2));
-    let sum = index * (index - 1) / 2;
-    for(; ; ++index){
-        sum += index;
-        if(sum == target || (sum > target && ((sum - target) & 1) == 0)){
-            return index;
+var countPrimeSetBits = function(L, R) {
+    const get1s = (num)=>{
+        return num.toString(2).split("").filter(v=>v==1).length;
+    };
+
+    let count = 0;
+    for(let i = L; i<=R; i++) {
+        if(isPrime(get1s(i))) {
+            count++;
         }
     }
+
+    return count;
 };
-console.log(reachNumber(3));//2
-console.log(reachNumber(2));//3
-console.log(reachNumber(5));//5
-console.log(reachNumber(-1));//1
-console.log(reachNumber(-2));//3
-console.log(reachNumber(4));//3
+console.log(countPrimeSetBits(6, 10));//4
+console.log(countPrimeSetBits(10, 15));//5
 </script>
 </body>
