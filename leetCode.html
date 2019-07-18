@@ -217,25 +217,48 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {number} L
- * @param {number} R
- * @return {number}
+ * @param {number[][]} matrix
+ * @return {boolean}
  */
-var countPrimeSetBits = function(L, R) {
-    const get1s = (num)=>{
-        return num.toString(2).split("").filter(v=>v==1).length;
-    };
+var isToeplitzMatrix = function(matrix) {
+    if(!matrix.length) {
+        return false;
+    }
+    const getNext = function(i, j, target) {
+        if(i>=matrix.length || j>=matrix[i].length) {//over cross
+            return true;
+        }
+        if(target!=matrix[i][j]) {
+            return false;
+        }
 
-    let count = 0;
-    for(let i = L; i<=R; i++) {
-        if(isPrime(get1s(i))) {
-            count++;
+        return getNext(i+1, j+1, matrix[i][j]);
+    }
+
+    for(let i = 0, len = matrix.length; i<len; i++) {
+        if(!getNext(i, 0, matrix[i][0])) {
+            return false;
         }
     }
 
-    return count;
+    for(let i = 0, len = matrix[0].length; i<len; i++) {
+        if(!getNext(0, i, matrix[0][i])) {
+            return false;
+        }
+    }
+
+    return true;
 };
-console.log(countPrimeSetBits(6, 10));//4
-console.log(countPrimeSetBits(10, 15));//5
+console.log(isToeplitzMatrix([
+  [1,2,3,4],
+  [5,1,2,3],
+  [9,5,1,2]
+]));//true
+console.log(isToeplitzMatrix([
+  [1,2],
+  [2,2]
+]));//false
+console.log(isToeplitzMatrix([]));//false
+console.log(isToeplitzMatrix([[1]]));//true
 </script>
 </body>
