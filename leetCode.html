@@ -217,48 +217,23 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {number[][]} matrix
- * @return {boolean}
+ * @param {string} J
+ * @param {string} S
+ * @return {number}
  */
-var isToeplitzMatrix = function(matrix) {
-    if(!matrix.length) {
-        return false;
+var numJewelsInStones = function(J, S) {
+    const map = {};
+    for(let j of J) {
+        map[j] = 1;
     }
-    const getNext = function(i, j, target) {
-        if(i>=matrix.length || j>=matrix[i].length) {//over cross
-            return true;
-        }
-        if(target!=matrix[i][j]) {
-            return false;
-        }
-
-        return getNext(i+1, j+1, matrix[i][j]);
+    let count = 0;
+    for(let s of S) {
+        map[s] && count++;
     }
 
-    for(let i = 0, len = matrix.length; i<len; i++) {
-        if(!getNext(i, 0, matrix[i][0])) {
-            return false;
-        }
-    }
-
-    for(let i = 0, len = matrix[0].length; i<len; i++) {
-        if(!getNext(0, i, matrix[0][i])) {
-            return false;
-        }
-    }
-
-    return true;
+    return count;
 };
-console.log(isToeplitzMatrix([
-  [1,2,3,4],
-  [5,1,2,3],
-  [9,5,1,2]
-]));//true
-console.log(isToeplitzMatrix([
-  [1,2],
-  [2,2]
-]));//false
-console.log(isToeplitzMatrix([]));//false
-console.log(isToeplitzMatrix([[1]]));//true
+console.log(numJewelsInStones("aA", "aAAbbbb"));//3
+console.log(numJewelsInStones("z", "ZZ"));//0
 </script>
 </body>
