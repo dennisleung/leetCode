@@ -217,35 +217,22 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {string} S
- * @return {string[]}
+ * @param {number} N
+ * @return {number}
  */
-var letterCasePermutation = function(S) {
-    let s = [];
-    if(S) {
-        if(/[a-zA-Z]/.test(S[0])) {
-            s.push(S[0].toLowerCase());
-            s.push(S[0].toUpperCase());
-        }else {
-            s.push(S[0]);
-        }
-        let l = letterCasePermutation(S.slice(1));
-        let newS = [];
-        for(let i = 0, iLen = s.length; i<iLen; i++) {
-            for(let j = 0, jLen = l.length; j<jLen; j++) {
-                newS.push(s[i] + l[j]);
-            }
-        }
-        s = newS;
-    }else {
-        s.push("");
+var rotatedDigits = function(N) {
+    const isValid = (n)=>{
+        n = `${n}`;
+        return /^[0125689]+$/.test(n) && /[2569]/.test(n);
+    };
+    let count = 0;
+    for(let i = 1; i<=N; i++) {
+        isValid(i) && count++;
     }
-
-    return s;
+    return count;
 };
-console.log(letterCasePermutation("a1b2"));//["a1b2", "a1B2", "A1b2", "A1B2"]
-console.log(letterCasePermutation("3z4"));//["3z4", "3Z4"]
-console.log(letterCasePermutation("12345"));//["12345"]
-console.log(letterCasePermutation(""));//[""]
+console.log(rotatedDigits(10));//4
+console.log(rotatedDigits(1));//0
+console.log(rotatedDigits(2));//0
 </script>
 </body>
