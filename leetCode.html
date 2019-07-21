@@ -217,22 +217,35 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {TreeNode} root
- * @return {number}
+ * @param {string} S
+ * @return {string[]}
  */
-var minDiffInBST = function(root) {
-    let arr = preorderTraversal(root);
-    let minDistance = Infinity;
-    for(let i = 0, len = arr.length; i<len-1; i++) {
-        let distance = arr[i+1]["val"]-arr[i]["val"];
-        if(minDistance>distance) {
-            minDistance = distance;
+var letterCasePermutation = function(S) {
+    let s = [];
+    if(S) {
+        if(/[a-zA-Z]/.test(S[0])) {
+            s.push(S[0].toLowerCase());
+            s.push(S[0].toUpperCase());
+        }else {
+            s.push(S[0]);
         }
+        let l = letterCasePermutation(S.slice(1));
+        let newS = [];
+        for(let i = 0, iLen = s.length; i<iLen; i++) {
+            for(let j = 0, jLen = l.length; j<jLen; j++) {
+                newS.push(s[i] + l[j]);
+            }
+        }
+        s = newS;
+    }else {
+        s.push("");
     }
 
-    return minDistance;
+    return s;
 };
-console.log(minDiffInBST(makeTree([4,2,6,1,3,null,null])));//1
-console.log(minDiffInBST(makeTree([90,69,null,49,89,null,52,null,null,null,null])));//1
+console.log(letterCasePermutation("a1b2"));//["a1b2", "a1B2", "A1b2", "A1B2"]
+console.log(letterCasePermutation("3z4"));//["3z4", "3Z4"]
+console.log(letterCasePermutation("12345"));//["12345"]
+console.log(letterCasePermutation(""));//[""]
 </script>
 </body>
