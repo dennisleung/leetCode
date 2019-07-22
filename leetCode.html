@@ -217,22 +217,29 @@ var isSelfDividingNumbers = function(num) {
 };
 
 /**
- * @param {number} N
- * @return {number}
+ * @param {string} A
+ * @param {string} B
+ * @return {boolean}
  */
-var rotatedDigits = function(N) {
-    const isValid = (n)=>{
-        n = `${n}`;
-        return /^[0125689]+$/.test(n) && /[2569]/.test(n);
+var rotateString = function(A, B) {
+    const shift = (str)=>{
+        if(str.length<1) {
+            return str;
+        }
+
+        return str.slice(1) + str[0];
     };
-    let count = 0;
-    for(let i = 1; i<=N; i++) {
-        isValid(i) && count++;
+    for(let i = 0, len = A.length; i<=len; i++) {
+        if(A==B) {
+            return true;
+        }
+        A = shift(A);
     }
-    return count;
+
+    return false;
 };
-console.log(rotatedDigits(10));//4
-console.log(rotatedDigits(1));//0
-console.log(rotatedDigits(2));//0
+console.log(rotateString("", ""));//true
+console.log(rotateString("abcde", "cdeab"));//true
+console.log(rotateString("abcde", "abced"));//false
 </script>
 </body>
