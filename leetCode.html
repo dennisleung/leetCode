@@ -228,19 +228,29 @@ const transformToCode = function(str) {
 };
 
 /**
- * @param {string[]} words
- * @return {number}
+ * @param {number[]} widths
+ * @param {string} S
+ * @return {number[]}
  */
-var uniqueMorseRepresentations = function(words) {
-    const set = new Set();
-    let count = 0;
-    for(let word of words) {
-        let code = transformToCode(word);
-        set.add(code);
+var numberOfLines = function(widths, S) {
+    let lineCount = 0;
+    let lineMaxUnits = 100;
+    let currentUnits = 0;
+    if(!S) {
+        return [0, 0];
+    }
+    for(let s of S) {
+        let unit = widths[s.charCodeAt(0)-97];
+        if(currentUnits+unit>lineMaxUnits) {
+            lineCount++;
+            currentUnits = 0;
+        }
+        currentUnits += unit;
     }
 
-    return set.size;
+    return [lineCount+1, currentUnits];
 };
-console.log(uniqueMorseRepresentations(["gin", "zen", "gig", "msg"]));//2
+console.log(numberOfLines([10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], "abcdefghijklmnopqrstuvwxyz"));//[3, 60]
+console.log(numberOfLines([4,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], "bbbcccdddaaa"));//[2, 4]
 </script>
 </body>
