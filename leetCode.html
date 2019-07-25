@@ -216,41 +216,33 @@ var isSelfDividingNumbers = function(num) {
     return true;
 };
 
-const CODE = [".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."];
-
-const transformToCode = function(str) {
-    let result = "";
-    for(let ch of str) {
-        result += CODE[ch.toLowerCase().charCodeAt(0)-97];
-    }
-
-    return result;
-};
-
 /**
- * @param {number[]} widths
- * @param {string} S
- * @return {number[]}
+ * @param {string[]} cpdomains
+ * @return {string[]}
  */
-var numberOfLines = function(widths, S) {
-    let lineCount = 0;
-    let lineMaxUnits = 100;
-    let currentUnits = 0;
-    if(!S) {
-        return [0, 0];
-    }
-    for(let s of S) {
-        let unit = widths[s.charCodeAt(0)-97];
-        if(currentUnits+unit>lineMaxUnits) {
-            lineCount++;
-            currentUnits = 0;
+var subdomainVisits = function(cpdomains) {
+    const result = {};
+    for(let cpdomain of cpdomains) {
+        let [times, domain] = cpdomain.split(" ");
+        let fromIndex = 0;
+        while(true) {
+            result[domain] = (result[domain]||0) + parseInt(times);
+            let index = domain.indexOf(".");
+            if(index == -1) {
+                break;
+            }
+            domain = domain.slice(index+1);
         }
-        currentUnits += unit;
     }
 
-    return [lineCount+1, currentUnits];
+    const data = [];
+    for(let domain in result) {
+        data.push(`${result[domain]} ${domain}`);
+    }
+
+    return data;
 };
-console.log(numberOfLines([10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], "abcdefghijklmnopqrstuvwxyz"));//[3, 60]
-console.log(numberOfLines([4,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10], "bbbcccdddaaa"));//[2, 4]
+console.log(subdomainVisits(["9001 discuss.leetcode.com"]));//["9001 discuss.leetcode.com", "9001 leetcode.com", "9001 com"]
+console.log(subdomainVisits(["900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"]));//["901 mail.com","50 yahoo.com","900 google.mail.com","5 wiki.org","5 org","1 intel.mail.com","951 com"]
 </script>
 </body>
