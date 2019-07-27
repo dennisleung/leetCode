@@ -202,47 +202,40 @@ var postorder = function(root) {
     return result;
 };
 
-var isSelfDividingNumbers = function(num) {
-    let digits = `${num}`.split("");
-    for(let digit of digits) {
-        if(digit==="0") {
-            return false;
-        }
-        if(num%digit!==0) {
-           return false; 
-        }
-    }
+const getGroup = function(arr, count) {
+    let mid = ~~(arr.length/2);
+    getGroup(arr.slice(0, mid), 1)
+    getGroup(arr.slice(mid), count-1)
 
-    return true;
+    getGroup(arr.slice(0, mid), count-1)
+    getGroup(arr.slice(mid), 1)
 };
 
 /**
- * @param {string[]} cpdomains
- * @return {string[]}
+ * @param {number[][]} points
+ * @return {number}
  */
-var subdomainVisits = function(cpdomains) {
-    const result = {};
-    for(let cpdomain of cpdomains) {
-        let [times, domain] = cpdomain.split(" ");
-        let fromIndex = 0;
-        while(true) {
-            result[domain] = (result[domain]||0) + parseInt(times);
-            let index = domain.indexOf(".");
-            if(index == -1) {
-                break;
+var largestTriangleArea = function(points) {
+    const getArea = (a, b, c)=>{
+        const [x1, y1] = a;
+        const [x2, y2] = b;
+        const [x3, y3] = c;
+        return 0.5 * Math.abs(x2 * y3 + x1 * y2 + x3 * y1 - x3 * y2 - x2 * y1 - x1 * y3)
+    }
+
+    let max = 0;
+    let len = points.length;
+    for(let x = 0; x<len-2; x++) {
+        for(let y = x+1; y<len-1; y++) {
+            for(let z = y+1; z<len; z++) {
+                max = Math.max(max, getArea(points[x], points[y], points[z]));
             }
-            domain = domain.slice(index+1);
         }
     }
 
-    const data = [];
-    for(let domain in result) {
-        data.push(`${result[domain]} ${domain}`);
-    }
-
-    return data;
+    return max;
 };
-console.log(subdomainVisits(["9001 discuss.leetcode.com"]));//["9001 discuss.leetcode.com", "9001 leetcode.com", "9001 com"]
-console.log(subdomainVisits(["900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"]));//["901 mail.com","50 yahoo.com","900 google.mail.com","5 wiki.org","5 org","1 intel.mail.com","951 com"]
+console.log(largestTriangleArea([[0,0],[0,1],[1,0],[0,2],[2,0]]));//2
+console.log(largestTriangleArea([[1,0],[0,0],[0,1]]));//0.5
 </script>
 </body>
