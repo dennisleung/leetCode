@@ -213,23 +213,31 @@ const getGroup = function(arr, count) {
 
 /**
  * @param {string} S
- * @return {string}
+ * @return {number[][]}
  */
-var toGoatLatin = function(S) {
-    const vowels = {"a":true, "e":true, "i":true, "o":true, "u":true, "A":true, "E":true, "I":true, "O":true, "U":true};
-    return S.split(" ").map((v, i)=>{
-        let str = new Array(i+2).join("a");
-        if(vowels[v[0]]) {
-            str = v + "ma" + str;
+var largeGroupPositions = function(S) {
+    const result = [];
+    let curLen = 1;
+    for(var i = 0, len = S.length; i<len-1; i++) {
+        if(S[i]==S[i+1]) {
+            curLen++;
         }else {
-            str = v.slice(1) + v[0] + "ma" + str;
+            if(curLen>=3) {
+                result.push([i-curLen+1, i]);
+            }
+            curLen = 1;
         }
+    }
 
-        return str;
-    }).join(" ");
+    if(curLen>=3) {
+        result.push([i-curLen+1, i]);
+    }
+
+    return result;
 };
-console.log(toGoatLatin("I speak Goat Latin")=="Imaa peaksmaaa oatGmaaaa atinLmaaaaa");
-console.log(toGoatLatin("The quick brown fox jumped over the lazy dog")=="heTmaa uickqmaaa rownbmaaaa oxfmaaaaa umpedjmaaaaaa overmaaaaaaa hetmaaaaaaaa azylmaaaaaaaaa ogdmaaaaaaaaaa");
-console.log(toGoatLatin("Each word consists of lowercase and uppercase letters only")=="Eachmaa ordwmaaa onsistscmaaaa ofmaaaaa owercaselmaaaaaa andmaaaaaaa uppercasemaaaaaaaa etterslmaaaaaaaaa onlymaaaaaaaaaa");
+console.log(largeGroupPositions("aaa"));//[[0, 2]]
+console.log(largeGroupPositions("abbxxxxzzy"));//[[3,6]]
+console.log(largeGroupPositions("abc"));//[]
+console.log(largeGroupPositions("abcdddeeeeaabbbcd"));//[[3,5],[6,9],[12,14]]
 </script>
 </body>
