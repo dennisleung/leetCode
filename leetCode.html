@@ -212,32 +212,13 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} S
+ * @param {number[][]} A
  * @return {number[][]}
  */
-var largeGroupPositions = function(S) {
-    const result = [];
-    let curLen = 1;
-    for(var i = 0, len = S.length; i<len-1; i++) {
-        if(S[i]==S[i+1]) {
-            curLen++;
-        }else {
-            if(curLen>=3) {
-                result.push([i-curLen+1, i]);
-            }
-            curLen = 1;
-        }
-    }
-
-    if(curLen>=3) {
-        result.push([i-curLen+1, i]);
-    }
-
-    return result;
+var flipAndInvertImage = function(A) {
+    return A.map(row=>row.reverse().map(v=>v?0:1));
 };
-console.log(largeGroupPositions("aaa"));//[[0, 2]]
-console.log(largeGroupPositions("abbxxxxzzy"));//[[3,6]]
-console.log(largeGroupPositions("abc"));//[]
-console.log(largeGroupPositions("abcdddeeeeaabbbcd"));//[[3,5],[6,9],[12,14]]
+console.log(flipAndInvertImage([[1,1,0],[1,0,1],[0,0,0]]));//[[1,0,0],[0,1,0],[1,1,1]]
+console.log(flipAndInvertImage([[1,1,0,0],[1,0,0,1],[0,1,1,1],[1,0,1,0]]));//[[1,1,0,0],[0,1,1,0],[0,0,0,1],[1,0,1,0]]
 </script>
 </body>
