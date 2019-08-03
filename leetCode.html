@@ -212,24 +212,73 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} rec1
- * @param {number[]} rec2
- * @return {boolean}
+ * @param {number[][]} grid
+ * @return {number}
  */
-var isRectangleOverlap = function(rec1, rec2) {
-    const [x1, y1, x2, y2] = rec1;
-    const [x3, y3, x4, y4] = rec2;
-    const x5 = Math.max(x1, x3);
-    const x6 = Math.min(x2, x4);
-    const y5 = Math.max(y1, y3);
-    const y6 = Math.min(y2, y4);
+var numMagicSquaresInside = function(grid) {
+    const isMagicSquare = (rowStart, colStart) => {
+        let cache = {};
+        let count = 0;
+        for(let i = rowStart; i<=rowStart+2; i++) {
+            for(let j = colStart; j<=colStart+2; j++) {
+                let num = grid[i][j];
+                if(!cache[num] && num>0 && num<10) {
+                    count++;
+                }
+                cache[grid[i][j]] = 1;
+            }
+        }
+        if(count<9) {
+            return false;
+        }
 
-    return x5<x6 && y5<y6;
+        let sum = -1;
+        for(let i = rowStart; i<=rowStart+2; i++) {
+            let _sum = 0;
+            for(let j = colStart; j<=colStart+2; j++) {
+                _sum += grid[i][j];
+            }
+            if(sum>=0 && _sum!=sum) {
+                return false;
+            }
+            sum = _sum;
+        }
+
+        for(let j = colStart; j<=colStart+2; j++) {
+            let _sum = 0;
+            for(let i = rowStart; i<=rowStart+2; i++) {
+                _sum += grid[i][j];
+            }
+            if(sum>=0 && _sum!=sum) {
+                return false;
+            }
+            sum = _sum;   
+        }
+
+        if(grid[rowStart][colStart]+grid[rowStart+1][colStart+1]+grid[rowStart+2][colStart+2]!=sum) {
+            return false;
+        }
+        
+        if(grid[rowStart+2][colStart]+grid[rowStart+1][colStart+1]+grid[rowStart][colStart+2]!=sum) {
+            return false;
+        }
+
+        return true;
+    }
+
+    let count = 0;
+    for(let i = 0; i<=grid.length-3; i++) {
+        for(let j = 0; j<=grid[0].length-3; j++) {
+            isMagicSquare(i, j) && count++;
+        }
+    }
+
+    return count;
 };
-console.log(isRectangleOverlap([0,0,2,2], [1,1,3,3]));//true
-console.log(isRectangleOverlap([0,0,1,1], [1,0,2,1]));//false
-console.log(isRectangleOverlap([0,0,1,1], [0, 0, 1, 1]));//true
-console.log(isRectangleOverlap([0,0,1,1], [0, 0, 0.5, 0.5]));//true
-console.log(isRectangleOverlap([0,0,1,1], [0.1, 0.1, 0.5, 0.5]));//true
+console.log(numMagicSquaresInside([[5,5,5],[5,5,5],[5,5,5]]));//0
+console.log(numMagicSquaresInside([[4,3,8,4],
+        [9,5,1,9],
+        [2,7,6,2]]));//1
+console.log(numMagicSquaresInside([[10,3,5],[1,6,11],[7,9,2]]));//0
 </script>
 </body>
