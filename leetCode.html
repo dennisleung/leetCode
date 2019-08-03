@@ -212,73 +212,29 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[][]} grid
- * @return {number}
+ * @param {string} S
+ * @param {string} T
+ * @return {boolean}
  */
-var numMagicSquaresInside = function(grid) {
-    const isMagicSquare = (rowStart, colStart) => {
-        let cache = {};
-        let count = 0;
-        for(let i = rowStart; i<=rowStart+2; i++) {
-            for(let j = colStart; j<=colStart+2; j++) {
-                let num = grid[i][j];
-                if(!cache[num] && num>0 && num<10) {
-                    count++;
-                }
-                cache[grid[i][j]] = 1;
+var backspaceCompare = function(S, T) {
+    const typeStr = (str)=>{
+        const result = [];
+        for(let ch of str) {
+            if(ch=="#") {
+                result.pop();
+            }else {
+                result.push(ch);
             }
         }
-        if(count<9) {
-            return false;
-        }
 
-        let sum = -1;
-        for(let i = rowStart; i<=rowStart+2; i++) {
-            let _sum = 0;
-            for(let j = colStart; j<=colStart+2; j++) {
-                _sum += grid[i][j];
-            }
-            if(sum>=0 && _sum!=sum) {
-                return false;
-            }
-            sum = _sum;
-        }
+        return result.join("");
+    };
 
-        for(let j = colStart; j<=colStart+2; j++) {
-            let _sum = 0;
-            for(let i = rowStart; i<=rowStart+2; i++) {
-                _sum += grid[i][j];
-            }
-            if(sum>=0 && _sum!=sum) {
-                return false;
-            }
-            sum = _sum;   
-        }
-
-        if(grid[rowStart][colStart]+grid[rowStart+1][colStart+1]+grid[rowStart+2][colStart+2]!=sum) {
-            return false;
-        }
-        
-        if(grid[rowStart+2][colStart]+grid[rowStart+1][colStart+1]+grid[rowStart][colStart+2]!=sum) {
-            return false;
-        }
-
-        return true;
-    }
-
-    let count = 0;
-    for(let i = 0; i<=grid.length-3; i++) {
-        for(let j = 0; j<=grid[0].length-3; j++) {
-            isMagicSquare(i, j) && count++;
-        }
-    }
-
-    return count;
+    return typeStr(S)==typeStr(T);
 };
-console.log(numMagicSquaresInside([[5,5,5],[5,5,5],[5,5,5]]));//0
-console.log(numMagicSquaresInside([[4,3,8,4],
-        [9,5,1,9],
-        [2,7,6,2]]));//1
-console.log(numMagicSquaresInside([[10,3,5],[1,6,11],[7,9,2]]));//0
+console.log(backspaceCompare("ab#c", "ad#c"));//true
+console.log(backspaceCompare("ab##", "c#d#"));//true
+console.log(backspaceCompare("a##c", "#a#c"));//true
+console.log(backspaceCompare("a#c", "b"));//false
 </script>
 </body>
