@@ -212,29 +212,33 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} S
- * @param {string} T
- * @return {boolean}
+ * @param {number[]} seats
+ * @return {number}
  */
-var backspaceCompare = function(S, T) {
-    const typeStr = (str)=>{
-        const result = [];
-        for(let ch of str) {
-            if(ch=="#") {
-                result.pop();
+var maxDistToClosest = function(seats) {
+    let preSeated = false;
+    let count = 0;
+    let max = 0;
+    for(let seat of seats) {
+        if(seat) {
+            if(preSeated>0) {
+                max = Math.max(max, Math.floor((count+1)/2));
             }else {
-                result.push(ch);
+                max = Math.max(max, count);
             }
+            preSeated = true;
+            count = 0;
+        }else {
+            count++;
         }
-
-        return result.join("");
-    };
-
-    return typeStr(S)==typeStr(T);
+    }
+    max = Math.max(max, count);
+    
+    return max;
 };
-console.log(backspaceCompare("ab#c", "ad#c"));//true
-console.log(backspaceCompare("ab##", "c#d#"));//true
-console.log(backspaceCompare("a##c", "#a#c"));//true
-console.log(backspaceCompare("a#c", "b"));//false
+console.log(maxDistToClosest([1,0,0,0,1,0,1]));//2
+console.log(maxDistToClosest([1,0,0,0]));//3
+console.log(maxDistToClosest([0,0,1]));//2
+console.log(maxDistToClosest([1,0,0,1]));//1
 </script>
 </body>
