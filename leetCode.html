@@ -212,33 +212,17 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} seats
+ * @param {number[]} A
  * @return {number}
  */
-var maxDistToClosest = function(seats) {
-    let preSeated = false;
-    let count = 0;
-    let max = 0;
-    for(let seat of seats) {
-        if(seat) {
-            if(preSeated>0) {
-                max = Math.max(max, Math.floor((count+1)/2));
-            }else {
-                max = Math.max(max, count);
-            }
-            preSeated = true;
-            count = 0;
-        }else {
-            count++;
+var peakIndexInMountainArray = function(A) {
+    for(let i = 1, len = A.length; i<len-1; i++) {
+        if(A[i-1]<A[i] && A[i]>A[i+1]) {
+            return i;
         }
     }
-    max = Math.max(max, count);
-    
-    return max;
 };
-console.log(maxDistToClosest([1,0,0,0,1,0,1]));//2
-console.log(maxDistToClosest([1,0,0,0]));//3
-console.log(maxDistToClosest([0,0,1]));//2
-console.log(maxDistToClosest([1,0,0,1]));//1
+console.log(peakIndexInMountainArray([0,1,0]));//1
+console.log(peakIndexInMountainArray([0,2,1,0]));//1
 </script>
 </body>
