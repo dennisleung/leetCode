@@ -212,17 +212,39 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} A
- * @return {number}
+ * @param {string} A
+ * @param {string} B
+ * @return {boolean}
  */
-var peakIndexInMountainArray = function(A) {
-    for(let i = 1, len = A.length; i<len-1; i++) {
-        if(A[i-1]<A[i] && A[i]>A[i+1]) {
-            return i;
+var buddyStrings = function(A, B) {
+    if(A.length != B.length) {
+        return false;
+    }
+
+    if(A == B) {
+        return /([a-z]).*\1/.test(A);
+    }
+
+    let exist = [];
+    let need = [];
+    for(let i = 0, len = A.length; i<len; i++) {
+        if(A[i]!=B[i]) {
+            exist.push(A[i]);
+            need.push(B[i]);
         }
     }
+    if(exist.length!=2) {
+        return false;
+    }
+
+    return exist.sort().join(",")==need.sort().join(",");
 };
-console.log(peakIndexInMountainArray([0,1,0]));//1
-console.log(peakIndexInMountainArray([0,2,1,0]));//1
+console.log(buddyStrings("ab", "ba"));//true
+console.log(buddyStrings("ab", "ab"));//false
+console.log(buddyStrings("aa", "aa"));//true
+console.log(buddyStrings("aaaaaaabc", "aaaaaaacb"));//true
+console.log(buddyStrings("", "aa"));//false
+console.log(buddyStrings("abab", "abab"));//true
+
 </script>
 </body>
