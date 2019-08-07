@@ -212,39 +212,37 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} A
- * @param {string} B
+ * @param {number[]} bills
  * @return {boolean}
  */
-var buddyStrings = function(A, B) {
-    if(A.length != B.length) {
-        return false;
-    }
-
-    if(A == B) {
-        return /([a-z]).*\1/.test(A);
-    }
-
-    let exist = [];
-    let need = [];
-    for(let i = 0, len = A.length; i<len; i++) {
-        if(A[i]!=B[i]) {
-            exist.push(A[i]);
-            need.push(B[i]);
+var lemonadeChange = function(bills) {
+    const cache = {};
+    for(bill of bills) {
+        let change = bill - 5;
+        if(change) {
+            let credits = Object.keys(cache).sort((a,b)=>b-a);
+            for(let credit of credits) {
+                let needCreditCount = Math.min(cache[credit], Math.floor(change/credit));
+                cache[credit] = cache[credit] - needCreditCount;
+                change -= credit * needCreditCount;
+                if(change<=0) {
+                    break;
+                }
+            }
+            if(change>0) {
+                return false;
+            }
         }
-    }
-    if(exist.length!=2) {
-        return false;
+        cache[bill] = (cache[bill] || 0) + 1;
     }
 
-    return exist.sort().join(",")==need.sort().join(",");
+    return true;
 };
-console.log(buddyStrings("ab", "ba"));//true
-console.log(buddyStrings("ab", "ab"));//false
-console.log(buddyStrings("aa", "aa"));//true
-console.log(buddyStrings("aaaaaaabc", "aaaaaaacb"));//true
-console.log(buddyStrings("", "aa"));//false
-console.log(buddyStrings("abab", "abab"));//true
+
+console.log(lemonadeChange([5,5,5,10,20]));//true
+console.log(lemonadeChange([5,5,10]));//true
+console.log(lemonadeChange([10,10]));//false
+console.log(lemonadeChange([5,5,10,10,20]));//false
 
 </script>
 </body>
