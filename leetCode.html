@@ -211,66 +211,35 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-/**
- * @param {number} N
- * @return {number}
- */
-var binaryGap = function(N) {
-    let bs = N.toString(2);
-    let max = 0;
-    let pre = bs.indexOf("1");
-    for(let i = pre+1; i<bs.length; i++) {
-        if(bs[i]=="1") {
-            max = Math.max(max, i-pre);
-            pre = i;
+var addTwoNumbers = function(l1, l2) {
+    const result = [];
+    let acc = 0;
+    while(true) {
+        if(!l1 && !l2) {
+            if(acc) {
+                result.push(acc);
+            }
+            break;
         }
+        let r = acc;
+        if(l1) {
+            r += l1.val;
+            l1 = l1.next;
+        }
+
+        if(l2) {
+            r += l2.val;
+            l2 = l2.next;
+        }
+
+        result.push(r%10);
+        acc = r>=10 ? 1 : 0;
     }
 
-    return max;
-};
-console.log(binaryGap(22));//2
-console.log(binaryGap(5));//2
-console.log(binaryGap(6));//1
-console.log(binaryGap(8));//0
-
-
-
-/**
- * @param {TreeNode} root1
- * @param {TreeNode} root2
- * @return {boolean}
- */
-var leafSimilar = function(root1, root2) {
-    const getLeaves = (root, leaves) => {
-        if(!root) {
-            return;
-        }
-        root.left && getLeaves(root.left, leaves);
-        root.right && getLeaves(root.right, leaves);
-        if(!root.left && !root.right) {
-            leaves.push(root.val);
-        }
-    }
-
-    const leaves1 = [];
-    getLeaves(root1, leaves1);
-    const leaves2 = [];
-    getLeaves(root2, leaves2);
-
-    if(leaves1.length != leaves2.length) {
-        return false;
-    }
-
-    for(let i = 0, len = leaves1.length; i<len; i++) {
-        if(leaves1[i]!=leaves2[i]) {
-            return false;
-        }
-    }
-
-    return true;
+    return makeLink(result);
 };
 
-//console.log(leafSimilar(makeTree([3,5,1,6,2,9,8,null,null,7,4]), makeTree([3,5,1,6,7,4,2,null,null,null,null,null,null,9,8])));
+console.log(addTwoNumbers(makeLink([2, 4, 3]), makeLink([5, 6, 4])));
 
 </script>
 </body>
