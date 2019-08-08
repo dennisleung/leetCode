@@ -212,37 +212,24 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} bills
- * @return {boolean}
+ * @param {number[][]} A
+ * @return {number[][]}
  */
-var lemonadeChange = function(bills) {
-    const cache = {};
-    for(bill of bills) {
-        let change = bill - 5;
-        if(change) {
-            let credits = Object.keys(cache).sort((a,b)=>b-a);
-            for(let credit of credits) {
-                let needCreditCount = Math.min(cache[credit], Math.floor(change/credit));
-                cache[credit] = cache[credit] - needCreditCount;
-                change -= credit * needCreditCount;
-                if(change<=0) {
-                    break;
-                }
-            }
-            if(change>0) {
-                return false;
-            }
+var transpose = function(A) {
+    const B = [];
+    for(let i = 0, iLen = A[0].length; i<iLen; i++) {
+        let row = [];
+        for(let j = 0, jLen = A.length; j<jLen; j++) {
+            row.push(A[j][i]);
         }
-        cache[bill] = (cache[bill] || 0) + 1;
+        B.push(row);
     }
 
-    return true;
+    return B;
 };
 
-console.log(lemonadeChange([5,5,5,10,20]));//true
-console.log(lemonadeChange([5,5,10]));//true
-console.log(lemonadeChange([10,10]));//false
-console.log(lemonadeChange([5,5,10,10,20]));//false
+console.log(transpose([[1,2,3],[4,5,6],[7,8,9]]));//[[1,4,7],[2,5,8],[3,6,9]]
+console.log(transpose([[1,2,3],[4,5,6]]));//[[1,4],[2,5],[3,6]]
 
 </script>
 </body>
