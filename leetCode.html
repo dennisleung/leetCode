@@ -212,24 +212,65 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[][]} A
- * @return {number[][]}
+ * @param {number} N
+ * @return {number}
  */
-var transpose = function(A) {
-    const B = [];
-    for(let i = 0, iLen = A[0].length; i<iLen; i++) {
-        let row = [];
-        for(let j = 0, jLen = A.length; j<jLen; j++) {
-            row.push(A[j][i]);
+var binaryGap = function(N) {
+    let bs = N.toString(2);
+    let max = 0;
+    let pre = bs.indexOf("1");
+    for(let i = pre+1; i<bs.length; i++) {
+        if(bs[i]=="1") {
+            max = Math.max(max, i-pre);
+            pre = i;
         }
-        B.push(row);
     }
 
-    return B;
+    return max;
+};
+console.log(binaryGap(22));//2
+console.log(binaryGap(5));//2
+console.log(binaryGap(6));//1
+console.log(binaryGap(8));//0
+
+
+
+/**
+ * @param {TreeNode} root1
+ * @param {TreeNode} root2
+ * @return {boolean}
+ */
+var leafSimilar = function(root1, root2) {
+    const getLeaves = (root, leaves) => {
+        if(!root) {
+            return;
+        }
+        root.left && getLeaves(root.left, leaves);
+        root.right && getLeaves(root.right, leaves);
+        if(!root.left && !root.right) {
+            leaves.push(root.val);
+        }
+    }
+
+    const leaves1 = [];
+    getLeaves(root1, leaves1);
+    const leaves2 = [];
+    getLeaves(root2, leaves2);
+
+    if(leaves1.length != leaves2.length) {
+        return false;
+    }
+
+    for(let i = 0, len = leaves1.length; i<len; i++) {
+        if(leaves1[i]!=leaves2[i]) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
-console.log(transpose([[1,2,3],[4,5,6],[7,8,9]]));//[[1,4,7],[2,5,8],[3,6,9]]
-console.log(transpose([[1,2,3],[4,5,6]]));//[[1,4],[2,5],[3,6]]
+//console.log(leafSimilar(makeTree([3,5,1,6,2,9,8,null,null,7,4]), makeTree([3,5,1,6,7,4,2,null,null,null,null,null,null,9,8])));
 
 </script>
 </body>
