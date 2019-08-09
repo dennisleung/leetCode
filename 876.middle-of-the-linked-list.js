@@ -15,6 +15,18 @@
   ✔ 15/15 cases passed (44 ms)
   ✔ Your runtime beats 97.14 % of javascript submissions
   ✔ Your memory usage beats 77.78 % of javascript submissions (33.8 MB)
+
+better solution:
+var middleNode = function(head) {
+    let fast = head;
+    let slow = head;
+    
+    while (fast && fast.next) {//slow每次走一步，fast每次走两步
+        fast = fast.next.next;
+        slow = slow.next;
+    }
+    return slow;
+};
 */
 
 /**

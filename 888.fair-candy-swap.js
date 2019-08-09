@@ -8,6 +8,24 @@
   ✔ 75/75 cases passed (104 ms)
   ✔ Your runtime beats 69.95 % of javascript submissions
   ✔ Your memory usage beats 33.33 % of javascript submissions (44.5 MB)
+
+better solution:
+var fairCandySwap = function(A, B) {    
+    const sum = (first, next) => first + next;
+    const sumA = A.reduce(sum);
+    const sumB = B.reduce(sum);
+    const mid = (sumA + sumB) / 2;
+    const setB = new Set(B);      
+    
+    for (let i=0; i< A.length; i++ ) {     
+        const current = A[i];
+        const withoutCurrent = sumA - current;
+        const searchedItem = mid - withoutCurrent;
+        if ( setB.has(searchedItem) &&  sumB - searchedItem + current === mid ) {
+            return [ A[i], searchedItem ];
+        }        
+    }      
+};
 */
 
 /**
