@@ -212,37 +212,35 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} deck
- * @return {boolean}
+ * @param {string} s
+ * @param {number} numRows
+ * @return {string}
  */
- var hasGroupsSizeX = function(deck) {
-    let cache = {};
-    for(card of deck) {
-        cache[card] = (cache[card] || 0) + 1;
-    }
-
-    let counts = Object.values(cache);
-    for(let i = 2, minCount = Math.min(...counts); i<=minCount; i++) {
-        let flag = true;
-        for(let c of counts) {
-            if(c%i!==0) {
-                flag = false;
-                break;
+var convert = function(s, numRows) {
+    const result = [];
+    let row = 0;
+    let col = 0;
+    let flag = 1;
+    for(let ch of s) {
+        result[row] = result[row] || [];
+        result[row].push(ch);
+        if(col%numRows==0) {
+            if(row==numRows-1) {
+                col++;
             }
+        }else {
+            col++;
         }
-
-        if(flag) {
-            return true;
+        row = row + flag;
+        if(row==numRows-1 || row==0) {
+            flag = -flag;
         }
     }
-    return false;
+
+    return result.reduce((a, b)=>a+b.join(""), "");
 };
 
-console.log(hasGroupsSizeX([1,2,3,4,4,3,2,1]));//true
-console.log(hasGroupsSizeX([1,1,1,2,2,2,3,3]));//false
-console.log(hasGroupsSizeX([1]));//false
-console.log(hasGroupsSizeX([1,1]));//true
-console.log(hasGroupsSizeX([1,1,2,2,2,2]));//true
-console.log(hasGroupsSizeX([1,1,1,1,2,2,2,2,2,2]));//true
+console.log(convert("PAYPALISHIRING", 3));//PAHNAPLSIIGYIR
+console.log(convert("PAYPALISHIRING", 4));//PINALSIGYAHRPI
 </script>
 </body>
