@@ -212,33 +212,37 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} s
- * @return {string}
+ * @param {number[]} deck
+ * @return {boolean}
  */
-var longestPalindrome = function(s) {
-    let maxStr = "";
-    for(let i = 0, len = s.length; i<len; i++) {
-        for(let j = 0; j<2; j++) {
-            let start = i;
-            let end = i+j;
-            while(s[start] && s[start]===s[end]) {
-                start--;
-                end++;
-            }
-            if(end-start-1>maxStr.length) {//注意这里计算长度的方式，因为执行到这里的start和end是溢出（不合法）的，所以要-1
-                maxStr = s.slice(start+1, end);
-            }
-        }
+ var hasGroupsSizeX = function(deck) {
+    let cache = {};
+    for(card of deck) {
+        cache[card] = (cache[card] || 0) + 1;
     }
 
-    return maxStr;
+    let counts = Object.values(cache);
+    for(let i = 2, minCount = Math.min(...counts); i<=minCount; i++) {
+        let flag = true;
+        for(let c of counts) {
+            if(c%i!==0) {
+                flag = false;
+                break;
+            }
+        }
+
+        if(flag) {
+            return true;
+        }
+    }
+    return false;
 };
 
-console.log(longestPalindrome("babad"));//bab
-// console.log(longestPalindrome("cbbd"));//bb
-// console.log(longestPalindrome("a"));//a
-// console.log(longestPalindrome("bb"));//bb
-// console.log(longestPalindrome("1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"));
-// console.log(longestPalindrome("aaabaaaa"));
+console.log(hasGroupsSizeX([1,2,3,4,4,3,2,1]));//true
+console.log(hasGroupsSizeX([1,1,1,2,2,2,3,3]));//false
+console.log(hasGroupsSizeX([1]));//false
+console.log(hasGroupsSizeX([1,1]));//true
+console.log(hasGroupsSizeX([1,1,2,2,2,2]));//true
+console.log(hasGroupsSizeX([1,1,1,1,2,2,2,2,2,2]));//true
 </script>
 </body>
