@@ -212,35 +212,17 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} s
- * @param {number} numRows
- * @return {string}
+ * @param {string} str
+ * @return {number}
  */
-var convert = function(s, numRows) {
-    const result = [];
-    let row = 0;
-    let col = 0;
-    let flag = 1;
-    for(let ch of s) {
-        result[row] = result[row] || [];
-        result[row].push(ch);
-        if(col%numRows==0) {
-            if(row==numRows-1) {
-                col++;
-            }
-        }else {
-            col++;
-        }
-        row = row + flag;
-        if(row==numRows-1 || row==0) {
-            flag = -flag;
-        }
-    }
-
-    return result.reduce((a, b)=>a+b.join(""), "");
+var myAtoi = function(str) {
+    str = str.repleace(/(^\s+)|([^\d]+$)/g, "");
+    return /^\d+$/.test(str) ? parseInt(str, 10) : 0;
 };
 
-console.log(convert("PAYPALISHIRING", 3));//PAHNAPLSIIGYIR
-console.log(convert("PAYPALISHIRING", 4));//PINALSIGYAHRPI
+console.log(myAtoi("42"));//42
+console.log(myAtoi("42"));//42
+console.log(myAtoi("42"));//42
+console.log(myAtoi("42"));//42
 </script>
 </body>
