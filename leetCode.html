@@ -236,23 +236,20 @@ const INT_MIN = -Math.pow(2, 31);
 // };
 
 /**
- * @param {number[]} A
- * @return {number[]}
+ * @param {number[]} height
+ * @return {number}
  */
-var sortArrayByParityII = function(A) {
-    const B = [];
-    for(let i = 0, len = A.length, odd = 1, even = 0; i<len; i++) {
-        if(A[i]%2==0) {
-            B[even] = A[i];
-            even += 2;
-        }else {
-            B[odd] = A[i];
-            odd += 2;
+var maxArea = function(height) {
+    let max = 0;
+    for(let i = 0, len = height.length; i<len-1; i++) {
+        for(let j = i+1; j<len; j++) {
+            let area = (j-i) * Math.min(height[i], height[j]);
+            max = Math.max(max, area);
         }
     }
 
-    return B;
+    return max;
 };
-console.log(sortArrayByParityII([4,2,5,7]));
+console.log(maxArea([1,8,6,2,5,4,8,3,7]));//49
 </script>
 </body>
