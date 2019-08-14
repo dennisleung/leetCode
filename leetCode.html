@@ -215,43 +215,27 @@ const INT_MAX = Math.pow(2, 31)-1;
 const INT_MIN = -Math.pow(2, 31);
 
 /**
- * @param {string} str
- * @return {number}
+ * @param {number} num
+ * @return {string}
  */
-// var myAtoi = function(str) {
-//     str = str.replace(/(^\s+)/, "");
-//     let match = /([\d.]+)/.exec(str);
-//     if(!match) {
-//         return 0;
-//     }
-//     str = str.slice(0, match.index + match[0].length);
-//     let value = /^[+-]?\d+(\.\d+)?$/.test(str) ? parseInt(str, 10) : 0;
-//     if(value>0) {
-//         value = Math.min(value, INT_MAX);
-//     }else if(value<0) {
-//         value = Math.max(value, INT_MIN);
-//     }
-
-//     return value;
-// };
-
-/**
- * @param {string} name
- * @param {string} typed
- * @return {boolean}
- */
-var isLongPressedName = function(name, typed) {
-    //return new RegExp("^"+name.replace(/([a-zA-Z])(?!(\1|$))/g, "$1-").split("-").reduce((a, b)=>`${a}${b[0]}{${b.length},}`, "")+"$").test(typed);
-    //return new RegExp("^"+name.split("").reduce((a, b)=>`${a}${b}{1,}`, "")+"$").test(typed);
-    if(name==typed)
-        return true;
-    let reg=name.split('').join('+');
-    return (new RegExp(reg)).test(typed);   
+var intToRoman = function(num) {
+    let dts = [["M", 1000], ["CM", 900], ["D", 500], ["CD", 400], ["C", 100], ["XC", 90], ["L", 50], ["XL", 40], ["X", 10], ["IX", 9], ["V", 5], ["IV", 4], ["I", 1]];
+    let result = "";
+    let cur = 0;
+    while(num>0) {
+        if(num<dts[cur][1]) {
+            cur++;
+            continue;
+        }
+        num -= dts[cur][1];
+        result += dts[cur][0];
+    }
+    return result;
 };
-//console.log(isLongPressedName("alex", "aaleex"));//true
-//console.log(isLongPressedName("saeed", "ssaaedd"));//false
-//console.log(isLongPressedName("leelee", "lleeelee"));//true
-//console.log(isLongPressedName("laiden", "laiden"));//true
-//console.log(isLongPressedName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+console.log(intToRoman(3));//III
+console.log(intToRoman(4));//IV
+console.log(intToRoman(9));//IX
+console.log(intToRoman(58));//LVIII
+console.log(intToRoman(1994));//MCMXCIV
 </script>
 </body>
