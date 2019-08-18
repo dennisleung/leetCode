@@ -212,39 +212,28 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} digits
- * @return {string[]}
+ * @param {TreeNode} root
+ * @param {number} L
+ * @param {number} R
+ * @return {number}
  */
-var letterCombinations = function(digits) {
-    const map = {
-        "1" : [],
-        "2" : ["a", "b", "c"],
-        "3" : ["d", "e", "f"],
-        "4" : ["g", "h", "i"],
-        "5" : ["j", "k", "l"],
-        "6" : ["m", "n", "o"],
-        "7" : ["p", "q", "r", "s"],
-        "8" : ["t", "u", "v"],
-        "9" : ["w", "x", "y", "z"],
-        "0" : [" "],
-    };
-    let result = [""];
-    digits = digits.split("");
-    while(digits.length) {
-        let letters = map[digits.shift()];
-        let tmp = [];
-        for(let letter of letters) {
-            for(let str of result) {
-                tmp.push(str+letter);
-            }
+var rangeSumBST = function(root, L, R) {
+    let sum = 0;
+    const travels = (node) => {
+        if(!node) {
+            return;
         }
-        result = tmp;
-    }
+        travels(node.left);
+        travels(node.right);
+        if(node.val>=L && node.val<=R) {
+            sum += node.val;
+        }
+    };
 
-    return result;
+    travels(root);
+    return sum;
 };
-console.log(letterCombinations("1"));
-console.log(letterCombinations(""));
-console.log(letterCombinations("23"));//["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
+console.log(rangeSumBST(makeTree([10,5,15,3,7,null,18]), 7, 15));//32
+console.log(rangeSumBST(makeTree([10,5,15,3,7,13,18,1,null,6]), 6, 10));//23
 </script>
 </body>
