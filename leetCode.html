@@ -212,34 +212,67 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} A
- * @return {boolean}
+ * @param {number[]} nums
+ * @param target
+ * @return {number[][]}
  */
- var validMountainArray = function(A) {
-    if(A.length<3) {
-        return false;
-    }
-    let splitIndex = 0;
-    for(var i = 1, len = A.length; i<len-1; i++) {
-        if(A[i]==A[i-1] || A[i]==A[i+1]) {//不能有平的
-            return false;
-        }else if(A[i]>A[i-1] && A[i]>A[i+1]) {
-            splitIndex = i;
-        }
-    }
-    if(!splitIndex) {
-        return false;
+ var threeSum = function(nums, target) {
+    const cache = {};
+    for(let num of nums) {
+        cache[num] = (cache[num] || 0) + 1;
     }
 
-    let aPart = A.slice(0, splitIndex);
-    let bPart = A.slice(splitIndex+1);
-    return aPart.join("_")==aPart.sort((a,b)=>a-b).join("_") && bPart.join("_")==bPart.sort((a,b)=>b-a).join("_");
+    let result = {};
+    nums.sort((a, b)=>a-b);
+    for(let i = 0; i<nums.length; i++) {
+        let low = i+1;
+        let high = nums.length-1;
+        while(low<high) {
+            let r = nums[i] + nums[low] + nums[high];
+            if(r>target) {
+                high--;
+            }else if(r<target){
+                low++;
+            }else {
+                result[`${nums[i]}_${nums[low]}_${nums[high]}`] = [nums[i], nums[low], nums[high]];
+                low++;
+                high--;
+            }
+        }
+    }
+
+    return Object.values(result);
 };
-console.log(validMountainArray([2,1]));//false
-console.log(validMountainArray([3,5,5]));//false
-console.log(validMountainArray([0,3,2,1]));//true
-console.log(validMountainArray([0,1,2,3,4,5,6,7,8,9]));//false
-console.log(validMountainArray([1,7,9,5,4,1,2]));//false
-console.log(validMountainArray([14,82,89,84,79,70,70,68,67,66,63,60,58,54,44,43,32,28,26,25,22,15,13,12,10,8,7,5,4,3]));//false
+
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[][]}
+ */
+var fourSum = function(nums, target) {
+    const cache = {};
+    for(let i = 0; i<nums.length; i++) {
+        let result = threeSum(nums.slice(0, i).concat(nums.slice(i+1)), target-nums[i]);
+        for(let arr of result) {
+            arr = [...arr, nums[i]];
+            let cacheKey = arr.sort((a,b)=>a-b).join("_");
+            if(!cache[cacheKey]) {
+                cache[cacheKey] = arr;
+            }
+        }
+    }
+    
+    return Object.values(cache);
+};
+console.log(fourSum([1, 0, -1, 0, -2, 2], 0));
+// [
+//   [-1,  0, 0, 1],
+//   [-2, -1, 1, 2],
+//   [-2,  0, 0, 2]
+// ]
+console.log(fourSum([-500,-481,-480,-469,-437,-423,-408,-403,-397,-381,-379,-377,-353,-347,-337,-327,-313,-307,-299,-278,-265,-258,-235,-227,-225,-193,-192,-177,-176,-173,-170,-164,-162,-157,-147,-118,-115,-83,-64,-46,-36,-35,-11,0,0,33,40,51,54,74,93,101,104,105,112,112,116,129,133,146,152,157,158,166,177,183,186,220,263,273,320,328,332,356,357,363,372,397,399,420,422,429,433,451,464,484,485,498,499], 2139));
+console.log(fourSum([-5,5,4,-3,0,0,4,-2], 4));//[[-5,0,4,5],[-3,-2,4,5]]
+console.log(fourSum([-474,-445,-442,-426,-410,-382,-369,-367,-356,-351,-339,-335,-335,-320,-318,-313,-276,-250,-227,-215,-209,-209,-200,-198,-189,-183,-154,-149,-138,-134,-121,-110,-97,-93,-86,-66,-61,-54,-33,-12,-9,2,6,13,30,59,82,86,88,111,132,159,162,193,204,220,225,229,231,275,314,327,332,386,400,440,452,457,485], 3456));
+
 </script>
 </body>
