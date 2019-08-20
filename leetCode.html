@@ -211,25 +211,34 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-/**
- * @param {string[]} A
- * @return {number}
- */
-var minDeletionSize = function(A) {
-    let result = [];
-    for(let i = 0, iLen = A[0].length; i<iLen; i++) {
-        for(let j = 0, jLen = A.length; j<jLen-1; j++) {
-            if(A[j][i]>A[j+1][i]) {
-                result.push(i);
-                break;
+var largestTimeFromDigits = function(A) {
+    let max = "";
+    const compare = (arr)=>{
+        if((arr[0]*10+arr[1])<=23 && (arr[2]*10+arr[3])<=59) {
+            let str = `${arr[0]}${arr[1]}:${arr[2]}${arr[3]}`;
+            if(str>max) {
+                max = str;
             }
+        }
+    };
+    const dfs = (a, b)=>{
+        if(a.length==4) {
+            compare(a);
+            return;
+        }
+        for(let i = 0, len = b.length; i<len; i++) {
+            dfs([...a, b[i]], b.slice(0, i).concat(b.slice(i+1)));
         }
     }
 
-    return result.length;
+    dfs([], A);
+
+    return max;
 };
-console.log(minDeletionSize(["cba","daf","ghi"]));//1
-console.log(minDeletionSize(["a","b"]));//0
-console.log(minDeletionSize(["zyx","wvu","tsr"]));//3
+console.log(largestTimeFromDigits([1,2,3,4]));//23:41
+console.log(largestTimeFromDigits([5,5,5,5]));//
+console.log(largestTimeFromDigits([0,4,0,0]));//04:00
+console.log(largestTimeFromDigits([3,0,2,0]));//23:00
+console.log(largestTimeFromDigits([2,0,6,6]));//06:26
 </script>
 </body>
