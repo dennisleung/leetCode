@@ -211,34 +211,34 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-var largestTimeFromDigits = function(A) {
-    let max = "";
-    const compare = (arr)=>{
-        if((arr[0]*10+arr[1])<=23 && (arr[2]*10+arr[3])<=59) {
-            let str = `${arr[0]}${arr[1]}:${arr[2]}${arr[3]}`;
-            if(str>max) {
-                max = str;
+/**
+ * @param {string[]} words
+ * @param {string} order
+ * @return {boolean}
+ */
+var isAlienSorted = function(words, order) {
+    let originalStr = words.join("|");
+    const map = {};
+    for(let i = 0; i<order.length; i++) {
+        map[order[i]] = i;
+    }
+    words.sort((a, b) => {
+        for(let i = 0, len = Math.min(a.length, b.length); i<len; i++) {
+            if(map[a[i]]<map[b[i]]) {
+                return -1;
+            }else if(map[a[i]]>map[b[i]]) {
+                return 1;
             }
         }
-    };
-    const dfs = (a, b)=>{
-        if(a.length==4) {
-            compare(a);
-            return;
-        }
-        for(let i = 0, len = b.length; i<len; i++) {
-            dfs([...a, b[i]], b.slice(0, i).concat(b.slice(i+1)));
-        }
-    }
 
-    dfs([], A);
+        return a.length - b.length;
+    });
 
-    return max;
+    return words.join("|")==originalStr;
 };
-console.log(largestTimeFromDigits([1,2,3,4]));//23:41
-console.log(largestTimeFromDigits([5,5,5,5]));//
-console.log(largestTimeFromDigits([0,4,0,0]));//04:00
-console.log(largestTimeFromDigits([3,0,2,0]));//23:00
-console.log(largestTimeFromDigits([2,0,6,6]));//06:26
+console.log(isAlienSorted(["hello","leetcode"], "hlabcdefgijkmnopqrstuvwxyz"));//true
+console.log(isAlienSorted(["word","world","row"], "worldabcefghijkmnpqstuvxyz"));//false
+console.log(isAlienSorted(["apple","app"], "abcdefghijklmnopqrstuvwxyz"));//false
+console.log(isAlienSorted(["apple","apple"], "abcdefghijklmnopqrstuvwxyz"));//true
 </script>
 </body>
