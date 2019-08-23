@@ -211,14 +211,26 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-var repeatedNTimes = function(A) {
-    A.sort((a,b)=>a-b);
-    let mid = Math.floor(A.length/2);
-    return A[0]==A[mid-1] ? A[0] : A[mid];
+var isUnivalTree = function(root) {
+    if(!root) {
+        return false;
+    }
+
+    let sameVal = root.val;
+    let queue = [root];
+    while(queue.length) {
+        let node = queue.shift();
+        if(node.val!=sameVal) {
+            return false;
+        }
+        node.left && queue.push(node.left);
+        node.right && queue.push(node.right);
+    }
+
+    return true;
 };
-console.log(repeatedNTimes([1,2,3,3]));//3
-console.log(repeatedNTimes([2,1,2,5,3,2]));//2
-console.log(repeatedNTimes([5,1,5,2,5,3,5,4]));//5
-console.log(repeatedNTimes([9,5,3,3]));//3
+
+console.log(isUnivalTree(makeTree([1,1,1,1,1,null,1])));//true
+console.log(isUnivalTree(makeTree([2,2,2,5,2])));//false
 </script>
 </body>
