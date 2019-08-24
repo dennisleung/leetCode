@@ -211,26 +211,46 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-var isUnivalTree = function(root) {
-    if(!root) {
-        return false;
-    }
-
-    let sameVal = root.val;
-    let queue = [root];
-    while(queue.length) {
-        let node = queue.shift();
-        if(node.val!=sameVal) {
-            return false;
+var powerfulIntegers = function(x, y, bound) {
+    if(x==1 && y==1) {
+        if(bound>1) {
+            return [2];
+        }else {
+            return [];
         }
-        node.left && queue.push(node.left);
-        node.right && queue.push(node.right);
+    }
+    if(x>y) {
+        [x, y] = [y, x];
     }
 
-    return true;
+    let result = {};
+    let i = 0;
+    while(true) {
+        let tmpX = x ** i++;
+        if(tmpX>bound) {
+            break;
+        }
+        let j = 0;
+        while(true) {
+            let tmpY = y ** j++;
+            if(tmpY>bound-tmpX) {
+                break;
+            }
+            result[tmpX+tmpY] = 1;
+        }
+
+        if(x==1) {
+            break;
+        }
+    }
+
+    return Object.keys(result).map(v=>parseInt(v));
 };
 
-console.log(isUnivalTree(makeTree([1,1,1,1,1,null,1])));//true
-console.log(isUnivalTree(makeTree([2,2,2,5,2])));//false
+console.log(powerfulIntegers(1,1,1));
+console.log(powerfulIntegers(1,1,10));
+console.log(powerfulIntegers(2,1,10));
+console.log(powerfulIntegers(2,3,10));//[2,3,4,5,7,9,10]
+console.log(powerfulIntegers(3,5,15));//[2,4,6,8,10,14]
 </script>
 </body>
