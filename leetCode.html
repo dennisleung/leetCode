@@ -211,46 +211,29 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-var powerfulIntegers = function(x, y, bound) {
-    if(x==1 && y==1) {
-        if(bound>1) {
-            return [2];
-        }else {
-            return [];
-        }
-    }
-    if(x>y) {
-        [x, y] = [y, x];
-    }
-
-    let result = {};
-    let i = 0;
-    while(true) {
-        let tmpX = x ** i++;
-        if(tmpX>bound) {
-            break;
-        }
-        let j = 0;
-        while(true) {
-            let tmpY = y ** j++;
-            if(tmpY>bound-tmpX) {
-                break;
+/**
+ * @param {number[]} A
+ * @return {number}
+ */
+var largestPerimeter = function(A) {
+    A.sort((a,b)=>b-a);
+    for(let i = 0, iLen = A.length-2; i<iLen; i++) {
+        for(let j = i+1, jLen = A.length-1; j<jLen; j++) {
+            for(let k = j+1, kLen = A.length; k<kLen; k++) {
+                if(A[k]+A[j]>A[i]) {
+                    return A[k] + A[j] + A[i];
+                }
             }
-            result[tmpX+tmpY] = 1;
-        }
-
-        if(x==1) {
-            break;
         }
     }
 
-    return Object.keys(result).map(v=>parseInt(v));
+    return 0;
 };
 
-console.log(powerfulIntegers(1,1,1));
-console.log(powerfulIntegers(1,1,10));
-console.log(powerfulIntegers(2,1,10));
-console.log(powerfulIntegers(2,3,10));//[2,3,4,5,7,9,10]
-console.log(powerfulIntegers(3,5,15));//[2,4,6,8,10,14]
+console.log(largestPerimeter([2,1,2]));//5
+console.log(largestPerimeter([1,2,1]));//0
+console.log(largestPerimeter([3,2,3,4]));//10
+console.log(largestPerimeter([3,6,2,3]));//8
+console.log(largestPerimeter([3,6,2,3,1,23,5,6,72,46,7,4,2,3,56,2,34,5,6,3,3,4,5,67,2,291727,34,3,4,5,24,2,4,56]));//
 </script>
 </body>
