@@ -211,16 +211,29 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-var addToArrayForm = function(A, K) {
-    const addToArrayForm = (A, K) => {
-    const string = A.join('');
-    const number = BigInt(string) + BigInt(K);
-    return Array.from((number).toString());
+var isCousins = function(root, x, y) {
+    const _findNode = (node, parentNode, val, depth)=>{
+        if(node.val==val) {
+            throw [parentNode, depth];
+        }
+        node.left && _findNode(node.left, node, val, depth+1);
+        node.right && _findNode(node.right, node, val, depth+1);
+    }
+    const findNode = (val) => {
+        try {
+            _findNode(root, null, val, 0);
+        }catch(result){
+            return result;
+        }
+    };
+
+    const [xRoot, xDepth] = findNode(x);
+    const [yRoot, yDepth] = findNode(y);
+    return xDepth==yDepth && xRoot&&yRoot&&xRoot.val!=yRoot.val;
 };
-console.log(addToArrayForm([1,2,0,0], 34));//[1,2,3,4]
-console.log(addToArrayForm([2,7,4], 181));//[4,5,5]
-console.log(addToArrayForm([2,1,5], 806));//[1,0,2,1]
-console.log(addToArrayForm([9,9,9,9,9,9,9,9,9,9], 1));//[1,0,0,0,0,0,0,0,0,0,0]
-console.log(addToArrayForm([1,2,6,3,0,7,1,7,1,9,7,5,6,6,4,4,0,0,6,3], 516));//[1,2,6,3,0,7,1,7,1,9,7,5,6,6,4,4,0,5,7,9]
+console.log(isCousins(makeTree([1,2,3,4]), 4, 3));//false
+console.log(isCousins(makeTree([1,2,3,null,4,null,5]), 5, 4));//true
+console.log(isCousins(makeTree([1,2,3,null,4]), 2, 3));//false
+
 </script>
 </body>
