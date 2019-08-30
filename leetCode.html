@@ -212,69 +212,34 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[][]} grid
+ * @param {number} N
+ * @param {number[][]} trust
  * @return {number}
- */
-var orangesRotting = function(grid) {
-    let goodCount = 0;
-    let rottenCells = [];
-    for(let i = 0; i<grid.length; i++) {
-        for(let j = 0; j < grid[i].length; j++) {
-            switch(grid[i][j]) {
-                case 1:
-                    goodCount++;
-                    break;
-                case 2:
-                    rottenCells.push([i, j]);
-                    break;
-                default:
-                    break;
-            }
+*/
+var findJudge = function(N, trust) {
+    const cache = {};//存储被谁信任
+    const cache2 = {};//存储信任谁
+    for(let [a, b] of trust) {
+        cache[b]=cache[b] || 0;
+        cache[b]++;
+        
+        cache2[a]=cache2[a] || 0;
+        cache2[a]++;
+    }
+    for(let index in cache) {
+        if(cache[index]==N-1 && !cache2[index]) {
+            return index;
         }
     }
-    if(!goodCount) {
-        return 0;
-    }
-    let minutes = 0;
-    while(true) {
-        let newRottenCells = [];
-        for(let i = 0; i<rottenCells.length; i++) {
-            let [x, y] = rottenCells[i];
-            let pos = [];
-            if(x>0) {
-                pos.push([x-1, y]);
-            }
-            if(y<grid[x].length-1) {
-                pos.push([x, y+1]);
-            }
-            if(x<grid.length-1) {
-                pos.push([x+1, y]);
-            }
-            if(y>0) {
-                pos.push([x, y-1]);
-            }
-            
-            for(let [xx, yy] of pos) {
-                if(grid[xx][yy]==1) {
-                    grid[xx][yy] = 2;
-                    newRottenCells.push([xx, yy]);
-                    goodCount--;
-                }
-            }
-        }
 
-        if(!newRottenCells.length) {
-            break;
-        }
-        rottenCells = newRottenCells;
-        minutes++;
-    }
-    
-    return minutes>0&&!goodCount ? minutes : -1;
+    return -1;
 };
-console.log(orangesRotting([[2,1,1],[1,1,0],[0,1,1]]));//4
-console.log(orangesRotting([[2,1,1],[0,1,1],[1,0,1]]));//-1
-console.log(orangesRotting([[0,2]]));//0
+console.log(findJudge(2, [[1,2]]));//2
+console.log(findJudge(3, [[1,3],[2,3]]));//3
+console.log(findJudge(3, [[1,3],[2,3],[3,1]]));//-1
+console.log(findJudge(3, [[1,2],[2,3]]));//-1
+console.log(findJudge(4, [[1,3],[1,4],[2,3],[2,4],[4,3]]));//3
+console.log(findJudge(4, [[1,3],[1,4],[2,3],[2,4]]));//-1
 
 </script>
 </body>
