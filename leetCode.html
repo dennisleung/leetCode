@@ -211,50 +211,31 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-/**
- * @param {character[][]} board
- * @return {number}
- */
-var numRookCaptures = function(board) {
-    let rook = null;
-    const bishops = [];
-    const pawns = [];
-    outer:for(let i = 0; i<board.length; i++) {
-        for(let j = 0; j<board[i].length; j++) {
-            if(board[i][j]=="R") {
-                rook = [i, j]
-                break outer;
+var commonChars = function(A) {
+    let cache = {};
+    let inited = false;
+    for(let str of A) {
+        let newCache = {};
+        for(let ch of str) {
+            if(inited) {
+                newCache[ch] = Math.min((newCache[ch]||0)+1, cache[ch]||0);
+            }else {
+                newCache[ch] = (newCache[ch]||0) + 1;
             }
         }
+        inited = true;
+        cache = newCache;
     }
 
-    const canReach = function(ax, ay) {
-        let [x, y] = rook;
-        while(x>=0&&x<board.length&&y>0&&y<board[0].length) {
-            switch(board[x][y]) {
-                case "p":
-                    return 1;
-                case "B":
-                    return 0;
-                default:
-                    break;
-            }
-            x += ax;
-            y += ay;
+    const result = [];
+    for(let ch in cache) {
+        for(let i = 0; i<(cache[ch]||0); i++) {
+            result.push(ch);
         }
-        return 0;
-    };
-
-    let sum = 0;
-    sum += canReach(0, 1);
-    sum += canReach(0, -1);
-    sum += canReach(1, 0);
-    sum += canReach(-1, 0);
-    return sum;
+    }
+    return result;
 };
-console.log(numRookCaptures([[".",".",".",".",".",".",".","."],[".",".",".","p",".",".",".","."],[".",".",".","R",".",".",".","p"],[".",".",".",".",".",".",".","."],[".",".",".",".",".",".",".","."],[".",".",".","p",".",".",".","."],[".",".",".",".",".",".",".","."],[".",".",".",".",".",".",".","."]]));//3
-console.log(numRookCaptures([[".",".",".",".",".",".",".","."],[".","p","p","p","p","p",".","."],[".","p","p","B","p","p",".","."],[".","p","B","R","B","p",".","."],[".","p","p","B","p","p",".","."],[".","p","p","p","p","p",".","."],[".",".",".",".",".",".",".","."],[".",".",".",".",".",".",".","."]]));//0
-console.log(numRookCaptures([[".",".",".",".",".",".",".","."],[".",".",".","p",".",".",".","."],[".",".",".","p",".",".",".","."],["p","p",".","R",".","p","B","."],[".",".",".",".",".",".",".","."],[".",".",".","B",".",".",".","."],[".",".",".","p",".",".",".","."],[".",".",".",".",".",".",".","."]]));//3
-
+console.log(commonChars(["bella","label","roller"]));//["e","l","l"]
+console.log(commonChars(["cool","lock","cook"]));//["c","o"]
 </script>
 </body>
