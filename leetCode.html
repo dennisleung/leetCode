@@ -212,34 +212,15 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} A
- * @param {number} K
+ * @param {number} N
  * @return {number}
  */
-var largestSumAfterKNegations = function(A, K) {
-    A.sort((a,b)=>a-b);
-    let negs = [];
-    for(var i = 0, len = A.length; i<len; i++) {
-        if(A[i]<0 && negs.length<K) {
-            negs.push(-A[i]);
-        }else {
-            break;
-        }
-    }
-
-    A = A.slice(i).concat(negs);
-    let kLeft = K-negs.length;
-    if(kLeft>0) {//已经处理完所有负数，但是还有次数剩下，这时对绝对值最小的数进行处理（此时A已经全部是非负数）
-        A = A.sort((a,b)=>a-b);
-        if(kLeft%2!=0) {
-            A[0] = -A[0];
-        }
-    }
-
-    return A.reduce((a,b)=>a+b, 0);
+var bitwiseComplement = function(N) {
+    return parseInt(N.toString(2).replace(/./g, (match)=>match==="1"?"0":"1"), 2);
 };
-console.log(largestSumAfterKNegations([4,2,3], 1));//5
-console.log(largestSumAfterKNegations([3,-1,0,2], 3));//6
-console.log(largestSumAfterKNegations([2,-3,-1,5,-4], 2));//13
+console.log(bitwiseComplement(5));//2
+console.log(bitwiseComplement(7));//0
+console.log(bitwiseComplement(10));//5
+console.log(bitwiseComplement(0));//1
 </script>
 </body>
