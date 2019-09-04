@@ -212,15 +212,24 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number} N
+ * @param {number[]} time
  * @return {number}
  */
-var bitwiseComplement = function(N) {
-    return parseInt(N.toString(2).replace(/./g, (match)=>match==="1"?"0":"1"), 2);
-};
-console.log(bitwiseComplement(5));//2
-console.log(bitwiseComplement(7));//0
-console.log(bitwiseComplement(10));//5
-console.log(bitwiseComplement(0));//1
+var numPairsDivisibleBy60 = time => {
+    let c = new Array(60).fill(0)
+    return time.reduce((acc, cur) => {
+        acc += c[(60 - cur % 60) % 60]
+        c[cur % 60] += 1 
+        return acc
+    }, 0)
+}
+console.log(numPairsDivisibleBy60([30,20,150,100,40]));//3
+console.log(numPairsDivisibleBy60([30]));//0
+console.log(numPairsDivisibleBy60([120]));//0
+console.log(numPairsDivisibleBy60([60,60,60]));//3
+
+const arr = new Array(60000).fill(0).map((v, i)=>i);
+console.log(numPairsDivisibleBy60(arr));
+
 </script>
 </body>
