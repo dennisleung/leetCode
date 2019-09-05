@@ -212,24 +212,35 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} time
- * @return {number}
+ * @param {number[]} A
+ * @return {boolean}
  */
-var numPairsDivisibleBy60 = time => {
-    let c = new Array(60).fill(0)
-    return time.reduce((acc, cur) => {
-        acc += c[(60 - cur % 60) % 60]
-        c[cur % 60] += 1 
-        return acc
-    }, 0)
-}
-console.log(numPairsDivisibleBy60([30,20,150,100,40]));//3
-console.log(numPairsDivisibleBy60([30]));//0
-console.log(numPairsDivisibleBy60([120]));//0
-console.log(numPairsDivisibleBy60([60,60,60]));//3
+var canThreePartsEqualSum = function(A) {
+   const sum = A.reduce((a, b)=>a+b, 0);
+   if(sum%3!==0) {
+       return false;
+   }
 
-const arr = new Array(60000).fill(0).map((v, i)=>i);
-console.log(numPairsDivisibleBy60(arr));
+   let tmp = 0;
+   let count = 0;
+   for(let num of A) {
+       tmp += num;
+       if(tmp==sum/3) {
+           tmp = 0;
+           count++;
+       }
+   }
+
+   return count >= 3;
+};
+console.log(canThreePartsEqualSum([]));
+console.log(canThreePartsEqualSum([1, 2]));
+console.log(canThreePartsEqualSum([0,2,1,-6,6,-7,9,1,2,0,1]));//true
+console.log(canThreePartsEqualSum([0,2,1,-6,6,7,9,-1,2,0,1]));//false
+console.log(canThreePartsEqualSum([3,3,6,5,-2,2,5,1,-9,4]));//true
+
+const arr = new Array(50000).fill(1).map((v, i)=>i);
+console.log(canThreePartsEqualSum(arr));
 
 </script>
 </body>
