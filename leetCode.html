@@ -213,34 +213,19 @@ const getGroup = function(arr, count) {
 
 /**
  * @param {number[]} A
- * @return {boolean}
+ * @return {boolean[]}
  */
-var canThreePartsEqualSum = function(A) {
-   const sum = A.reduce((a, b)=>a+b, 0);
-   if(sum%3!==0) {
-       return false;
-   }
-
-   let tmp = 0;
-   let count = 0;
-   for(let num of A) {
-       tmp += num;
-       if(tmp==sum/3) {
-           tmp = 0;
-           count++;
-       }
-   }
-
-   return count >= 3;
+var prefixesDivBy5 = function(A) {
+    let cur = 0;
+    return A.map((v)=>{
+        cur = (cur*2+v)%5;
+        return cur===0;
+    });
 };
-console.log(canThreePartsEqualSum([]));
-console.log(canThreePartsEqualSum([1, 2]));
-console.log(canThreePartsEqualSum([0,2,1,-6,6,-7,9,1,2,0,1]));//true
-console.log(canThreePartsEqualSum([0,2,1,-6,6,7,9,-1,2,0,1]));//false
-console.log(canThreePartsEqualSum([3,3,6,5,-2,2,5,1,-9,4]));//true
-
-const arr = new Array(50000).fill(1).map((v, i)=>i);
-console.log(canThreePartsEqualSum(arr));
-
+console.log(prefixesDivBy5([0,1,1]));//[true,false,false]
+console.log(prefixesDivBy5([1,1,1]));//[false,false,false]
+console.log(prefixesDivBy5([0,1,1,1,1,1]));//[true,false,false,false,true,false]
+console.log(prefixesDivBy5([1,1,1,0,1]));//[false,false,false,false,false]
+console.log(prefixesDivBy5([1,0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,1,1,1,1,1,1,0,0,0,1,0,1,1,1,1,0,1,1,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,1,1,1]));//[false,false,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false]
 </script>
 </body>
