@@ -212,20 +212,31 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[]} A
- * @return {boolean[]}
+ * @param {string} S
+ * @return {string}
  */
-var prefixesDivBy5 = function(A) {
-    let cur = 0;
-    return A.map((v)=>{
-        cur = (cur*2+v)%5;
-        return cur===0;
-    });
+var removeOuterParentheses = function(S) {
+    let result = "";
+    let queue = [];
+    let leftPCount = 0;
+    for(let s of S) {
+        queue.push(s);
+        if(s=="(") {
+            leftPCount++;
+        }else {
+            leftPCount--;
+        }
+        if(leftPCount==0) {
+            result += queue.slice(1, -1).join("");
+            queue = [];
+        }
+    }
+
+    return result;
 };
-console.log(prefixesDivBy5([0,1,1]));//[true,false,false]
-console.log(prefixesDivBy5([1,1,1]));//[false,false,false]
-console.log(prefixesDivBy5([0,1,1,1,1,1]));//[true,false,false,false,true,false]
-console.log(prefixesDivBy5([1,1,1,0,1]));//[false,false,false,false,false]
-console.log(prefixesDivBy5([1,0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,1,1,1,1,1,1,0,0,0,1,0,1,1,1,1,0,1,1,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,1,1,1]));//[false,false,true,true,true,true,true,true,true,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,false,false,false,true,true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true,true,true,false,false,false]
+
+console.log(removeOuterParentheses("(()())(())(()(()))")=="()()()()(())");
+console.log(removeOuterParentheses("(()())(())")=="()()()");
+console.log(removeOuterParentheses("()()")=="");
 </script>
 </body>
