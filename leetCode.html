@@ -211,32 +211,14 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-/**
- * @param {string} S
- * @return {string}
- */
-var removeOuterParentheses = function(S) {
-    let result = "";
-    let queue = [];
-    let leftPCount = 0;
-    for(let s of S) {
-        queue.push(s);
-        if(s=="(") {
-            leftPCount++;
-        }else {
-            leftPCount--;
-        }
-        if(leftPCount==0) {
-            result += queue.slice(1, -1).join("");
-            queue = [];
-        }
-    }
-
-    return result;
+var twoCitySchedCost = function(costs) {
+    costs.sort(([Aofa, Bofa], [Aofb, Bofb])=>(Aofa-Bofa)-(Aofb-Bofb));
+    return costs.reduce((sum, v, i)=>{
+        return sum + (i<costs.length/2?v[0]:v[1]);
+    }, 0);
 };
-
-console.log(removeOuterParentheses("(()())(())(()(()))")=="()()()()(())");
-console.log(removeOuterParentheses("(()())(())")=="()()()");
-console.log(removeOuterParentheses("()()")=="");
+console.log(twoCitySchedCost([[10,20],[30,200],[400,50],[30,20]]));//110
+console.log(twoCitySchedCost([[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]]));//1859
+console.log(twoCitySchedCost([[555,594],[403,796],[203,847],[292,885],[525,478],[327,970],[297,483],[540,102],[855,412],[174,684],[591,837],[431,385],[107,740],[433,854],[472,205],[862,439],[961,598],[440,574],[716,156],[202,976],[170,661],[661,823],[867,44],[372,606],[8,281],[705,704],[48,6],[909,266],[675,515],[484,749]]));
 </script>
 </body>
