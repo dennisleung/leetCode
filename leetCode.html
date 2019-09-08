@@ -211,14 +211,23 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-var twoCitySchedCost = function(costs) {
-    costs.sort(([Aofa, Bofa], [Aofb, Bofb])=>(Aofa-Bofa)-(Aofb-Bofb));
-    return costs.reduce((sum, v, i)=>{
-        return sum + (i<costs.length/2?v[0]:v[1]);
-    }, 0);
+var allCellsDistOrder = function(R, C, r0, c0) {
+    const cells = [];
+    for(let i = 0; i<R; i++) {
+        for(let j = 0; j<C; j++) {
+            cells.push([i, j]);
+        }
+    }
+    cells.sort(([r1, c1], [r2, c2]) => {
+        return (Math.abs(r1-r0)+Math.abs(c1-c0)) - (Math.abs(r2-r0)+Math.abs(c2-c0));
+    });
+
+    return cells;
 };
-console.log(twoCitySchedCost([[10,20],[30,200],[400,50],[30,20]]));//110
-console.log(twoCitySchedCost([[259,770],[448,54],[926,667],[184,139],[840,118],[577,469]]));//1859
-console.log(twoCitySchedCost([[555,594],[403,796],[203,847],[292,885],[525,478],[327,970],[297,483],[540,102],[855,412],[174,684],[591,837],[431,385],[107,740],[433,854],[472,205],[862,439],[961,598],[440,574],[716,156],[202,976],[170,661],[661,823],[867,44],[372,606],[8,281],[705,704],[48,6],[909,266],[675,515],[484,749]]));
+console.log(allCellsDistOrder(1, 2, 0, 0));//[[0,0],[0,1]]
+console.log(allCellsDistOrder(2, 2, 0, 1));//[[0,1],[0,0],[1,1],[1,0]]
+console.log(allCellsDistOrder(2, 3, 1, 2));//[[1,2],[0,2],[1,1],[0,1],[1,0],[0,0]]
+console.log(allCellsDistOrder(100, 100, 1, 2));//[[1,2],[0,2],[1,1],[0,1],[1,0],[0,0]]
+
 </script>
 </body>
