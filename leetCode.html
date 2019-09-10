@@ -212,23 +212,56 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number[][]} points
- * @return {boolean}
+ * @param {number} N
+ * @param {number[][]} paths
+ * @return {number[]}
  */
-var isBoomerang = function(points) {
-    const [[x1, y1], [x2, y2], [x3, y3]] = points;
-    let c1 = Math.sqrt(Math.pow((y1-y2), 2)+Math.pow((x1-x2), 2));
-    let c2 = Math.sqrt(Math.pow((y1-y3), 2)+Math.pow((x1-x3), 2));
-    let c3 = Math.sqrt(Math.pow((y2-y3), 2)+Math.pow((x2-x3), 2));
-    [c1, c2, c3] = [c1, c2, c3].sort((a, b)=>a-b);
-    return c1+c2>c3;
+var gardenNoAdj = function(N, paths) {
+    const cache = {};
+    for(let [a, b] of paths) {
+        a--;
+        b--;
+        cache[a] = cache[a] || [];
+        cache[b] = cache[b] || [];
+        cache[a].push(b);
+        cache[b].push(a);
+    }
+
+    const isConflict = (nodes, i)=>{
+        let cnodes = cache[i] || [];
+        for(let cnode of cnodes) {
+            if(cnode<i && nodes[cnode]==nodes[i]) {
+                return true;
+            }
+        }
+        return false;
+    }; 
+    const dfs = (nodes, i, colors)=>{
+        if(i>=nodes.length) {//找到解
+            return nodes;
+        }
+        for(let color of colors) {
+            nodes[i] = color;
+            if(!isConflict(nodes, i)) {
+                const result = dfs(nodes, i+1, colors);
+                throw result;
+            }
+        }
+
+        return null;
+    };
+    const nodes = new Array(N).fill(0);
+    const colors = [1, 2, 3, 4];
+    try {
+        dfs(nodes, 0, colors);
+    }catch(result) {
+        return result;
+    }
 };
 
-console.log(isBoomerang([[1,1],[2,3],[3,2]]));//true
-console.log(isBoomerang([[1,1],[2,2],[3,3]]));//false
-console.log(isBoomerang([[0,1],[0,2],[0,3]]));//false
-console.log(isBoomerang([[1,0],[2,0],[3,0]]));//false
-console.log(isBoomerang([[0,0],[1,1],[1,1]]));//false
-console.log(isBoomerang([[0,0],[2,0],[0,2]]));//true
+console.log(gardenNoAdj(3, [[1,2],[2,3],[3,1]]));//[1, 2, 3]
+console.log(gardenNoAdj(4, [[1,2],[3,4]]));//[1,2,1,2]
+console.log(gardenNoAdj(4, [[1,2],[2,3],[3,4],[4,1],[1,3],[2,4]]));//[1, 2, 3, 4]
+console.log(gardenNoAdj(1, []));//[1]
 </script>
 </body>
