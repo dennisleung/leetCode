@@ -212,56 +212,20 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number} N
- * @param {number[][]} paths
- * @return {number[]}
+ * @param {number[]} stones
+ * @return {number}
  */
-var gardenNoAdj = function(N, paths) {
-    const cache = {};
-    for(let [a, b] of paths) {
-        a--;
-        b--;
-        cache[a] = cache[a] || [];
-        cache[b] = cache[b] || [];
-        cache[a].push(b);
-        cache[b].push(a);
+var lastStoneWeight = function(stones) {
+    while(stones.length>1) {
+        stones.sort((a, b)=>a-b);
+        stones.splice(-2, 2, stones[stones.length-1]-stones[stones.length-2]);
     }
 
-    const isConflict = (nodes, i)=>{
-        let cnodes = cache[i] || [];
-        for(let cnode of cnodes) {
-            if(cnode<i && nodes[cnode]==nodes[i]) {
-                return true;
-            }
-        }
-        return false;
-    }; 
-    const dfs = (nodes, i, colors)=>{
-        if(i>=nodes.length) {//找到解
-            return nodes;
-        }
-        for(let color of colors) {
-            nodes[i] = color;
-            if(!isConflict(nodes, i)) {
-                const result = dfs(nodes, i+1, colors);
-                throw result;
-            }
-        }
-
-        return null;
-    };
-    const nodes = new Array(N).fill(0);
-    const colors = [1, 2, 3, 4];
-    try {
-        dfs(nodes, 0, colors);
-    }catch(result) {
-        return result;
-    }
+    return stones[0];
 };
 
-console.log(gardenNoAdj(3, [[1,2],[2,3],[3,1]]));//[1, 2, 3]
-console.log(gardenNoAdj(4, [[1,2],[3,4]]));//[1,2,1,2]
-console.log(gardenNoAdj(4, [[1,2],[2,3],[3,4],[4,1],[1,3],[2,4]]));//[1, 2, 3, 4]
-console.log(gardenNoAdj(1, []));//[1]
+console.log(lastStoneWeight([2,7,4,1,8,1]));//1
+console.log(lastStoneWeight([2]));//2
+console.log(lastStoneWeight([2, 2]));//1
 </script>
 </body>
