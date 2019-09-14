@@ -211,29 +211,24 @@ const getGroup = function(arr, count) {
     getGroup(arr.slice(mid), 1)
 };
 
-// var removeDuplicates = function(S) {
-//     while(true) {
-//         let newS = S.replace(/([a-z])\1/g, "");
-//         if(newS.length==S.length) {
-//             break;
-//         }
-//         S = newS;
-//     }
+var gcdOfStrings = function(str1, str2) {
+    if(str1.length<str2.length) {//str2's length is smaller than str1's
+        [str1, str2] = [str2, str1];
+    }
+    for(let i = str2.length; i>0; i--) {
+        let subStr = str2.slice(0, i);
+        let reg = new RegExp(`^(${subStr}){1,}$`);
+        if(reg.test(str1) && reg.test(str2)) {
+            return subStr;
+        }
+    }
 
-//     return S;
-// };
-// console.log(removeDuplicates("abbaca"));//ca
-// console.log(removeDuplicates("aa"));//
-// console.log(removeDuplicates("baab"));//
-// console.log(removeDuplicates("aaabb"));//a
-
-
-var heightChecker = function(heights) {
-    const oldHeights = [].concat(heights);
-    heights.sort((a,b)=>a-b);
-    return heights.reduce((count, v, i)=>count+(heights[i]==oldHeights[i]?0:1), 0);
+    return "";
 };
-console.log(heightChecker([1,1,4,2,1,3]));//3
+console.log(gcdOfStrings("ABCABC", "ABC"));//ABC
+console.log(gcdOfStrings("ABABAB", "ABAB"));//AB
+console.log(gcdOfStrings("LEET", "CODE"));//
+console.log(gcdOfStrings("TAUXXTAUXXTAUXXTAUXXTAUXX","TAUXXTAUXXTAUXXTAUXXTAUXXTAUXXTAUXXTAUXXTAUXX"));//TAUXX
 
 </script>
 </body>
