@@ -212,46 +212,36 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string[]} queries
- * @param {string[]} words
- * @return {number[]}
+ * @param {string} text
+ * @param {string} first
+ * @param {string} second
+ * @return {string[]}
  */
-var numSmallerByFrequency = function(queries, words) {
-    const f = (str) => {
-        let cache = {};
-        for(let ch of str) {
-            cache[ch] = (cache[ch] || 0) + 1;
+var findOcurrences = function(text, first, second) {
+    const searchReg = new RegExp(`(^|\\s)${first}\\s+${second}\\s+([a-z]+)`, "g");
+    const result = [];
+    while(true) {
+        let match = searchReg.exec(text);
+        if(!match) {
+            break;
         }
-
-        let minCh = "";
-        for(let ch in cache) {
-            if(!minCh || ch<minCh) {
-                minCh = ch;
-            }
-        }
-
-        return cache[minCh];
+        let matchStr = match[2];
+        matchStr && result.push(matchStr);
+        searchReg.lastIndex = match.index + first.length;
     }
 
-    const wordCache = [];
-    for(let word of words) {
-        wordCache.push(f(word));
-    }
-    wordCache.sort((a, b)=>b-a);
+    return result;
 
-    return queries.map(query=>{
-        let minCount = f(query);
-        for(var i = 0; i<wordCache.length; i++) {
-            if(minCount>=wordCache[i]) {
-                break;
-            }
-        }
-        return i;
-    });
+
+    // const prefixRegStr = `${first}\\s+${second}\\s+`;
+    // const reg = new RegExp(`${prefixRegStr}(\\S+)?`, "g");
+    // const match = text.match(reg) || [];
+    // const prefixReg = new RegExp(prefixRegStr);
+    // return match.map(v=>v.replace(prefixReg, ""));
 };
-console.log(numSmallerByFrequency(["cbd"], ["zaaaz"]));//[1]
-console.log(numSmallerByFrequency(["bbb","cc"], ["a","aa","aaa","aaaa"]));//[1,2]
-console.log(numSmallerByFrequency(["bba","abaaaaaa","aaaaaa","bbabbabaab","aba","aa","baab","bbbbbb","aab","bbabbaabb"], ["aaabbb","aab","babbab","babbbb","b","bbbbbbbbab","a","bbbbbbbbbb","baaabbaab","aa"]));//[6,1,1,2,3,3,3,1,3,2]
-
+console.log(findOcurrences("alice is a good girl she is a good student", "a", "good"));//["girl","student"]
+console.log(findOcurrences("alice is a  good girl she is a good student", "a", "good"));//["girl","student"]
+console.log(findOcurrences("a  good girl she is a good student", "a", "good"));//["girl","student"]
+console.log(findOcurrences("we will we will rock you", "we", "will"));//["we","rock"]
 </script>
 </body>
