@@ -212,36 +212,30 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} text
- * @param {string} first
- * @param {string} second
- * @return {string[]}
+ * @param {number} candies
+ * @param {number} num_people
+ * @return {number[]}
  */
-var findOcurrences = function(text, first, second) {
-    const searchReg = new RegExp(`(^|\\s)${first}\\s+${second}\\s+([a-z]+)`, "g");
-    const result = [];
-    while(true) {
-        let match = searchReg.exec(text);
-        if(!match) {
+var distributeCandies = function(candies, num_people) {
+   let sum = 0;
+   let pos = 0;
+   const result = (new Array(num_people)).fill(0);
+   for(let i = 1; ; i++) {
+        result[pos] += i;
+        sum += i;
+        if(sum>candies) {
+            result[pos] = result[pos] + candies - sum;
+            break;
+        }else if(sum==candies) {
             break;
         }
-        let matchStr = match[2];
-        matchStr && result.push(matchStr);
-        searchReg.lastIndex = match.index + first.length;
-    }
+        pos = (++pos)%num_people;
+   }
 
-    return result;
-
-
-    // const prefixRegStr = `${first}\\s+${second}\\s+`;
-    // const reg = new RegExp(`${prefixRegStr}(\\S+)?`, "g");
-    // const match = text.match(reg) || [];
-    // const prefixReg = new RegExp(prefixRegStr);
-    // return match.map(v=>v.replace(prefixReg, ""));
+   return result;
 };
-console.log(findOcurrences("alice is a good girl she is a good student", "a", "good"));//["girl","student"]
-console.log(findOcurrences("alice is a  good girl she is a good student", "a", "good"));//["girl","student"]
-console.log(findOcurrences("a  good girl she is a good student", "a", "good"));//["girl","student"]
-console.log(findOcurrences("we will we will rock you", "we", "will"));//["we","rock"]
+console.log(distributeCandies(7, 4));//[1,2,3,1]
+console.log(distributeCandies(10, 3));//[5,2,3]
+console.log(distributeCandies(10**9, 1000));//[5,2,3]
 </script>
 </body>
