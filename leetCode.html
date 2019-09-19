@@ -212,30 +212,19 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {number} candies
- * @param {number} num_people
- * @return {number[]}
+ * @param {string} date
+ * @return {number}
  */
-var distributeCandies = function(candies, num_people) {
-   let sum = 0;
-   let pos = 0;
-   const result = (new Array(num_people)).fill(0);
-   for(let i = 1; ; i++) {
-        result[pos] += i;
-        sum += i;
-        if(sum>candies) {
-            result[pos] = result[pos] + candies - sum;
-            break;
-        }else if(sum==candies) {
-            break;
-        }
-        pos = (++pos)%num_people;
-   }
-
-   return result;
+var dayOfYear = function(date) {
+    const dd = new Date(date.replace("-", "/"));
+    const year = dd.getFullYear();
+    dd.setHours("23");
+    return Math.ceil((dd.getTime() - (new Date(`${year}/01/01`)).getTime())/86400000);
 };
-console.log(distributeCandies(7, 4));//[1,2,3,1]
-console.log(distributeCandies(10, 3));//[5,2,3]
-console.log(distributeCandies(10**9, 1000));//[5,2,3]
+console.log(dayOfYear("2019-01-09"));//9
+console.log(dayOfYear("2019-02-10"));//41
+console.log(dayOfYear("2003-03-01"));//60
+console.log(dayOfYear("2004-03-01"));//61
+console.log(dayOfYear("1900-03-01"));//60
 </script>
 </body>
