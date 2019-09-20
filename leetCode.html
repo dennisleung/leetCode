@@ -212,19 +212,34 @@ const getGroup = function(arr, count) {
 };
 
 /**
- * @param {string} date
+ * 获取阶乘
+ **/
+const getPermutationSum = function(n) {
+    let result = BigInt(1);
+    for(let i = 2; i<=n; i++) {
+        result *= BigInt(i);
+    }
+    return result;
+};
+
+const primeCache = [];
+for(let i = 1; i<=100; i++) {
+    primeCache[i] = isPrime(i);
+}
+
+/**
+ * @param {number} n
  * @return {number}
  */
-var dayOfYear = function(date) {
-    const dd = new Date(date.replace("-", "/"));
-    const year = dd.getFullYear();
-    dd.setHours("23");
-    return Math.ceil((dd.getTime() - (new Date(`${year}/01/01`)).getTime())/86400000);
+var numPrimeArrangements = function(n) {
+    let primeCount = 0;
+    for(let i = 1; i<=n; i++) {
+        primeCache[i] && primeCount++;
+    }
+
+    return (getPermutationSum(primeCount) * getPermutationSum(n-primeCount))%BigInt(10**9+7);
 };
-console.log(dayOfYear("2019-01-09"));//9
-console.log(dayOfYear("2019-02-10"));//41
-console.log(dayOfYear("2003-03-01"));//60
-console.log(dayOfYear("2004-03-01"));//61
-console.log(dayOfYear("1900-03-01"));//60
+console.log(numPrimeArrangements(5));//12
+console.log(numPrimeArrangements(100));//682289015
 </script>
 </body>
