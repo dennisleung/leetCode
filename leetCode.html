@@ -227,19 +227,17 @@ for(let i = 1; i<=100; i++) {
     primeCache[i] = isPrime(i);
 }
 
-/**
- * @param {number} n
- * @return {number}
- */
-var numPrimeArrangements = function(n) {
-    let primeCount = 0;
-    for(let i = 1; i<=n; i++) {
-        primeCache[i] && primeCount++;
-    }
-
-    return (getPermutationSum(primeCount) * getPermutationSum(n-primeCount))%BigInt(10**9+7);
+var distanceBetweenBusStops = function(distance, start, destination) {
+   const allDistance = distance.reduce((a,b)=>a+b, 0);
+   if(start>destination) {
+       [start, destination] = [destination, start];
+   }
+   const aDistance = distance.slice(start, destination).reduce((a,b)=>a+b, 0);
+   return Math.min(aDistance, allDistance-aDistance);
 };
-console.log(numPrimeArrangements(5));//12
-console.log(numPrimeArrangements(100));//682289015
+console.log(distanceBetweenBusStops([1,2,3,4], 0, 1));//1
+console.log(distanceBetweenBusStops([1,2,3,4], 0, 2));//3
+console.log(distanceBetweenBusStops([1,2,3,4], 0, 3));//4
+console.log(distanceBetweenBusStops([1,2,3,4], 3, 0));//4
 </script>
 </body>
