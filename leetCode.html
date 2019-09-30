@@ -228,16 +228,19 @@ for(let i = 1; i<=100; i++) {
 }
 
 /**
- * @param {number} day
- * @param {number} month
- * @param {number} year
- * @return {string}
+ * @param {string} text
+ * @return {number}
  */
-var dayOfTheWeek = function(day, month, year) {
-    return ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][(new Date(`${year}/${month}/${day}`)).getDay()];
+var maxNumberOfBalloons = function(text) {
+    const cache = {"b":0, "a":0, "l":0, "o":0, "n":0};
+    for(let ch of text) {
+        cache[ch]++;
+    }
+
+    return Math.min(cache["b"], cache["a"], Math.floor(cache["l"]/2), Math.floor(cache["o"]/2), cache["n"]);
 };
-console.log(dayOfTheWeek(31, 8, 2019));//Saturday
-console.log(dayOfTheWeek(18, 7, 1999));//Sunday
-console.log(dayOfTheWeek(15, 8, 1993));//Sunday
+console.log(maxNumberOfBalloons("nlaebolko"));//1
+console.log(maxNumberOfBalloons("loonbalxballpoon"));//2
+console.log(maxNumberOfBalloons("leetcode"));//0
 </script>
 </body>
