@@ -228,19 +228,31 @@ for(let i = 1; i<=100; i++) {
 }
 
 /**
- * @param {string} text
- * @return {number}
+ * @param {ListNode} head
+ * @param {number} n
+ * @return {ListNode}
  */
-var maxNumberOfBalloons = function(text) {
-    const cache = {"b":0, "a":0, "l":0, "o":0, "n":0};
-    for(let ch of text) {
-        cache[ch]++;
+var removeNthFromEnd = function(head, n) {
+    const arr = [];
+    const _head = new ListNode(null);
+    _head.next = head;
+    head = _head;
+
+    const pushQueue = (node) => {
+        if(arr.length==n+1) {
+            arr.splice(0, 1);
+        }
+        arr.push(node);
     }
 
-    return Math.min(cache["b"], cache["a"], Math.floor(cache["l"]/2), Math.floor(cache["o"]/2), cache["n"]);
+    while(head) {
+        pushQueue(head);
+        head = head.next;
+    }
+
+    arr[0].next = arr[1].next;
+    return _head.next;
 };
-console.log(maxNumberOfBalloons("nlaebolko"));//1
-console.log(maxNumberOfBalloons("loonbalxballpoon"));//2
-console.log(maxNumberOfBalloons("leetcode"));//0
+console.log(removeNthFromEnd(makeLink([1,2,3,4,5]), 2));
 </script>
 </body>
