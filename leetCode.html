@@ -227,32 +227,37 @@ for(let i = 1; i<=100; i++) {
     primeCache[i] = isPrime(i);
 }
 
-/**
- * @param {ListNode} head
- * @param {number} n
- * @return {ListNode}
- */
-var removeNthFromEnd = function(head, n) {
-    const arr = [];
-    const _head = new ListNode(null);
-    _head.next = head;
-    head = _head;
-
-    const pushQueue = (node) => {
-        if(arr.length==n+1) {
-            arr.splice(0, 1);
-        }
-        arr.push(node);
+const cache = [];
+var generateParenthesis = function(n) {
+    if(cache[n]) {
+        return cache[n];
     }
-
-    while(head) {
-        pushQueue(head);
-        head = head.next;
+    let result = [];
+    switch(n) {
+        case 0:
+            result = [""];
+            break;
+        case 1:
+            result = ["()"];
+            break;
+        default:
+            for(let i = 1; i<n; i++) {
+                const a = generateParenthesis(i);
+                const b = generateParenthesis(n-i);
+                a.map(aa=>{result = result.concat(b.map(bb=>`${aa}${bb}`))})   
+                if(i==1) {
+                    result = result.concat(b.map(bb=>`(${bb})`));
+                }
+            }
+            break;
     }
-
-    arr[0].next = arr[1].next;
-    return _head.next;
+    cache[n] = result.filter((v, i, a)=>a.indexOf(v)===i);
+    return cache[n];
 };
-console.log(removeNthFromEnd(makeLink([1,2,3,4,5]), 2));
+console.log(generateParenthesis(3));
+console.log(generateParenthesis(4));
+// var a = generateParenthesis(4);
+// var b = ["(((())))","((()()))","((())())","((()))()","(()(()))","(()()())","(()())()","(())(())","(())()()","()((()))","()(()())","()(())()","()()(())","()()()()"].filter(v=>a.indexOf(v)==-1);
+// console.log(b);
 </script>
 </body>
