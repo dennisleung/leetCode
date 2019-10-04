@@ -227,25 +227,61 @@ for(let i = 1; i<=100; i++) {
     primeCache[i] = isPrime(i);
 }
 
-/**
- * @param {ListNode} head
- * @return {ListNode}
- */
-var swapPairs = function(head) {
-    const root = new ListNode();
-    root.next = head;
-    head = root;
-    while(head.next && head.next.next) {
-        let tmp = head.next;
-        head.next = tmp.next;
-        tmp.next = tmp.next.next;
-        head.next.next = tmp;
-        head = tmp;
+var divide = function(dividend, divisor) {
+    const subDivide = (a, b)=>{//a,b均为正数
+        let q = 0;
+        let tmp = 0;
+        while(tmp<=a) {
+            tmp += b;
+            q++;
+        }
+        q--;
+        return [q, a-tmp+b];
+    };
+    
+    let _dividend = Math.abs(dividend).toString().split("");
+    let di = Math.abs(divisor);
+    let _divisor = di.toString().split("");
+    let tmp = "";
+    let result = "";
+    let flag = false;
+    while(true) {
+        if(!_dividend.length) {
+            break;
+        }
+        tmp = tmp + _dividend.shift();
+        let _tmp = parseInt(tmp);
+        if(_tmp<di) {
+            if(flag) {
+                result = result + "0";
+            }
+        }else {
+            flag = true;
+            let [q, left] = subDivide(_tmp, di);
+            result = result + q;
+            if(left>0) {
+                tmp = left + "";
+            }else {
+                tmp = "";
+            }
+        }
     }
-
-    return root.next;
+   
+    let quotient = parseInt(result) || 0;
+    if(quotient>0) {
+        return (dividend>0)^(divisor>0) ? -quotient : Math.min(Math.pow(2, 31)-1, quotient);
+    }else {
+        return 0;
+    }
 };
-console.log(swapPairs(makeLink([1,2,3,4])));//2,1,4,3
-console.log(swapPairs(makeLink([1,2,3,4,5])));//2,1,4,3,5
+console.log(divide(10, 3));//3
+console.log(divide(7, -3));//-2
+console.log(divide(10, -5));//-2
+console.log(divide(0, 1));//0
+console.log(divide(0, -1));//0
+console.log(divide(Math.pow(2, 31), 1));//2147483647
+console.log(divide(-2147483648, -1));//2147483647
+console.log(divide(-2147483648, 1));//-2147483648
+console.log(divide(2147483647, 2));//1073741823
 </script>
 </body>
