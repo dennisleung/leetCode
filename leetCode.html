@@ -227,61 +227,36 @@ for(let i = 1; i<=100; i++) {
     primeCache[i] = isPrime(i);
 }
 
-var divide = function(dividend, divisor) {
-    const subDivide = (a, b)=>{//a,b均为正数
-        let q = 0;
-        let tmp = 0;
-        while(tmp<=a) {
-            tmp += b;
-            q++;
-        }
-        q--;
-        return [q, a-tmp+b];
-    };
-    
-    let _dividend = Math.abs(dividend).toString().split("");
-    let di = Math.abs(divisor);
-    let _divisor = di.toString().split("");
-    let tmp = "";
-    let result = "";
-    let flag = false;
-    while(true) {
-        if(!_dividend.length) {
+var nextPermutation = function(nums) {
+    let i;
+    for(i = nums.length-1; i>0; i--) {
+        if(nums[i]>nums[i-1]) {
             break;
         }
-        tmp = tmp + _dividend.shift();
-        let _tmp = parseInt(tmp);
-        if(_tmp<di) {
-            if(flag) {
-                result = result + "0";
-            }
-        }else {
-            flag = true;
-            let [q, left] = subDivide(_tmp, di);
-            result = result + q;
-            if(left>0) {
-                tmp = left + "";
-            }else {
-                tmp = "";
+    }
+    if(i==0) {//已经是最大的数了，返回最小的数
+        nums.sort((a, b)=>a-b);
+    }else {
+        let replace = nums[i-1];
+        let length = nums.length-i+1;
+        let tmp = nums.slice(-length);
+        let j = 0;
+        tmp.sort((a,b)=>a-b);
+        for(;j<tmp.length; j++) {
+            if(tmp[j]>replace) {
+                break;
             }
         }
+        nums[i-1] = tmp[j];
+        tmp.splice(j, 1);
+        nums.splice(i, length-1, ...tmp);
     }
-   
-    let quotient = parseInt(result) || 0;
-    if(quotient>0) {
-        return (dividend>0)^(divisor>0) ? -quotient : Math.min(Math.pow(2, 31)-1, quotient);
-    }else {
-        return 0;
-    }
+
+    return nums;//todo
 };
-console.log(divide(10, 3));//3
-console.log(divide(7, -3));//-2
-console.log(divide(10, -5));//-2
-console.log(divide(0, 1));//0
-console.log(divide(0, -1));//0
-console.log(divide(Math.pow(2, 31), 1));//2147483647
-console.log(divide(-2147483648, -1));//2147483647
-console.log(divide(-2147483648, 1));//-2147483648
-console.log(divide(2147483647, 2));//1073741823
+console.log(nextPermutation([1,2,3]));//1,3,2
+console.log(nextPermutation([3,2,1]));//1,2,3
+console.log(nextPermutation([1,1,5]));//1,5,1
+console.log(nextPermutation([1,1,1]));//1,1,1
 </script>
 </body>
