@@ -222,37 +222,42 @@ const getPermutationSum = function(n) {
     return result;
 };
 
-const primeCache = [];
-for(let i = 1; i<=100; i++) {
-    primeCache[i] = isPrime(i);
-}
-
-/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number}
- */
-var search = function(nums, target) {
-    let i;
-    for(i = 0; i<nums.length-1 && nums[i]<nums[i+1] && nums[i]<target; i++) {}
-    if(nums[i]==target) {
-        return i;
-    }
-    for(i = nums.length-1; i>0 && nums[i]>nums[i-1] && nums[i]>target; i--) {}
-    if(nums[i]==target) {
-        return i;
+const binarySearch = (nums, target) => {
+    for(let low = 0, high = nums.length-1; low<=high;) {
+        let mid = Math.floor((low+high)/2);
+        if(nums[mid] == target) {
+            return mid;
+        }else if(nums[mid]>target) {
+            high = mid-1;
+        }else {
+            low = mid+1;
+        }
     }
 
     return -1;
 };
-console.log(search([4,5,6,7,0,1,2], 0));//4
-console.log(search([4,5,6,7,0,1,2], 3));//-1
-console.log(search([4,5,6,7,0,1,2], 4));//0
-console.log(search([4,5,6,7,0,1,2], 2));//6
-console.log(search([0,1,2,4,5,6,7], 3));//-1
-console.log(search([0,1,2,4,5,6,7], 0));//0
-console.log(search([0,1,2,4,5,6,7], 7));//6
-console.log(search([0,1,2,4,5,6,7], 5));//4
-console.log(search([1], 1));//0
+
+
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+var searchRange = function(nums, target) {
+    let pos = binarySearch(nums, target);
+    if(pos==-1) {
+        return [-1, -1];
+    }else {
+        let first = last = pos;
+        while(first>=0 && nums[first]==target) {first--;}
+        while(last<=nums.length-1 && nums[last]==target) {last++;}
+        return [first+1, last-1];
+    }
+};
+console.log(searchRange([5,7,7,8,8,10], 8));//[3,4]
+console.log(searchRange([5,7,7,8,8,10], 6));//[-1,-1]
+console.log(searchRange([5,7,7,8,8,10], 10));//[5,5]
+console.log(searchRange([5,7,7,8,8,10], 5));//[0,0]
+console.log(searchRange([5,7,7,8,8,9,10], 10));//[6,6]
 </script>
 </body>
