@@ -237,27 +237,72 @@ const binarySearch = (nums, target) => {
     return -1;
 };
 
-
 /**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
+ * @param {character[][]} board
+ * @return {boolean}
  */
-var searchRange = function(nums, target) {
-    let pos = binarySearch(nums, target);
-    if(pos==-1) {
-        return [-1, -1];
-    }else {
-        let first = last = pos;
-        while(first>=0 && nums[first]==target) {first--;}
-        while(last<=nums.length-1 && nums[last]==target) {last++;}
-        return [first+1, last-1];
+var isValidSudoku = function(board) {
+    const isSubValid = (row)=>{
+        const cache = {};
+        for(let dg of row) {
+            if(dg!=="." && cache[dg]) {
+                return false;
+            }
+            cache[dg] = 1;
+        }
+
+        return true;
+    };
+    const isValid = (i, j) => {
+        if(!isSubValid(board[i])) {
+            return false;
+        }
+
+        if(!isSubValid(board.map(row=>row[j]))) {
+            return false;
+        }
+
+        const rowStart = ~~(i/3) * 3;
+        const colStart = ~~(j/3) * 3;
+        const arr = board.slice(rowStart, rowStart+3).reduce((arr,row)=>arr.concat(row.slice(colStart, colStart+3)), []);
+        if(!isSubValid(arr)) {
+            return false;
+        }
+
+        return true;
+    };
+
+    for(let i = 0; i<board.length; i++) {
+        for(let j = 0; j<board[i].length; j++) {
+            if(!isValid(i, j)) {
+                return false;
+            }
+        }
     }
+
+    return true;
 };
-console.log(searchRange([5,7,7,8,8,10], 8));//[3,4]
-console.log(searchRange([5,7,7,8,8,10], 6));//[-1,-1]
-console.log(searchRange([5,7,7,8,8,10], 10));//[5,5]
-console.log(searchRange([5,7,7,8,8,10], 5));//[0,0]
-console.log(searchRange([5,7,7,8,8,9,10], 10));//[6,6]
+console.log(isValidSudoku([
+  ["5","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]));//true
+console.log(isValidSudoku([
+  ["8","3",".",".","7",".",".",".","."],
+  ["6",".",".","1","9","5",".",".","."],
+  [".","9","8",".",".",".",".","6","."],
+  ["8",".",".",".","6",".",".",".","3"],
+  ["4",".",".","8",".","3",".",".","1"],
+  ["7",".",".",".","2",".",".",".","6"],
+  [".","6",".",".",".",".","2","8","."],
+  [".",".",".","4","1","9",".",".","5"],
+  [".",".",".",".","8",".",".","7","9"]
+]));//false
 </script>
 </body>
