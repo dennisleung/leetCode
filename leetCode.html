@@ -242,25 +242,44 @@ const binarySearch = (nums, target) => {
  * @param {number} target
  * @return {number[][]}
  */
-var combinationSum = function(candidates, target) {
-    if(!candidates.length) {
-        return [];
-    }
+ function combinationSum2(candidates, target) {
+    var res = []; // [][]
+    var prefix = [];
 
-    let arr1 = [];
-    if(target>candidates[0]) {
-        arr1 = combinationSum(candidates, target-candidates[0]);
-        if(arr1.length) {
-            arr1.forEach(v=>v.unshift(candidates[0]));
+    candidates.sort((a, b) => a - b);
+    search(0, target);
+    return res;
+
+    function search(idx, rest) {
+        if (rest === 0) {
+            return res.push(prefix.slice());
         }
-    }else if(target==candidates[0]) {
-        arr1 = [[candidates[0]]];
-    }
 
-    let arr2 = combinationSum(candidates.slice(1), target);
-    return arr1.concat(arr2);
-};
-console.log(combinationSum([2,3,6,7], 7));//[[7],[2,2,3]]
-console.log(combinationSum([2,3,5], 8));//[[2,2,2,2],[2,3,3],[3,5]]
+        if (rest < 0 || idx === candidates.length) {
+          return;
+        }
+
+        // include number at idx
+        prefix.push(candidates[idx]);
+        search(idx + 1, rest - candidates[idx]);
+        
+        // exclude number at idx
+        // eg. [1, 1, 1]
+        // allow 
+        // [1, 1, 1]
+        // [X, 1, 1]
+        // [X, X, 1]
+        // [X, X, X]
+        // disallow
+        // [1, 1, X]
+        // [1, X, X]
+        prefix.pop();
+        if (prefix[prefix.length - 1] !== candidates[idx]) {
+            search(idx + 1, rest);
+        }
+    }
+}
+console.log(combinationSum2([10,1,2,7,6,1,5], 8));//[[1, 7],[1, 2, 5],[2, 6],[1, 1, 6]]
+console.log(combinationSum2([2,5,2,1,2], 5));//[[1,2,2],[5]]
 </script>
 </body>
