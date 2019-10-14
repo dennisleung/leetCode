@@ -238,43 +238,25 @@ const binarySearch = (nums, target) => {
 };
 
 /**
- * @param {number[][]} matrix
- * @return {void} Do not return anything, modify matrix in-place instead.
+ * @param {string[]} strs
+ * @return {string[][]}
  */
- var rotate = function(matrix) {
-  for (var row = 0; row <= matrix.length-1; row++) {
-  var tracker = matrix.length-1;
-  
-    for (var j = matrix.length-1; j >= 0; j--) {
-      var current = matrix[row].pop();
-      matrix[tracker].unshift(current);
-      tracker--;
-    }
-  }
-  return matrix;
-};
-console.log(rotate([
-  [1,2,3],
-  [4,5,6],
-  [7,8,9]
-]));
-// [
-//   [7,4,1],
-//   [8,5,2],
-//   [9,6,3]
-// ]
+var groupAnagrams = function(strs) {
+    const result = {};
+    strs.forEach((str)=>{
+        const key = str.split("").sort((a,b)=>a.charCodeAt(0)-b.charCodeAt(0)).join("");
+        result[key] = result[key] || [];
+        result[key].push(str);
+    });
 
-console.log(rotate([
-  [ 5, 1, 9,11],
-  [ 2, 4, 8,10],
-  [13, 3, 6, 7],
-  [15,14,12,16]
-]));
-// [
-//   [15,13, 2, 5],
-//   [14, 3, 4, 1],
-//   [12, 6, 8, 9],
-//   [16, 7,10,11]
-// ]
+    return Object.values(result);
+};
+
+console.log(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
 </script>
 </body>
