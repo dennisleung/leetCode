@@ -238,25 +238,25 @@ const binarySearch = (nums, target) => {
 };
 
 /**
- * @param {string[]} strs
- * @return {string[][]}
+ * @param {number[]} arr
+ * @return {number[][]}
  */
-var groupAnagrams = function(strs) {
-    const result = {};
-    strs.forEach((str)=>{
-        const key = str.split("").sort((a,b)=>a.charCodeAt(0)-b.charCodeAt(0)).join("");
-        result[key] = result[key] || [];
-        result[key].push(str);
-    });
+var minimumAbsDifference = function(arr) {
+    const cache = {};
+    arr.sort((a,b)=>a-b);
+    for(let i = 0; i<arr.length-1; i++) {
+        const diff = arr[i+1] - arr[i];
+        cache[diff] = cache[diff] || [];
+        cache[diff].push([arr[i], arr[i+1]]);
+    }
 
-    return Object.values(result);
+    const minDiff = Math.min(...Object.keys(cache));
+    return cache[minDiff];
 };
 
-console.log(groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]));
-[
-  ["ate","eat","tea"],
-  ["nat","tan"],
-  ["bat"]
-]
+console.log(minimumAbsDifference([4,2,1,3]));//[[1,2],[2,3],[3,4]]
+console.log(minimumAbsDifference([1,3,6,10,15]));//[[1,3]]
+console.log(minimumAbsDifference([3,8,-10,23,19,-4,-14,27]));//[[-14,-10],[19,23],[23,27]]
+console.log(minimumAbsDifference([1,3]));//[[1,3]]
 </script>
 </body>
