@@ -237,30 +237,103 @@ const binarySearch = (nums, target) => {
     return -1;
 };
 
-/**
- * @param {number[]} arr
- * @return {boolean}
- */
-var uniqueOccurrences = function(arr) {
-    const cache = {};
-    for(let num of arr) {
-        cache[num] = (cache[num]||0) + 1;
+const ASSERT = {
+    tasks : [],
+    handler : null,
+    add(task) {
+        this.tasks.push(task);
+        this.run();
+    },
+    run() {
+        this.handler && clearTimeout(this.handler);
+        this.handler = setTimeout(()=>{
+            let newTasks = this.tasks;
+            const onlyRunTasks = this.tasks.filter(([,,isOnly])=>isOnly);
+            if(onlyRunTasks.length) {
+                newTasks = onlyRunTasks;
+            }
+            let runFailCount = 0;
+            newTasks.forEach(([aFunc, b], index)=>{
+                const a = aFunc();
+                const aStr = JSON.stringify(a);
+                const bStr = JSON.stringify(b);
+                if(aStr!=bStr) {
+                    runFailCount++;
+                    setTimeout(() => {
+                        console.log(`-------------------------- case ${index+1} START --------------------------------`) 
+                        console.log('input:', a)
+                        //console.dir(a)
+                        console.error(`expect ${bStr}, got ${aStr}`);
+                        console.log(`-------------------------- case ${index+1} END --------------------------------`) 
+                    }, 0); 
+                }
+            });
+            this.tasks = [];
+            if(runFailCount>0) {
+                console.log(`run ${newTasks.length} cases, %c${newTasks.length-runFailCount} passed, %c${runFailCount} failed`, 'color:green', 'color:red');
+            }else {
+                console.log(`run ${newTasks.length} cases, %c all passed`, 'color:green');
+            }
+        }, 0);
     }
-    const ocs = Object.values(cache);
-    const ocCache = {}
-    for(let oc of ocs) {
-        if(ocCache[oc]) {
-            return false;
-        }
-        ocCache[oc] = 1;
-    }
-
-    return true;
+};
+const assertCompare = function(a, b) {
+    ASSERT.add([a, b]);
+};
+assertCompare.only = function(a, b) {
+    ASSERT.add([a, b, true]);
 };
 
-console.log(uniqueOccurrences([1,2,2,1,1,3]));//true
-console.log(uniqueOccurrences([1,2]));//false
-console.log(uniqueOccurrences([1]));//true
-console.log(uniqueOccurrences([-3,0,1,-3,1,1,1,-3,10,0]));//true
+/**
+ * @param {number[][]} matrix
+ * @return {number[]}
+ */
+var spiralOrder = function(matrix, result=[]) {
+    if (matrix.length === 0) {
+        return result
+
+      }
+	
+	for (var i = 0; i < matrix.length; i++) {
+		var current = matrix[i]
+	 	if (i === 0) {
+	 		result = result.concat(current);
+	 	} else {
+	 	  var last = current.pop();
+	 		if (!last) {
+	 			return result
+	 		}
+	 		result.push(last)
+	 		current.reverse()
+	 	} 
+ 	}
+	
+	matrix.shift()
+ 	return spiralOrder(matrix.reverse(), result)
+};
+
+assertCompare(()=>spiralOrder([
+    [ 1, 2, 3 ],
+    [ 4, 5, 6 ],
+    [ 7, 8, 9 ]
+    ]), [1,2,3,6,9,8,7,4,5]);
+assertCompare(()=>spiralOrder([
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [9,10,11,12]
+    ]), [1,2,3,4,8,12,11,10,9,5,6,7]);//
+
+assertCompare(() => spiralOrder([
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+        [10, 11, 12],
+    ]), [1,2,3,6,9,12,11,10,7,4,5,8]);
+assertCompare(()=>spiralOrder([[1]]), [1]);
+assertCompare(()=>spiralOrder([]), []);
+assertCompare(()=>spiralOrder([[6,9,7]]), [6,9,7]);
+assertCompare(()=>spiralOrder([[1,2,3,4],[5,6,7,8],[9,10,11,12]]), [1,2,3,4,8,12,11,10,9,5,6,7]);
+assertCompare(()=>spiralOrder([[7],[9],[6]]), [7,9,6]);
+assertCompare(()=>spiralOrder([[1,2],[3,4]]), [1,2,4,3]);
 </script>
 </body>
