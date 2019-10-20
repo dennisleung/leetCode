@@ -285,55 +285,47 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {number[][]} matrix
- * @return {number[]}
+ * @param {number[]} chips
+ * @return {number}
  */
-var spiralOrder = function(matrix, result=[]) {
-    if (matrix.length === 0) {
-        return result
+var minCostToMoveChips = function(chips) {
+    let oddCount = 0;
+    let evenCount = 0;
+    for(let chip of chips) {
+        if(chip%2===0) {
+            evenCount++;
+        }else {
+            oddCount++;
+        }
+    }
 
-      }
-	
-	for (var i = 0; i < matrix.length; i++) {
-		var current = matrix[i]
-	 	if (i === 0) {
-	 		result = result.concat(current);
-	 	} else {
-	 	  var last = current.pop();
-	 		if (!last) {
-	 			return result
-	 		}
-	 		result.push(last)
-	 		current.reverse()
-	 	} 
- 	}
-	
-	matrix.shift()
- 	return spiralOrder(matrix.reverse(), result)
+    return Math.min(oddCount, evenCount);
+
+    if(!oddCount || !evenCount) {//全都为奇数或者偶数
+        return 0;
+    }
+    
+    let minDiff = Infinity;
+    chips.sort((a,b)=>a-b);
+    for(let i = 0; i<chips.length-1; i++) {
+        let aEven = chips[i]%2===0;
+        let bEven = chips[i+1]%2===0;
+        if(aEven!==bEven) {
+            minDiff = Math.min(minDiff, Math.abs(chips[i]-chips[i+1]));
+        }
+    }
+
+    
+    
 };
 
-assertCompare(()=>spiralOrder([
-    [ 1, 2, 3 ],
-    [ 4, 5, 6 ],
-    [ 7, 8, 9 ]
-    ]), [1,2,3,6,9,8,7,4,5]);
-assertCompare(()=>spiralOrder([
-    [1, 2, 3, 4],
-    [5, 6, 7, 8],
-    [9,10,11,12]
-    ]), [1,2,3,4,8,12,11,10,9,5,6,7]);//
-
-assertCompare(() => spiralOrder([
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9],
-        [10, 11, 12],
-    ]), [1,2,3,6,9,12,11,10,7,4,5,8]);
-assertCompare(()=>spiralOrder([[1]]), [1]);
-assertCompare(()=>spiralOrder([]), []);
-assertCompare(()=>spiralOrder([[6,9,7]]), [6,9,7]);
-assertCompare(()=>spiralOrder([[1,2,3,4],[5,6,7,8],[9,10,11,12]]), [1,2,3,4,8,12,11,10,9,5,6,7]);
-assertCompare(()=>spiralOrder([[7],[9],[6]]), [7,9,6]);
-assertCompare(()=>spiralOrder([[1,2],[3,4]]), [1,2,4,3]);
+assertCompare(()=>minCostToMoveChips([1,2,3]), 1);
+assertCompare(()=>minCostToMoveChips([2,2,2,3,3]), 2);
+assertCompare(()=>minCostToMoveChips([2,1000,2,3,99]), 2);
+assertCompare(()=>minCostToMoveChips([]), 0);
+assertCompare(()=>minCostToMoveChips([1]), 0);
+assertCompare(()=>minCostToMoveChips([1,1]), 0);
+assertCompare(()=>minCostToMoveChips([1,2,3,4,5,6,7]), 3);
+assertCompare(()=>minCostToMoveChips([1,2,2,2,2]), 1);
 </script>
 </body>
