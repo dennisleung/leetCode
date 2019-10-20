@@ -285,47 +285,39 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {number[]} chips
- * @return {number}
+ * @param {number[]} nums
+ * @return {boolean}
  */
-var minCostToMoveChips = function(chips) {
-    let oddCount = 0;
-    let evenCount = 0;
-    for(let chip of chips) {
-        if(chip%2===0) {
-            evenCount++;
-        }else {
-            oddCount++;
+var canJump = function(nums) {
+    if(nums.length<2) {
+        return true;
+    }
+    let start = 0;
+    let end = nums[0];
+    while(true) {
+        if(end>=nums.length-1) {
+            return true;
         }
-    }
-
-    return Math.min(oddCount, evenCount);
-
-    if(!oddCount || !evenCount) {//全都为奇数或者偶数
-        return 0;
-    }
-    
-    let minDiff = Infinity;
-    chips.sort((a,b)=>a-b);
-    for(let i = 0; i<chips.length-1; i++) {
-        let aEven = chips[i]%2===0;
-        let bEven = chips[i+1]%2===0;
-        if(aEven!==bEven) {
-            minDiff = Math.min(minDiff, Math.abs(chips[i]-chips[i+1]));
+        if(start==end) {
+            return false;
         }
+        let max = 0;
+        for(let i = start; i<=end; i++) {
+            max = Math.max(max, i+nums[i]);
+        }
+        start = Math.max(start+nums[start], start+1);
+        end = max;
     }
-
-    
-    
 };
 
-assertCompare(()=>minCostToMoveChips([1,2,3]), 1);
-assertCompare(()=>minCostToMoveChips([2,2,2,3,3]), 2);
-assertCompare(()=>minCostToMoveChips([2,1000,2,3,99]), 2);
-assertCompare(()=>minCostToMoveChips([]), 0);
-assertCompare(()=>minCostToMoveChips([1]), 0);
-assertCompare(()=>minCostToMoveChips([1,1]), 0);
-assertCompare(()=>minCostToMoveChips([1,2,3,4,5,6,7]), 3);
-assertCompare(()=>minCostToMoveChips([1,2,2,2,2]), 1);
+assertCompare(()=>canJump([0]), true);
+assertCompare(()=>canJump([1]), true);
+assertCompare(()=>canJump([0, 1]), false);
+assertCompare(()=>canJump([2,3,1,1,4]), true);
+assertCompare(()=>canJump([3,2,1,0,4]), false);
+assertCompare(()=>canJump([3,2,1,2,4,1,4,5,6,7,3,4,5,6,7,8,10]), true);
+assertCompare(()=>canJump([2,0,6,9,8,4,5,0,8,9,1,2,9,6,8,8,0,6,3,1,2,2,1,2,6,5,3,1,2,2,6,4,2,4,3,0,0,0,3,8,2,4,0,1,2,0,1,4,6,5,8,0,7,9,3,4,6,6,5,8,9,3,4,3,7,0,4,9,0,9,8,4,3,0,7,7,1,9,1,9,4,9,0,1,9,5,7,7,1,5,8,2,8,2,6,8,2,2,7,5,1,7,9,6]), false);
+assertCompare(()=>canJump([2,0,0]), true);
+assertCompare(()=>canJump([5,9,3,2,1,0,2,3,3,1,0,0]), true);
 </script>
 </body>
