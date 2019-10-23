@@ -286,56 +286,39 @@ assertCompare.only = function(a, b) {
 
 /**
  * @param {number} n
- * @return {number[][]}
+ * @param {number} k
+ * @return {string}
  */
-var generateMatrix = function(n) {
-    if(n<1) {
-        return [];
-    }
-    
-    const matrix = [];
-    const circle = (a, b, startNum) => {
-        for(let i = a[1]; i<=b[1]; i++){
-            matrix[a[0]] = matrix[a[0]] || [];
-            matrix[a[0]][i] = startNum++;
-        }
-        for(let i = a[0]+1; i<=b[0]; i++){
-            matrix[i] = matrix[i] || [];
-            matrix[i][b[1]] = startNum++;
-        }
-        if(a[0]>=b[0] || a[1]>=b[1]) {
-            return;
-        }
-        for(let i = b[1]-1; i>=a[1]; i--){
-            matrix[b[0]] = matrix[b[0]] || [];
-            matrix[b[0]][i] = startNum++;
-        }
-        for(let i = b[0]-1; i>a[0]; i--){
-            matrix[i] = matrix[i] || [];
-            matrix[i][a[0]] = startNum++;
-        }
-        
-        return startNum;
+var getPermutation = function(n, k) {
+    let units = [];
+    let arr = [];
+    let tmp = 1;
+    for(let i = 1; i<=n; i++) {
+        tmp *= i;
+        units[i-1] = tmp;
+        arr.push(i);
     }
 
-    let a = [0, 0];
-    let b = [n-1, n-1];
-    let startNum = 1;
-    while(a[0]<=b[0] && a[1]<=b[1]) {
-        startNum = circle(a, b, startNum);
-        a[0]++;a[1]++;
-        b[0]--;b[1]--;
-    }
+    units = units.slice(0, n).reverse();
+    let result = "";
     
-    return matrix;
+    for(let i = 1; i<units.length; i++) {
+        let tmp = Math.floor(k/units[i]);
+        if(k-tmp*units[i]==0) {
+            tmp--;
+        }
+        result += arr.splice(tmp, 1)[0];
+        k -= units[i] * tmp;
+    }
+    result += arr[0];
+
+    return result;
 };
 
-assertCompare(()=>generateMatrix(0), []);
-assertCompare(()=>generateMatrix(1), [[1]]);
-assertCompare(()=>generateMatrix(3), [
- [ 1, 2, 3 ],
- [ 8, 9, 4 ],
- [ 7, 6, 5 ]
-]);
+assertCompare(()=>getPermutation(1, 1), "1");
+assertCompare(()=>getPermutation(2, 1), "12");
+assertCompare(()=>getPermutation(3, 3), "213");
+assertCompare(()=>getPermutation(4, 9), "2314");
+assertCompare(()=>getPermutation(9, 23783), "168239745");
 </script>
 </body>
