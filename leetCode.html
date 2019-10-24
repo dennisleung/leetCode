@@ -263,7 +263,8 @@ const ASSERT = {
                         console.log(`-------------------------- case ${index+1} START --------------------------------`) 
                         console.log('input:', a)
                         //console.dir(a)
-                        console.error(`expect ${bStr}, got ${aStr}`);
+                        console.error(`expect ${bStr}`);
+                        console.error(`got    ${aStr}`);
                         console.log(`-------------------------- case ${index+1} END --------------------------------`) 
                     }, 0); 
                 }
@@ -285,40 +286,37 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {number} n
+ * @param {ListNode} head
  * @param {number} k
- * @return {string}
+ * @return {ListNode}
  */
-var getPermutation = function(n, k) {
-    let units = [];
-    let arr = [];
-    let tmp = 1;
-    for(let i = 1; i<=n; i++) {
-        tmp *= i;
-        units[i-1] = tmp;
-        arr.push(i);
+var rotateRight = function(head, k) {
+    if(!head) {
+        return null;
     }
 
-    units = units.slice(0, n).reverse();
-    let result = "";
-    
-    for(let i = 1; i<units.length; i++) {
-        let tmp = Math.floor(k/units[i]);
-        if(k-tmp*units[i]==0) {
-            tmp--;
-        }
-        result += arr.splice(tmp, 1)[0];
-        k -= units[i] * tmp;
+    let last = head;
+    const arr = [];
+    while(last) {
+        arr.push(last);
+        last = last.next;
     }
-    result += arr[0];
 
-    return result;
+    k = k % arr.length;
+    if(k>0) {
+        arr[arr.length-1].next = arr[0];
+        arr[arr.length-k-1].next = null;
+        return arr[arr.length-k];
+    }else {
+        return head;
+    }
 };
 
-assertCompare(()=>getPermutation(1, 1), "1");
-assertCompare(()=>getPermutation(2, 1), "12");
-assertCompare(()=>getPermutation(3, 3), "213");
-assertCompare(()=>getPermutation(4, 9), "2314");
-assertCompare(()=>getPermutation(9, 23783), "168239745");
+assertCompare(()=>rotateRight(null, 1), null);
+assertCompare(()=>rotateRight(makeLink([1]), 1), makeLink([1]));
+assertCompare(()=>rotateRight(makeLink([1]), 2), makeLink([1]));
+assertCompare(()=>rotateRight(makeLink([1,2]), 2), makeLink([1,2]));
+assertCompare(()=>rotateRight(makeLink([1,2,3,4,5]), 2), makeLink([4,5,1,2,3]));
+assertCompare(()=>rotateRight(makeLink([0,1,2]), 4), makeLink([2,0,1]));
 </script>
 </body>
