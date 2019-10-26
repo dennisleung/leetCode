@@ -286,37 +286,31 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {ListNode} head
- * @param {number} k
- * @return {ListNode}
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
  */
-var rotateRight = function(head, k) {
-    if(!head) {
-        return null;
-    }
+var uniquePaths = function(m, n) {
+    const cache = {};
+    const getSub = function(m, n) {
+        if(m==0 || n==0) {
+            return 1;
+        }
+        
+        const cacheKey = `${m}_${n}`;
+        if(!cache[cacheKey]) {
+            cache[cacheKey] = getSub(m-1, n) + getSub(m, n-1);
+        }
+        return cache[cacheKey];
+    };
 
-    let last = head;
-    const arr = [];
-    while(last) {
-        arr.push(last);
-        last = last.next;
-    }
-
-    k = k % arr.length;
-    if(k>0) {
-        arr[arr.length-1].next = arr[0];
-        arr[arr.length-k-1].next = null;
-        return arr[arr.length-k];
-    }else {
-        return head;
-    }
+    return getSub(m-1, n-1);
 };
 
-assertCompare(()=>rotateRight(null, 1), null);
-assertCompare(()=>rotateRight(makeLink([1]), 1), makeLink([1]));
-assertCompare(()=>rotateRight(makeLink([1]), 2), makeLink([1]));
-assertCompare(()=>rotateRight(makeLink([1,2]), 2), makeLink([1,2]));
-assertCompare(()=>rotateRight(makeLink([1,2,3,4,5]), 2), makeLink([4,5,1,2,3]));
-assertCompare(()=>rotateRight(makeLink([0,1,2]), 4), makeLink([2,0,1]));
+assertCompare(()=>uniquePaths(3, 2), 3);
+assertCompare(()=>uniquePaths(1, 1), 1);
+assertCompare(()=>uniquePaths(7, 3), 28);
+assertCompare(()=>uniquePaths(3, 7), 28);
+assertCompare(()=>uniquePaths(100, 7), 1609344100);
 </script>
 </body>
