@@ -286,31 +286,50 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {number} m
- * @param {number} n
+ * @param {number[][]} obstacleGrid
  * @return {number}
  */
-var uniquePaths = function(m, n) {
-    const cache = {};
-    const getSub = function(m, n) {
-        if(m==0 || n==0) {
-            return 1;
+var uniquePathsWithObstacles = function(obstacleGrid) {
+    const cache = [];
+    for(let i = 0; i<obstacleGrid.length; i++) {
+        for(let j = 0; j<obstacleGrid[0].length; j++) {
+            let ways = 0;
+            if(!obstacleGrid[i][j]) {
+                if(i==0&&j==0) {
+                    ways = 1;
+                }else if(i>0&&j>0) {
+                    ways = cache[i-1][j] + cache[i][j-1];
+                }else if(i>0) {
+                    ways = cache[i-1][0];
+                }else {
+                    ways = cache[0][j-1];
+                }
+                
+            }
+            cache[i] = cache[i] || [];
+            cache[i][j] = ways;
         }
-        
-        const cacheKey = `${m}_${n}`;
-        if(!cache[cacheKey]) {
-            cache[cacheKey] = getSub(m-1, n) + getSub(m, n-1);
-        }
-        return cache[cacheKey];
-    };
+    }
 
-    return getSub(m-1, n-1);
+    return cache[obstacleGrid.length-1][obstacleGrid[0].length-1];
 };
 
-assertCompare(()=>uniquePaths(3, 2), 3);
-assertCompare(()=>uniquePaths(1, 1), 1);
-assertCompare(()=>uniquePaths(7, 3), 28);
-assertCompare(()=>uniquePaths(3, 7), 28);
-assertCompare(()=>uniquePaths(100, 7), 1609344100);
+assertCompare(()=>uniquePathsWithObstacles([
+  [0,0,0],
+  [0,1,0],
+  [0,0,0]
+]), 2);
+assertCompare(()=>uniquePathsWithObstacles([[0]]), 1);
+assertCompare(()=>uniquePathsWithObstacles([
+    [0,0],
+    [0,0],
+]), 2);
+assertCompare(()=>uniquePathsWithObstacles([[1,0]]), 0);
+assertCompare(()=>uniquePathsWithObstacles([
+    [0,1,0,0,0],
+    [1,0,0,0,0],
+    [0,0,0,0,0],
+    [0,0,0,0,0]
+]), 0);
 </script>
 </body>
