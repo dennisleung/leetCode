@@ -285,23 +285,36 @@ assertCompare.only = function(a, b) {
     ASSERT.add([a, b, true]);
 };
 
-var minPathSum = function(grid) {
-    for(var i=0;i<grid.length;i++){
-        for(var j=0;j<grid[0].length;j++){
-            if(i!=0||j!=0) {
-                grid[i][j] += Math.min((i>0? grid[i-1][j] : Infinity), (j>0 ? grid[i][j-1] :Infinity))
-            }
+/**
+ * @param {string} path
+ * @return {string}
+ */
+var simplifyPath = function(path) {
+    path = path.replace(/\/+/g, "/").replace(/\/$/, "");
+    const pts = path.split("/").slice(1);
+    const result = [];
+    while(pts.length) {
+        let pt = pts.shift();
+        switch(pt) {
+            case ".":
+                break;
+            case "..":
+                result.pop();
+                break;
+            default:
+                result.push(pt);
+                break;
         }
     }
-    return grid[grid.length-1][grid[0].length-1];
+
+    return "/" + result.join("/");
 };
-assertCompare(()=>minPathSum([
-  [1]
-]), 1);
-assertCompare(()=>minPathSum([
-  [1,3,1],
-  [1,5,1],
-  [4,2,1]
-]), 7);
+assertCompare(()=>simplifyPath("/home/"), "/home");
+assertCompare(()=>simplifyPath("/../"), "/");
+assertCompare(()=>simplifyPath("/home//foo/"), "/home/foo");
+assertCompare(()=>simplifyPath("/a/./b/../../c/"), "/c");
+assertCompare(()=>simplifyPath("/a/../../b/../c//.//"), "/c");
+assertCompare(()=>simplifyPath("/home/"), "/home");
+assertCompare(()=>simplifyPath("/a//b////c/d//././/.."), "/a/b/c");
 </script>
 </body>
