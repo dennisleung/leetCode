@@ -286,35 +286,48 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {string} path
- * @return {string}
+ * @param {number[][]} matrix
+ * @return {void} Do not return anything, modify matrix in-place instead.
  */
-var simplifyPath = function(path) {
-    path = path.replace(/\/+/g, "/").replace(/\/$/, "");
-    const pts = path.split("/").slice(1);
-    const result = [];
-    while(pts.length) {
-        let pt = pts.shift();
-        switch(pt) {
-            case ".":
-                break;
-            case "..":
-                result.pop();
-                break;
-            default:
-                result.push(pt);
-                break;
+var setZeroes = function(matrix) {
+    const rowCache = {};
+    const colCache = {};
+    for(let i = 0; i<matrix.length; i++) {
+        for(let j = 0; j<matrix[i].length; j++) {
+            if(!matrix[i][j]) {
+                rowCache[i] = 1;
+                colCache[j] = 1;
+            }
         }
     }
 
-    return "/" + result.join("/");
+    for(let i = 0; i<matrix.length; i++) {
+        for(let j = 0; j<matrix[i].length; j++) {
+            if(rowCache[i]||colCache[j]) {
+                matrix[i][j] = 0;
+            }
+        }
+    }
+
+    return matrix;
 };
-assertCompare(()=>simplifyPath("/home/"), "/home");
-assertCompare(()=>simplifyPath("/../"), "/");
-assertCompare(()=>simplifyPath("/home//foo/"), "/home/foo");
-assertCompare(()=>simplifyPath("/a/./b/../../c/"), "/c");
-assertCompare(()=>simplifyPath("/a/../../b/../c//.//"), "/c");
-assertCompare(()=>simplifyPath("/home/"), "/home");
-assertCompare(()=>simplifyPath("/a//b////c/d//././/.."), "/a/b/c");
+assertCompare(()=>setZeroes([
+  [1,1,1],
+  [1,0,1],
+  [1,1,1]
+]), [
+  [1,0,1],
+  [0,0,0],
+  [1,0,1]
+]);
+assertCompare(()=>setZeroes([
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]), [
+  [0,0,0,0],
+  [0,4,5,0],
+  [0,3,1,0]
+]);
 </script>
 </body>
