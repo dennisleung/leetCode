@@ -287,47 +287,44 @@ assertCompare.only = function(a, b) {
 
 /**
  * @param {number[][]} matrix
- * @return {void} Do not return anything, modify matrix in-place instead.
+ * @param {number} target
+ * @return {boolean}
  */
-var setZeroes = function(matrix) {
-    const rowCache = {};
-    const colCache = {};
-    for(let i = 0; i<matrix.length; i++) {
-        for(let j = 0; j<matrix[i].length; j++) {
-            if(!matrix[i][j]) {
-                rowCache[i] = 1;
-                colCache[j] = 1;
-            }
+var searchMatrix = function(matrix, target) {
+    if(!matrix.length || !matrix[0].length) {
+        return false;
+    }
+    const getCell = function(index) {
+        let row = ~~(index/matrix[0].length);
+        let col = index - row * matrix[0].length;
+        return matrix[row][col];
+    };
+
+    for(let min = 0, max = matrix.length*matrix[0].length-1; min<=max;) {
+        let mid = ~~((min+max)/2);
+        let midVal = getCell(mid);
+        if(midVal==target) {
+            return true;
+        }else if(midVal<target) {
+            min = mid+1;
+        }else {
+            max = mid-1;
         }
     }
 
-    for(let i = 0; i<matrix.length; i++) {
-        for(let j = 0; j<matrix[i].length; j++) {
-            if(rowCache[i]||colCache[j]) {
-                matrix[i][j] = 0;
-            }
-        }
-    }
-
-    return matrix;
+    return false;
 };
-assertCompare(()=>setZeroes([
-  [1,1,1],
-  [1,0,1],
-  [1,1,1]
-]), [
-  [1,0,1],
-  [0,0,0],
-  [1,0,1]
-]);
-assertCompare(()=>setZeroes([
-  [0,1,2,0],
-  [3,4,5,2],
-  [1,3,1,5]
-]), [
-  [0,0,0,0],
-  [0,4,5,0],
-  [0,3,1,0]
-]);
+assertCompare(()=>searchMatrix([
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+], 3), true);
+assertCompare(()=>searchMatrix([
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+], 13), false);
+assertCompare(()=>searchMatrix([]), false);
+assertCompare(()=>searchMatrix([[]]), false);
 </script>
 </body>
