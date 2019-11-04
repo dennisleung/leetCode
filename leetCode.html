@@ -286,36 +286,61 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {number[]} nums
- * @return {number[][]}
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
  */
-var subsets = function(nums) {
-    let result = [];
-    function dfs(current, startIndex) {
-        result.push([...current]);
-        if(current.length == nums.length) {
-            return;
+var exist = function(board, word) {
+    const queue = [];
+    const addCell = (x,y,nextWordIndex,previousPath)=> {
+        const path = {...previousPath};
+        path[`${x}_${y}`] = 1;
+        queue.push({x,y,nextWordIndex,path});
+    };
+    board.forEach((row, rowIndex)=>{
+        row.forEach((cellVal,colIndex)=>{
+            if(cellVal==word[0]) {
+                addCell(rowIndex, colIndex, 1);
+            }
+        });
+    });
+
+    while(true) {
+        if(!queue.length) {
+            return false;
         }
-        for(let i = startIndex; i < nums.length; i++) {
-            dfs([...current, nums[i]], i + 1);
+
+        const {x,y,nextWordIndex,path} = queue.pop();
+        if(nextWordIndex>=word.length) {
+            return true;
+        }
+
+        if(!path[`${x-1}_${y}`] && x>0 && board[x-1][y]==word[nextWordIndex]) {
+            addCell(x-1, y, nextWordIndex+1, path);
+        }
+        if(!path[`${x}_${y+1}`] && y<board[0].length-1 && board[x][y+1]==word[nextWordIndex]) {
+            addCell(x, y+1, nextWordIndex+1, path);
+        }
+        if(!path[`${x+1}_${y}`] && x<board.length-1 && board[x+1][y]==word[nextWordIndex]) {
+            addCell(x+1, y, nextWordIndex+1, path);
+        }
+        if(!path[`${x}_${y-1}`] && y>0 && board[x][y-1]==word[nextWordIndex]) {
+            addCell(x, y-1, nextWordIndex+1, path);
         }
     }
 
-    dfs([], 0);
-
-    return result;
+    return false;
 };
 
-// [[1,2],[1,3],[1,4],[2,3],[2,4],[3,4],[3,4],[2,3],[2,4],[3,4],[3,4]]
-assertCompare(()=>subsets([1,2,3]), [
-  [3],
-  [1],
-  [2],
-  [1,2,3],
-  [1,3],
-  [2,3],
-  [1,2],
-  []
-]);
+const board = [
+  ['A','B','C','E'],
+  ['S','F','C','S'],
+  ['A','D','E','E']
+];
+assertCompare(()=>exist(board, "ABCCED"), true);
+assertCompare(()=>exist(board, "SEE"), true);
+assertCompare(()=>exist(board, "ABCB"), false);
+assertCompare(()=>exist(board, ""), false);
+assertCompare(()=>exist([], "ABCCED"), false);
 </script>
 </body>
