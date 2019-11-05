@@ -286,61 +286,36 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {character[][]} board
- * @param {string} word
- * @return {boolean}
+ * @param {number[]} nums
+ * @return {number}
  */
-var exist = function(board, word) {
-    const queue = [];
-    const addCell = (x,y,nextWordIndex,previousPath)=> {
-        const path = {...previousPath};
-        path[`${x}_${y}`] = 1;
-        queue.push({x,y,nextWordIndex,path});
-    };
-    board.forEach((row, rowIndex)=>{
-        row.forEach((cellVal,colIndex)=>{
-            if(cellVal==word[0]) {
-                addCell(rowIndex, colIndex, 1);
+var removeDuplicates = function(nums) {
+    if(!nums.length) {
+        //return 0;//todo
+        return [];
+    }
+    for(var i = 0, j = 1, sameCount = 1; j<nums.length; j++) {
+        if(nums[i]===nums[j]) {
+            if(sameCount<2) {
+                nums[++i] = nums[j];
             }
-        });
-    });
-
-    while(true) {
-        if(!queue.length) {
-            return false;
-        }
-
-        const {x,y,nextWordIndex,path} = queue.pop();
-        if(nextWordIndex>=word.length) {
-            return true;
-        }
-
-        if(!path[`${x-1}_${y}`] && x>0 && board[x-1][y]==word[nextWordIndex]) {
-            addCell(x-1, y, nextWordIndex+1, path);
-        }
-        if(!path[`${x}_${y+1}`] && y<board[0].length-1 && board[x][y+1]==word[nextWordIndex]) {
-            addCell(x, y+1, nextWordIndex+1, path);
-        }
-        if(!path[`${x+1}_${y}`] && x<board.length-1 && board[x+1][y]==word[nextWordIndex]) {
-            addCell(x+1, y, nextWordIndex+1, path);
-        }
-        if(!path[`${x}_${y-1}`] && y>0 && board[x][y-1]==word[nextWordIndex]) {
-            addCell(x, y-1, nextWordIndex+1, path);
+            sameCount++;
+        }else {
+            nums[++i] = nums[j];
+            sameCount = 1;
         }
     }
 
-    return false;
+    //return i+1;
+    return nums.slice(0, i+1);
 };
 
-const board = [
-  ['A','B','C','E'],
-  ['S','F','C','S'],
-  ['A','D','E','E']
-];
-assertCompare(()=>exist(board, "ABCCED"), true);
-assertCompare(()=>exist(board, "SEE"), true);
-assertCompare(()=>exist(board, "ABCB"), false);
-assertCompare(()=>exist(board, ""), false);
-assertCompare(()=>exist([], "ABCCED"), false);
+assertCompare(()=>removeDuplicates([]), []);
+assertCompare(()=>removeDuplicates([1]), [1]);
+assertCompare(()=>removeDuplicates([1,1]), [1,1]);
+assertCompare(()=>removeDuplicates([1,1,1]), [1,1]);
+assertCompare(()=>removeDuplicates([1,1,1,2,2,3]), [1,1,2,2,3]);
+assertCompare(()=>removeDuplicates([0,0,1,1,1,1,2,3,3]), [0,0,1,1,2,3,3]);
+assertCompare(()=>removeDuplicates([1,1,1,2,2,3]), [1,1,2,2,3]);
 </script>
 </body>
