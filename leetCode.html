@@ -286,36 +286,30 @@ assertCompare.only = function(a, b) {
 };
 
 /**
- * @param {number[]} nums
- * @return {number}
+ * @param {ListNode} head
+ * @return {ListNode}
  */
-var removeDuplicates = function(nums) {
-    if(!nums.length) {
-        //return 0;//todo
-        return [];
-    }
-    for(var i = 0, j = 1, sameCount = 1; j<nums.length; j++) {
-        if(nums[i]===nums[j]) {
-            if(sameCount<2) {
-                nums[++i] = nums[j];
-            }
-            sameCount++;
-        }else {
-            nums[++i] = nums[j];
-            sameCount = 1;
-        }
-    }
+var deleteDuplicates = function(head) {
+    const root = new ListNode();
+    root.next = head;
+    let pre = root;
+    current = pre.next;
+    while(current) {
+        if(pre.val===current.val || current.next && current.next.val===current.val) {
 
-    //return i+1;
-    return nums.slice(0, i+1);
+        }else {
+            pre.next = current;
+            pre = pre.next;
+        }
+        current = current.next;
+    }
+    pre.next = null;
+
+    return root.next;
 };
 
-assertCompare(()=>removeDuplicates([]), []);
-assertCompare(()=>removeDuplicates([1]), [1]);
-assertCompare(()=>removeDuplicates([1,1]), [1,1]);
-assertCompare(()=>removeDuplicates([1,1,1]), [1,1]);
-assertCompare(()=>removeDuplicates([1,1,1,2,2,3]), [1,1,2,2,3]);
-assertCompare(()=>removeDuplicates([0,0,1,1,1,1,2,3,3]), [0,0,1,1,2,3,3]);
-assertCompare(()=>removeDuplicates([1,1,1,2,2,3]), [1,1,2,2,3]);
+assertCompare(()=>deleteDuplicates(makeLink([1,2,3,3,4,4,5])), makeLink([1,2,5]));
+assertCompare(()=>deleteDuplicates(makeLink([1,1,1,2,3])), makeLink([2,3]));
+assertCompare.only(()=>deleteDuplicates(makeLink([1,1])), makeLink([]));
 </script>
 </body>
