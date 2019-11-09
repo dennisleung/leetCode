@@ -8,6 +8,30 @@
 12/12 cases passed (84 ms)
 Your runtime beats 6.11 % of javascript submissions
 Your memory usage beats 100 % of javascript submissions (36.8 MB)
+
+recursive solution:
+var grayCode = function(n) {
+    if (n === 0) return [0];
+    const res = grayCode(n - 1);
+    const mask = 1 << n - 1;
+    for (let i = res.length - 1; i >= 0; i--) {
+        res.push(res[i] | mask);
+    }
+    return res;
+};
+
+shorter version:
+var grayCode = function(n) {
+    return n ? (x => [...x, ...x.map((v, i) => x[x.length - 1 - i] + x.length)])(grayCode(n - 1)) : [0]
+}
+
+another solution:
+var grayCode = function(n) {
+    let nums = [0], c = -1;
+    while(c++ < n-1) nums = [...nums, ...nums.map(num => num+Math.pow(2,c)).reverse()];
+    return nums;
+};
+
 */
 
 // @lc code=start
