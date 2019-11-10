@@ -299,21 +299,43 @@ const num2Gray = function(num) {
 };
 
 /**
- * @param {number} n
- * @return {number[]}
+ * @param {number[]} nums
+ * @return {number[][]}
  */
-var grayCode = function(n) {
-    const result = [];
-    for(let i = 0; i<Math.pow(2, n); i++) {
-        result.push(parseInt(num2Gray(i), 2));
+var subsetsWithDup = function(nums) {
+    const result = {};
+    const addResult = function(arr) {
+        const key = arr.join(",");
+        if(!result[key]) {
+            result[key] = [...arr];
+        }
+    };
+    const dfs = function(current, startIndex) {
+        addResult(current);
+        if(current.length==nums.length) {
+            return;
+        }
+        for(let i = startIndex; i<nums.length; i++) {
+            dfs(current.concat([nums[i]]), i+1);
+        }
     }
 
-    return result;
+    nums.sort((a,b)=>a-b);
+    dfs([], 0);
+
+    return Object.values(result);
 };
 
-assertCompare(()=>grayCode(2), [0,1,3,2]);
-assertCompare(()=>grayCode(3), [0,1,3,2,6,7,5,4]);
-assertCompare(()=>grayCode(0), [0]);
-assertCompare(()=>grayCode(1), [0,1]);
+assertCompare(()=>subsetsWithDup([]), [[]]);
+assertCompare(()=>subsetsWithDup([1]), [[], [1]]);
+assertCompare(()=>subsetsWithDup([1,2,2]), [
+  [2],
+  [1],
+  [1,2,2],
+  [2,2],
+  [1,2],
+  []
+]);
+assertCompare(()=>subsetsWithDup([4,4,4,1,4]), [[],[1],[1,4],[1,4,4],[1,4,4,4],[1,4,4,4,4],[4],[4,4],[4,4,4],[4,4,4,4]]);
 </script>
 </body>
