@@ -299,43 +299,41 @@ const num2Gray = function(num) {
 };
 
 /**
- * @param {number[]} nums
- * @return {number[][]}
+ * @param {string} s
+ * @return {number}
  */
-var subsetsWithDup = function(nums) {
-    const result = {};
-    const addResult = function(arr) {
-        const key = arr.join(",");
-        if(!result[key]) {
-            result[key] = [...arr];
-        }
-    };
-    const dfs = function(current, startIndex) {
-        addResult(current);
-        if(current.length==nums.length) {
-            return;
-        }
-        for(let i = startIndex; i<nums.length; i++) {
-            dfs(current.concat([nums[i]]), i+1);
+var numDecodings = function(s) {
+    const helper = function(s) {        
+        if(s.length<=2) {
+            if(s.indexOf("0")!==-1) {
+                return (s==="10" || s==="20") ? 1 : 0
+            }
+            let sn = parseInt(s);
+            return (sn>10 && sn<27) ? 2 : 1;
+        }else {
+            let count = 0;
+            let s0 = parseInt(s[0]);
+            if(s0>0) {
+                count += helper(s.slice(1));
+                let s01 = s0*10+parseInt(s[1]);
+                if(s01<27) {
+                    count += helper(s.slice(2));
+                }
+            }
+            return count;
         }
     }
 
-    nums.sort((a,b)=>a-b);
-    dfs([], 0);
-
-    return Object.values(result);
+    return helper(s);
 };
 
-assertCompare(()=>subsetsWithDup([]), [[]]);
-assertCompare(()=>subsetsWithDup([1]), [[], [1]]);
-assertCompare(()=>subsetsWithDup([1,2,2]), [
-  [2],
-  [1],
-  [1,2,2],
-  [2,2],
-  [1,2],
-  []
-]);
-assertCompare(()=>subsetsWithDup([4,4,4,1,4]), [[],[1],[1,4],[1,4,4],[1,4,4,4],[1,4,4,4,4],[4],[4,4],[4,4,4],[4,4,4,4]]);
+assertCompare(()=>numDecodings("12"), 2);
+assertCompare(()=>numDecodings("226"), 3);
+assertCompare(()=>numDecodings("1"), 1);
+assertCompare(()=>numDecodings("20"), 1);
+assertCompare(()=>numDecodings("27"), 1);
+assertCompare(()=>numDecodings("000"), 0);
+assertCompare(()=>numDecodings("230"), 0);
+assertCompare(()=>numDecodings("012"), 0);
 </script>
 </body>
