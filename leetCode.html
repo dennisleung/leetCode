@@ -299,41 +299,40 @@ const num2Gray = function(num) {
 };
 
 /**
- * @param {string} s
- * @return {number}
+ * @param {ListNode} head
+ * @param {number} m
+ * @param {number} n
+ * @return {ListNode}
  */
-var numDecodings = function(s) {
-    const helper = function(s) {        
-        if(s.length<=2) {
-            if(s.indexOf("0")!==-1) {
-                return (s==="10" || s==="20") ? 1 : 0
-            }
-            let sn = parseInt(s);
-            return (sn>10 && sn<27) ? 2 : 1;
-        }else {
-            let count = 0;
-            let s0 = parseInt(s[0]);
-            if(s0>0) {
-                count += helper(s.slice(1));
-                let s01 = s0*10+parseInt(s[1]);
-                if(s01<27) {
-                    count += helper(s.slice(2));
-                }
-            }
-            return count;
-        }
+var reverseBetween = function(head, m, n) {
+    const _head = new ListNode();
+    _head.next = head;
+    const root = _head;
+    let index = 0;
+    let cur = root;
+    while(++index<m) {
+        cur = cur.next;
     }
 
-    return helper(s);
+    const node1 = cur;
+    const node2 = node1.next;
+    let preNode = node2;
+    cur = node2;
+    while(index++<=n) {
+        let nextNode = cur.next;
+        cur.next = preNode;
+        preNode = cur;
+        cur = nextNode;
+    }
+
+    node1.next = preNode;
+    node2.next = cur;
+
+    return root.next; 
 };
 
-assertCompare(()=>numDecodings("12"), 2);
-assertCompare(()=>numDecodings("226"), 3);
-assertCompare(()=>numDecodings("1"), 1);
-assertCompare(()=>numDecodings("20"), 1);
-assertCompare(()=>numDecodings("27"), 1);
-assertCompare(()=>numDecodings("000"), 0);
-assertCompare(()=>numDecodings("230"), 0);
-assertCompare(()=>numDecodings("012"), 0);
+assertCompare(()=>reverseBetween(makeLink([1,2,3,4,5]), 2, 4), makeLink([1,4,3,2,5]));
+assertCompare(()=>reverseBetween(makeLink([1,2,3,4,5]), 1, 1), makeLink([1,2,3,4,5]));
+assertCompare(()=>reverseBetween(makeLink([1]), 1, 1), makeLink([1]));
 </script>
 </body>
