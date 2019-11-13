@@ -299,40 +299,39 @@ const num2Gray = function(num) {
 };
 
 /**
- * @param {ListNode} head
- * @param {number} m
- * @param {number} n
- * @return {ListNode}
+ * @param {string} s
+ * @return {string[]}
  */
-var reverseBetween = function(head, m, n) {
-    const _head = new ListNode();
-    _head.next = head;
-    const root = _head;
-    let index = 0;
-    let cur = root;
-    while(++index<m) {
-        cur = cur.next;
+var restoreIpAddresses = function(s, preArr=[], result=[]) {
+    if(preArr.length>=4) {
+        if(!s) {
+            result.push(preArr);
+        }else {
+            return [];
+        }
     }
 
-    const node1 = cur;
-    const node2 = node1.next;
-    let preNode = node2;
-    cur = node2;
-    while(index++<=n) {
-        let nextNode = cur.next;
-        cur.next = preNode;
-        preNode = cur;
-        cur = nextNode;
+    let tmp = "";
+    for(let i = 0; i<Math.min(3, s.length); i++) {
+        tmp += s[i];
+        if(tmp.length>1 && tmp[0]=="0") {
+            continue;
+        }
+        if(parseInt(tmp)>255) {
+            continue;
+        }
+
+        restoreIpAddresses(s.slice(i+1), [...preArr, tmp], result);
     }
 
-    node1.next = preNode;
-    node2.next = cur;
-
-    return root.next; 
+    return result.map(v=>v.join("."));
 };
 
-assertCompare(()=>reverseBetween(makeLink([1,2,3,4,5]), 2, 4), makeLink([1,4,3,2,5]));
-assertCompare(()=>reverseBetween(makeLink([1,2,3,4,5]), 1, 1), makeLink([1,2,3,4,5]));
-assertCompare(()=>reverseBetween(makeLink([1]), 1, 1), makeLink([1]));
+assertCompare(()=>restoreIpAddresses("25525511135"), ["255.255.11.135", "255.255.111.35"]);
+assertCompare(()=>restoreIpAddresses("000"), []);
+assertCompare(()=>restoreIpAddresses(""), []);
+assertCompare(()=>restoreIpAddresses("256256256256"), []);
+assertCompare(()=>restoreIpAddresses("2562562562567"), []);
+assertCompare(()=>restoreIpAddresses("0000"), ["0.0.0.0"]);
 </script>
 </body>
