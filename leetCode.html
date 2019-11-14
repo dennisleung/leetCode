@@ -27,6 +27,9 @@ const makeLink = (arr)=>{
 }
 
 const makeTree = (arr)=>{
+    if(!arr.length) {
+        return null;
+    }
     let head = new TreeNode(arr.shift());
     let nodes = [head];
     while(arr.length) {
@@ -299,39 +302,28 @@ const num2Gray = function(num) {
 };
 
 /**
- * @param {string} s
- * @return {string[]}
+ * @param {TreeNode} root
+ * @return {number[]}
  */
-var restoreIpAddresses = function(s, preArr=[], result=[]) {
-    if(preArr.length>=4) {
-        if(!s) {
-            result.push(preArr);
+var inorderTraversal = function(root) {
+    const result = [];
+    const stacks = [];
+    let cur = root;
+    while(stacks.length || cur) {
+        if(cur) {
+            stacks.push(cur);
+            cur = cur.left;
         }else {
-            return [];
+            cur = stacks.pop();
+            result.push(cur.val);
+            cur = cur.right;
         }
     }
 
-    let tmp = "";
-    for(let i = 0; i<Math.min(3, s.length); i++) {
-        tmp += s[i];
-        if(tmp.length>1 && tmp[0]=="0") {
-            continue;
-        }
-        if(parseInt(tmp)>255) {
-            continue;
-        }
-
-        restoreIpAddresses(s.slice(i+1), [...preArr, tmp], result);
-    }
-
-    return result.map(v=>v.join("."));
+    return result;
 };
 
-assertCompare(()=>restoreIpAddresses("25525511135"), ["255.255.11.135", "255.255.111.35"]);
-assertCompare(()=>restoreIpAddresses("000"), []);
-assertCompare(()=>restoreIpAddresses(""), []);
-assertCompare(()=>restoreIpAddresses("256256256256"), []);
-assertCompare(()=>restoreIpAddresses("2562562562567"), []);
-assertCompare(()=>restoreIpAddresses("0000"), ["0.0.0.0"]);
+assertCompare(()=>inorderTraversal(makeTree([1,null,2,3])), [1,3,2]);
+assertCompare(()=>inorderTraversal(makeTree([])), []);
 </script>
 </body>
