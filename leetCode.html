@@ -322,59 +322,29 @@ const binaryTree2Arr = function(root) {
 };
 
 /**
- * @param {number} max
- * @return {TreeNode[]}
+ * @param {number} n
+ * @return {number}
  */
-var generateTrees = function(max, min=1) {
+var numTrees = function(max, min=1) {
     if(min>max) {
-        return [];
+        return 0;
+    }
+    if(max-min<2) {
+        return max-min+1;
     }
 
-    if(min==max) {
-        return [new TreeNode(min)];
-    }
-    
-    const result = [];
-    let root = null;
-    if(max-min==1) {
-        root = new TreeNode(max);
-        root.left = new TreeNode(min);
-        result.push(root);
-
-        root = new TreeNode(min);
-        root.right = new TreeNode(max);
-        result.push(root);
-
-        return result;
-    }
-
+    let count = 0;
     for(let i = min; i<=max; i++) {
-        let leftArr = [];
-        let rightArr = [];
-        if(i>min) {
-            leftArr = generateTrees(i-1, min);
-        }
-        if(i<max) {
-            rightArr = generateTrees(max, i+1);
-        }
-
-        let j = 0;
-        do {
-            let leftNode = leftArr[j++] || null;
-            let k = 0;
-            do {
-                let rightNode = rightArr[k++] || null;
-                let root = new TreeNode(i);
-                root.left = leftNode;
-                root.right = rightNode;
-                result.push(root);
-            }while(k<rightArr.length)
-        }while(j<leftArr.length)
+        let leftCount = i>min ? numTrees(i-1, min) : 1;
+        let rightCount = i<max ? numTrees(max, i+1) : 1;
+        count += leftCount * rightCount;
     }
 
-    return result;
+    return count;
 };
 
-// assertCompare(()=>generateTrees(3));
+assertCompare(()=>numTrees(0), 0);
+assertCompare(()=>numTrees(1), 1);
+assertCompare(()=>numTrees(3), 5);
 </script>
 </body>
