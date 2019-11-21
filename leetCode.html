@@ -338,25 +338,36 @@ var arr2BST = function(arr) {
     return root;
 };
 
-/**
- * @param {ListNode} head
- * @return {TreeNode}
- */
-var sortedListToBST = function(head) {
-    const arr = [];
-    while(head) {
-        arr.push(head.val);
-        head = head.next;
+var pathSum = function(root, sum) {
+    let result = [];
+    if(!root) {
+        return result;
     }
 
-    return arr2BST(arr);
+    if(root.left) {
+        const leftResult = pathSum(root.left, sum-root.val);
+        if(leftResult.length) {
+            result = result.concat(leftResult.map(v=>[root.val, ...v]));
+        }
+    }
+
+    if(root.right) {
+        const rightResult = pathSum(root.right, sum-root.val);
+        if(rightResult.length) {
+            result = result.concat(rightResult.map(v=>[root.val, ...v]));
+        }
+    }
+
+    if(!root.left&&!root.right&&root.val==sum) {
+        result.push([root.val]);
+    }
+
+    return result;
 };
 
-assertCompare(()=>sortedListToBST(makeLink([])), makeTree([]));
-assertCompare(()=>sortedListToBST(makeLink([1])), makeTree([1]));
-assertCompare(()=>sortedListToBST(makeLink([1,2])), makeTree([2,1]));
-assertCompare(()=>sortedListToBST(makeLink([1,2,3])), makeTree([2,1,3]));
-assertCompare(()=>sortedListToBST(makeLink([-10,-3,0,5,9])), makeTree([0,-3,9,-10,null,5]));
-
+assertCompare(()=>pathSum(makeTree([]), 10), []);
+assertCompare(()=>pathSum(makeTree([10]), 10), [[10]]);
+assertCompare(()=>pathSum(makeTree([10]), 1), []);
+assertCompare(()=>pathSum(makeTree([5,4,8,11,null,13,4,7,2,null,null,5,1]), 22), [[5,4,11,2],[5,8,4,5]]);
 </script>
 </body>
