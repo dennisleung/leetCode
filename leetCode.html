@@ -322,30 +322,41 @@ const binaryTree2Arr = function(root) {
         }
     }
 
-    return 
+    return result;
 };
 
-/**
- * @param {number[]} preorder
- * @param {number[]} inorder
- * @return {TreeNode}
- */
-var buildTree = function(inorder, postorder) {
-    if(!postorder.length) {
+var arr2BST = function(arr) {
+    if(!arr.length) {
         return null;
     }
 
-    const rootVal = postorder[postorder.length-1];
-    const rootIndex = inorder.indexOf(rootVal);
-    const root = new TreeNode();
-    root.val = rootVal;
-    root.left = buildTree(inorder.slice(0, rootIndex), postorder.slice(0, rootIndex));
-    root.right = buildTree(inorder.slice(rootIndex+1), postorder.slice(rootIndex, -1));
+    const rootIndex = Math.floor(arr.length/2);
+    const root = new TreeNode(arr[rootIndex]);
+    root.left = arr2BST(arr.slice(0, rootIndex));
+    root.right = arr2BST(arr.slice(rootIndex+1));
 
     return root;
 };
 
-assertCompare(()=>buildTree([9,3,15,20,7], [9,15,7,20,3]), makeTree([3,9,20,null,null,15,7]));
-assertCompare(()=>buildTree([], []), makeTree([]));
+/**
+ * @param {ListNode} head
+ * @return {TreeNode}
+ */
+var sortedListToBST = function(head) {
+    const arr = [];
+    while(head) {
+        arr.push(head.val);
+        head = head.next;
+    }
+
+    return arr2BST(arr);
+};
+
+assertCompare(()=>sortedListToBST(makeLink([])), makeTree([]));
+assertCompare(()=>sortedListToBST(makeLink([1])), makeTree([1]));
+assertCompare(()=>sortedListToBST(makeLink([1,2])), makeTree([2,1]));
+assertCompare(()=>sortedListToBST(makeLink([1,2,3])), makeTree([2,1,3]));
+assertCompare(()=>sortedListToBST(makeLink([-10,-3,0,5,9])), makeTree([0,-3,9,-10,null,5]));
+
 </script>
 </body>
