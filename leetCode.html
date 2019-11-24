@@ -13,6 +13,13 @@ function TreeNode(val) {
     this.right = null;
 }
 
+function Node(val,left,right,next) {
+    this.val = val;
+    this.left = left;
+    this.right = right;
+    this.next = next;
+};
+
 const makeLink = (arr)=>{
     if(!arr.length) {
         return null;
@@ -102,7 +109,7 @@ const preorderTraversal = function(root) {
         }
     };
 
-    return getLeftChildren(root).concat([root]).concat(getRightChildren(root));
+    return [root].concat(getLeftChildren(root)).concat(getRightChildren(root));
 };
 
 const getComplement = function(num, bit=32) {
@@ -180,13 +187,6 @@ function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
     this.topRight = topRight;
     this.bottomLeft = bottomLeft;
     this.bottomRight = bottomRight;
-};
-
-const dfs = (root)=>{
-    if(!root) {
-        return [];
-    }
-    return [root].concat(dfs(root.left), dfs(root.right));
 };
 
 /**
@@ -338,36 +338,33 @@ var arr2BST = function(arr) {
     return root;
 };
 
-var pathSum = function(root, sum) {
-    let result = [];
+/**
+ * @param {Node} root
+ * @return {Node}
+ */
+var connect = function(root) {
     if(!root) {
-        return result;
+        return null;
     }
-
-    if(root.left) {
-        const leftResult = pathSum(root.left, sum-root.val);
-        if(leftResult.length) {
-            result = result.concat(leftResult.map(v=>[root.val, ...v]));
+    let arr = [root];
+    while(arr.length) {
+        const nextArr = [];
+        for(let i = 0; i<arr.length; i++) {
+            const node = arr[i];
+            if(arr[i+1]) {
+                node.next = arr[i+1];
+            }
+            node.left && nextArr.push(node.left);
+            node.right && nextArr.push(node.right);
         }
+        arr = nextArr;
     }
 
-    if(root.right) {
-        const rightResult = pathSum(root.right, sum-root.val);
-        if(rightResult.length) {
-            result = result.concat(rightResult.map(v=>[root.val, ...v]));
-        }
-    }
-
-    if(!root.left&&!root.right&&root.val==sum) {
-        result.push([root.val]);
-    }
-
-    return result;
+    return root;
 };
 
-assertCompare(()=>pathSum(makeTree([]), 10), []);
-assertCompare(()=>pathSum(makeTree([10]), 10), [[10]]);
-assertCompare(()=>pathSum(makeTree([10]), 1), []);
-assertCompare(()=>pathSum(makeTree([5,4,8,11,null,13,4,7,2,null,null,5,1]), 22), [[5,4,11,2],[5,8,4,5]]);
+assertCompare(()=>connect(makeTree([])), makeTree([]));
+assertCompare(()=>connect(makeTree([1])), makeTree([1]));
+connect(makeTree([1,2,3,4,5,6,7]));
 </script>
 </body>
