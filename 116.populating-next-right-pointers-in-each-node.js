@@ -15,8 +15,9 @@
  * };
  */
 /*
-Runtime: 80 ms, faster than 81.44% of JavaScript online submissions for Populating Next Right Pointers in Each Node.
-Memory Usage: 39.8 MB, less than 33.33% of JavaScript online submissions for Populating Next Right Pointers in Each Node.
+12/12 cases passed (100 ms)
+Your runtime beats 7.22 % of javascript submissions
+Your memory usage beats 100 % of javascript submissions (39.6 MB)
 
 recursive solution:
 var connect = function(root) {
