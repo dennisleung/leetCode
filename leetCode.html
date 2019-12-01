@@ -348,53 +348,29 @@ var arr2BST = function(arr) {
     return root;
 };
 
-function Node(val,neighbors) {
-   this.val = val;
-   this.neighbors = neighbors;
-};
-
-var cloneGraph = function(node) {
-    if(!node) {
-        return null;
-    }
-    const queue = [node];
-    const everInQueue = new Set();
-    const map = new Map();
-    let rootNode = null;
-    everInQueue.add(node);
-    while(queue.length) {
-        const n = queue.shift();        
-        const _node = new Node(n.val, []);
-        map.set(n, _node);
-        for(let _n of n.neighbors) {
-            let _newN = map.get(_n);
-            if(_newN) {
-                _node.neighbors.push(_newN);
-                _newN.neighbors.push(_node);
-            }else {
-                if(!everInQueue.has(_n)) {
-                    queue.push(_n);
-                    everInQueue.add(_n);
-                }
+var canCompleteCircuit = function(gas, cost) {
+    const N = gas.map((g,i)=>gas[i]-cost[i]);
+    const isValidN = function(index) {
+        const arr = N.slice(index).concat(N.slice(0, index));
+        let sum = 0;
+        for(let n of arr) {
+            sum += n;
+            if(sum<0) {
+                return false;
             }
         }
-        if(!rootNode) {
-            rootNode = _node;
+        return true;
+    };
+    for(let i = 0; i<N.length; i++) {
+        if(N[i]>=0 && isValidN(i)) {
+            return i;
         }
     }
-
-    return rootNode;
+    return -1;
 };
 
-const node1 = new Node(1, []);
-const node2 = new Node(2, []);
-const node3 = new Node(3, []);
-const node4 = new Node(4, []);
-node1.neighbors = [node2, node4];
-node2.neighbors = [node1, node3];
-node3.neighbors = [node2, node4];
-node4.neighbors = [node1, node3];
-console.log(cloneGraph(node1));
-// assertCompare(()=>partition(""), []);
+assertCompare(()=>canCompleteCircuit([1,2,3,4,5], [3,4,5,1,2]), 3);
+assertCompare(()=>canCompleteCircuit([2,3,4], [3,4,3]), -1);
+assertCompare(()=>canCompleteCircuit([2], [2]), 0);
 </script>
 </body>
