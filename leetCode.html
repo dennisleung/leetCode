@@ -348,38 +348,53 @@ var arr2BST = function(arr) {
     return root;
 };
 
-var partition = function(s) {
-    if(!s) {
-        return [];
-    }
-    if(s.length==1) {
-        return [[s]];
-    }
+function Node(val,neighbors) {
+   this.val = val;
+   this.neighbors = neighbors;
+};
 
-    let result = [];
-    for(let i = 1; i<=s.length; i++) {
-        let aStr = s.slice(0, i);
-        if(isPalindrome(aStr)) {
-            let arr = partition(s.slice(i));
-            if(arr.length) {
-                result = result.concat(arr.map(v=>[aStr, ...v]));
+var cloneGraph = function(node) {
+    if(!node) {
+        return null;
+    }
+    const queue = [node];
+    const everInQueue = new Set();
+    const map = new Map();
+    let rootNode = null;
+    everInQueue.add(node);
+    while(queue.length) {
+        const n = queue.shift();        
+        const _node = new Node(n.val, []);
+        map.set(n, _node);
+        for(let _n of n.neighbors) {
+            let _newN = map.get(_n);
+            if(_newN) {
+                _node.neighbors.push(_newN);
+                _newN.neighbors.push(_node);
             }else {
-                result.push([aStr]);
+                if(!everInQueue.has(_n)) {
+                    queue.push(_n);
+                    everInQueue.add(_n);
+                }
             }
-            
+        }
+        if(!rootNode) {
+            rootNode = _node;
         }
     }
 
-    return result;
+    return rootNode;
 };
 
-assertCompare(()=>partition(""), []);
-assertCompare(()=>partition("a"), [["a"]]);
-assertCompare(()=>partition("aa"), [["a", "a"], ["aa"]]);
-assertCompare(()=>partition("ab"), [["a", "b"]]);
-assertCompare(()=>partition("aab"), [
-  ["aa","b"],
-  ["a","a","b"]
-]);
+const node1 = new Node(1, []);
+const node2 = new Node(2, []);
+const node3 = new Node(3, []);
+const node4 = new Node(4, []);
+node1.neighbors = [node2, node4];
+node2.neighbors = [node1, node3];
+node3.neighbors = [node2, node4];
+node4.neighbors = [node1, node3];
+console.log(cloneGraph(node1));
+// assertCompare(()=>partition(""), []);
 </script>
 </body>
