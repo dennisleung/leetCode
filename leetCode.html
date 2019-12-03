@@ -348,29 +348,21 @@ var arr2BST = function(arr) {
     return root;
 };
 
-var canCompleteCircuit = function(gas, cost) {
-    const N = gas.map((g,i)=>gas[i]-cost[i]);
-    const isValidN = function(index) {
-        const arr = N.slice(index).concat(N.slice(0, index));
-        let sum = 0;
-        for(let n of arr) {
-            sum += n;
-            if(sum<0) {
-                return false;
-            }
-        }
-        return true;
-    };
-    for(let i = 0; i<N.length; i++) {
-        if(N[i]>=0 && isValidN(i)) {
-            return i;
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var singleNumber = function(nums) {
+    nums.sort((a,b)=>a-b);
+    for(let i = 0; i<nums.length; i++) {
+        if(nums[i]!==nums[i-1] && nums[i]!==nums[i+1]) {
+            return nums[i];
         }
     }
-    return -1;
 };
 
-assertCompare(()=>canCompleteCircuit([1,2,3,4,5], [3,4,5,1,2]), 3);
-assertCompare(()=>canCompleteCircuit([2,3,4], [3,4,3]), -1);
-assertCompare(()=>canCompleteCircuit([2], [2]), 0);
+assertCompare(()=>singleNumber([3,2,2,2]), 3);
+assertCompare(()=>singleNumber([2,2,3,2]), 3);
+assertCompare(()=>singleNumber([0,1,0,1,0,1,99]), 99);
 </script>
 </body>
