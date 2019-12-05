@@ -358,23 +358,29 @@ function Node(val,next,random) {
  * @param {Node} head
  * @return {Node}
  */
-var copyRandomList = function(head, cache={}) {
-    if(!head) {
-        return null;
+var wordBreak = function(s, wordDict) {
+    const dp = [true];
+    const map = {};
+    for(let word of wordDict) {
+        map[word] = true;
     }
-    if(cache[head.val]) {
-        return cache[head.val];
+    for(let length = 1; length<=s.length; length++) {
+        for(let i = 0; i<length; i++) {
+            if(dp[i] && map[s.slice(i, length)]) {
+                dp[length] = true;
+                break;
+            }
+        }
     }
-    const node = new Node(head.val);
-    cache[head.val] = node;
-    node.next = copyRandomList(head.next, cache);
-    node.random = copyRandomList(head.random, cache);
 
-    return node;
+    return !!dp[s.length];
 };
 
-assertCompare(()=>singleNumber([3,2,2,2]), 3);
-assertCompare(()=>singleNumber([2,2,3,2]), 3);
-assertCompare(()=>singleNumber([0,1,0,1,0,1,99]), 99);
+assertCompare(()=>wordBreak("leetcode", ["leet", "code"]), true);
+assertCompare(()=>wordBreak("applepenapple", ["apple", "pen"]), true);
+assertCompare(()=>wordBreak("catsandog", ["cats", "dog", "sand", "and", "cat"]), false);
+assertCompare(()=>wordBreak("cars", ["car", "ca", "rs"]), true);
+assertCompare(()=>wordBreak("cars", ["ca", "rs", "car"]), true);
+assertCompare(()=>wordBreak("cbca", ["bc", "ca"]), false);
 </script>
 </body>

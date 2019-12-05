@@ -14,8 +14,9 @@
  * };
  */
 /*
-Runtime: 648 ms, faster than 55.17% of JavaScript online submissions for Copy List with Random Pointer.
-Memory Usage: 100.2 MB, less than 87.50% of JavaScript online submissions for Copy List with Random Pointer.
+9/9 cases passed (656 ms)
+Your runtime beats 38.11 % of javascript submissions
+Your memory usage beats 87.5 % of javascript submissions (100.2 MB)
 */
 /**
  * @param {Node} head
