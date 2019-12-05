@@ -354,27 +354,24 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-/**
- * @param {Node} head
- * @return {Node}
- */
-var wordBreak = function(s, wordDict) {
-    const dp = [true];
-    const map = {};
-    for(let word of wordDict) {
-        map[word] = true;
-    }
-    for(let length = 1; length<=s.length; length++) {
-        for(let i = 0; i<length; i++) {
-            if(dp[i] && map[s.slice(i, length)]) {
-                dp[length] = true;
-                break;
-            }
+var detectCycle = function(head) {
+    const map = new Map();
+    let index = 0;
+    while(head) {
+        if(map.has(head)) {
+            return map.get(head);
         }
+        map.set(head, index++);
+        head = head.next;
     }
 
-    return !!dp[s.length];
+    return -1;
 };
+
+var node1 = new ListNode(3);
+var node2 = new ListNode(3);
+var node3 = new ListNode(3);
+var node4 = new ListNode(3);
 
 assertCompare(()=>wordBreak("leetcode", ["leet", "code"]), true);
 assertCompare(()=>wordBreak("applepenapple", ["apple", "pen"]), true);
