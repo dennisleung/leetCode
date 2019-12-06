@@ -354,30 +354,35 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-var detectCycle = function(head) {
-    const map = new Map();
-    let index = 0;
+var reorderList = function(head) {
+    if(!head) {
+        return null;
+    }
+    
+    const arr = [];
     while(head) {
-        if(map.has(head)) {
-            return map.get(head);
-        }
-        map.set(head, index++);
+        arr.push(head);
         head = head.next;
     }
 
-    return -1;
+    let root = new ListNode();
+    let cur = root;
+    let flag = true;
+    while(arr.length) {
+        let node = flag ? arr.shift() : arr.pop();
+        flag = !flag;
+        node.next = null;
+        cur.next = node;
+        cur = node;
+    }
+
+    return root.next;
 };
 
-var node1 = new ListNode(3);
-var node2 = new ListNode(3);
-var node3 = new ListNode(3);
-var node4 = new ListNode(3);
-
-assertCompare(()=>wordBreak("leetcode", ["leet", "code"]), true);
-assertCompare(()=>wordBreak("applepenapple", ["apple", "pen"]), true);
-assertCompare(()=>wordBreak("catsandog", ["cats", "dog", "sand", "and", "cat"]), false);
-assertCompare(()=>wordBreak("cars", ["car", "ca", "rs"]), true);
-assertCompare(()=>wordBreak("cars", ["ca", "rs", "car"]), true);
-assertCompare(()=>wordBreak("cbca", ["bc", "ca"]), false);
+assertCompare(()=>reorderList(makeLink([1,2,3,4])), makeLink([1,4,2,3]));
+assertCompare(()=>reorderList(makeLink([1])), makeLink([1]));
+assertCompare(()=>reorderList(makeLink([1,2])), makeLink([1,2]));
+assertCompare(()=>reorderList(makeLink([1,2,3])), makeLink([1,3,2]));
+assertCompare(()=>reorderList(makeLink([])), makeLink([]));
 </script>
 </body>
