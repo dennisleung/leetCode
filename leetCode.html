@@ -354,35 +354,73 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-var reorderList = function(head) {
-    if(!head) {
-        return null;
-    }
-    
-    const arr = [];
-    while(head) {
-        arr.push(head);
-        head = head.next;
-    }
-
-    let root = new ListNode();
-    let cur = root;
-    let flag = true;
-    while(arr.length) {
-        let node = flag ? arr.shift() : arr.pop();
-        flag = !flag;
-        node.next = null;
-        cur.next = node;
-        cur = node;
-    }
-
-    return root.next;
+/**
+ * @param {number} capacity
+ */
+var LRUCache = function(capacity) {
+    this.cache = {};
+    this.capacity = capacity;
+    this.counter = 0;
+    this.currentCount = 0;
 };
 
-assertCompare(()=>reorderList(makeLink([1,2,3,4])), makeLink([1,4,2,3]));
-assertCompare(()=>reorderList(makeLink([1])), makeLink([1]));
-assertCompare(()=>reorderList(makeLink([1,2])), makeLink([1,2]));
-assertCompare(()=>reorderList(makeLink([1,2,3])), makeLink([1,3,2]));
-assertCompare(()=>reorderList(makeLink([])), makeLink([]));
+LRUCache.prototype._getCounter = function() {
+    return this.counter++;
+};
+
+LRUCache.prototype._checkCapacity = function() {
+    this.currentCount++;
+    if(this.currentCount>this.capacity) {
+        let minKey = -1;
+        let minCounter = Infinity;
+        for(let key in this.cache) {
+            if(this.cache[key]["counter"]<minCounter) {
+                minCounter = this.cache[key]["counter"];
+                minKey = key;
+            }
+        }
+        delete this.cache[minKey];
+        this.currentCount = this.capacity;
+    }
+};
+
+/** 
+ * @param {number} key
+ * @return {number}
+ */
+LRUCache.prototype.get = function(key) {
+    const item = this.cache[key];
+    if(!item) {
+        return -1;
+    }
+    item["counter"] = this._getCounter();
+    return item["value"];
+};
+
+/** 
+ * @param {number} key 
+ * @param {number} value
+ * @return {void}
+ */
+LRUCache.prototype.put = function(key, value) {
+    const item = this.cache[key] || {};
+    item["value"] = value;
+    item["counter"] = this._getCounter();
+    this.cache[key] = item;
+    this._checkCapacity();
+};
+
+const cache = new LRUCache(2);
+cache.put(1, 1);
+cache.put(2, 2);
+console.log(cache.get(1));//1
+
+cache.put(3, 3);
+console.log(cache.get(2));//-1
+
+cache.put(4, 4); 
+console.log(cache.get(1));//-1
+console.log(cache.get(3));//3
+console.log(cache.get(4));//4
 </script>
 </body>
