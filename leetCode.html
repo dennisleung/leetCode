@@ -355,42 +355,17 @@ function Node(val,next,random) {
 };
 
 /**
- * @param {string[]} tokens
- * @return {number}
+ * @param {string} s
+ * @return {string}
  */
-var evalRPN = function(tokens) {
-    const nums = [];
-    const OP = ["+", "-", "*", "/"];
-    for(let token of tokens) {
-        if(OP.indexOf(token)===-1) {
-            nums.push(token);
-        }else {
-            let num2 = parseInt(nums.pop());
-            let num1 = parseInt(nums.pop());
-            let result;
-            switch(token) {
-                case "+":
-                    result = num1 + num2;
-                    break;
-                case "-":
-                    result = num1 - num2;
-                    break;
-                case "*":
-                    result = num1 * num2;
-                    break;
-                default:
-                    result = ~~(num1 / num2);
-                    break;
-            }
-            nums.push(result);
-        }
-    }
-
-    return nums[0];
+var reverseWords = function(s) {
+    return s.split(/\s/g).filter(v=>!!v).reverse().join(" ");
 };
 
-assertCompare(()=>evalRPN(["2", "1", "+", "3", "*"]), 9);
-assertCompare(()=>evalRPN(["4", "13", "5", "/", "+"]), 6);
-assertCompare(()=>evalRPN(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]), 22);
+assertCompare(()=>reverseWords("the sky is blue"), "blue is sky the");
+assertCompare(()=>reverseWords("  hello world!  "), "world! hello");
+assertCompare(()=>reverseWords("a good   example"), "example good a");
+assertCompare(()=>reverseWords("a"), "a");
+assertCompare(()=>reverseWords(" "), "");
 </script>
 </body>

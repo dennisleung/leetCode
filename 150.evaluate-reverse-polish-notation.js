@@ -8,6 +8,27 @@
 20/20 cases passed (52 ms)
 Your runtime beats 99.39 % of javascript submissions
 Your memory usage beats 100 % of javascript submissions (37 MB)
+
+逆波兰式求值。
+
+another solution:
+var evalRPN = function(tokens) {
+    var st=[]
+    var ops = {
+        '+': (a,b)=>a+b,
+        '-': (a,b)=>a-b,
+        '*': (a,b)=>a*b,
+        '/': (a,b)=>a/b|0,
+    }
+
+    for(var to of tokens )
+        if (to in ops)
+            st[st.length-2] = ops[to](st[st.length-2], st.pop())
+        else
+            st.push(parseInt(to))
+
+    return st[0]
+};
 */
 
 // @lc code=start
