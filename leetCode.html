@@ -355,39 +355,42 @@ function Node(val,next,random) {
 };
 
 /**
- * @param {ListNode} head
- * @return {ListNode}
+ * @param {string[]} tokens
+ * @return {number}
  */
-var insertionSortList = function(head) {
-    const root = new ListNode(-Infinity);
-    root.next = head;
-    let cur = head;
-    while(cur && cur.next) {
-        if(cur.next.val<cur.val) {
-            let nextNode = cur.next.next;
-            let targetNode = cur.next;
-            targetNode.next = null;
-            cur.next = null;
-            let innerCur = root;
-            while(innerCur && innerCur.next) {
-                if(innerCur.val<=targetNode.val && targetNode.val<=innerCur.next.val) {
-                    let tmp = innerCur.next;
-                    innerCur.next = targetNode;
-                    targetNode.next = tmp;
-                    break;
-                }
-                innerCur = innerCur.next;
-            }
-            cur.next = nextNode;
+var evalRPN = function(tokens) {
+    const nums = [];
+    const OP = ["+", "-", "*", "/"];
+    for(let token of tokens) {
+        if(OP.indexOf(token)===-1) {
+            nums.push(token);
         }else {
-            cur = cur.next;
+            let num2 = parseInt(nums.pop());
+            let num1 = parseInt(nums.pop());
+            let result;
+            switch(token) {
+                case "+":
+                    result = num1 + num2;
+                    break;
+                case "-":
+                    result = num1 - num2;
+                    break;
+                case "*":
+                    result = num1 * num2;
+                    break;
+                default:
+                    result = ~~(num1 / num2);
+                    break;
+            }
+            nums.push(result);
         }
     }
-    
-    return root.next;
+
+    return nums[0];
 };
 
-assertCompare(()=>insertionSortList(makeLink([4,2,1,3])), makeLink([1,2,3,4]));
-assertCompare(()=>insertionSortList(makeLink([-1,5,3,4,0])), makeLink([-1,0,3,4,5]));
+assertCompare(()=>evalRPN(["2", "1", "+", "3", "*"]), 9);
+assertCompare(()=>evalRPN(["4", "13", "5", "/", "+"]), 6);
+assertCompare(()=>evalRPN(["10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+"]), 22);
 </script>
 </body>
