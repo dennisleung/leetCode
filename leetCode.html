@@ -355,17 +355,33 @@ function Node(val,next,random) {
 };
 
 /**
- * @param {string} s
- * @return {string}
+ * @param {number[]} nums
+ * @return {number}
  */
-var reverseWords = function(s) {
-    return s.split(/\s/g).filter(v=>!!v).reverse().join(" ");
+var maxProduct = function(nums) {
+    const min = [1];
+    const max = [1];
+    for(let i = 0; i<nums.length; i++) {
+        const num = nums[i];
+        if(num<0) {
+            min[i+1] = Math.min(max[i]*num, num);
+            max[i+1] = Math.max(min[i]*num, num);
+        }else {
+            min[i+1] = Math.min(min[i] * num, num);
+            max[i+1] = Math.max(max[i] * num, num)
+        }
+    }
+
+    max[0] = -Infinity;
+    return Math.max(...max);
 };
 
-assertCompare(()=>reverseWords("the sky is blue"), "blue is sky the");
-assertCompare(()=>reverseWords("  hello world!  "), "world! hello");
-assertCompare(()=>reverseWords("a good   example"), "example good a");
-assertCompare(()=>reverseWords("a"), "a");
-assertCompare(()=>reverseWords(" "), "");
+assertCompare(()=>maxProduct([2,3,-2,4]), 6);
+assertCompare(()=>maxProduct([-2,0,-1]), 0);
+assertCompare(()=>maxProduct([-2]), -2);
+assertCompare(()=>maxProduct([-2,0]), 0);
+assertCompare(()=>maxProduct([3,-1,4]), 4);
+assertCompare(()=>maxProduct([-2,3,-4]), 24);
+assertCompare(()=>maxProduct([-4,-3,-2]), 12);
 </script>
 </body>
