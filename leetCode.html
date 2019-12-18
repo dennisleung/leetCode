@@ -112,6 +112,16 @@ const preorderTraversal = function(root) {
     return [root].concat(getLeftChildren(root)).concat(getRightChildren(root));
 };
 
+const inorderTraversal = function(root, arr=[]) {
+    if(root) {
+        root.left && inorderTraversal(root.left, arr);
+        arr.push(root);
+        root.right && inorderTraversal(root.right, arr);
+    }
+
+    return arr;
+};
+
 const getComplement = function(num, bit=32) {
     let x = Math.abs(num).toString(2);
     x = ((new Array(bit)).fill("0").join("") + x).slice(-32)
@@ -354,52 +364,42 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-var fractionToDecimal = function(numerator, denominator) {
-    let intPart = numerator/denominator;
-    if(Math.floor(intPart)==Math.ceil(intPart)) {//整数
-        return ""+intPart;
-    }
-
-    const flag = intPart > 0 ? "" : "-";
-    numerator = Math.abs(numerator);
-    denominator = Math.abs(denominator);
-    intPart = Math.floor(numerator/denominator);
-    let left = numerator - intPart * denominator;
-    let decimalStr = "";
-    const cache = {};
-    while(true) {
-        if(left==0) {
-            break;
-        }
-
-        left *= 10;
-        if(left<denominator) {
-            decimalStr += "0";
-            continue;
-        }
-        
-        if(cache[left]===void 0) {
-            cache[left] = decimalStr.length;
-        }else {
-            let startPos = cache[left];
-            decimalStr = decimalStr.slice(0, startPos) + `(${decimalStr.slice(startPos)})`;
-            break;
-        }
-    
-        let cur = Math.floor(left/denominator);
-        left -= cur * denominator;
-        decimalStr += cur;
-    }
-
-    return `${flag}${intPart}.${decimalStr}`;
+/**
+ * @param {TreeNode} root
+ */
+var BSTIterator = function(root) {
+    this.cursor = 0;
+    this.arr = inorderTraversal(root);
 };
 
-assertCompare(()=>fractionToDecimal(1, 2), "0.5");
-assertCompare(()=>fractionToDecimal(2, 1), "2");
-assertCompare(()=>fractionToDecimal(2, 3), "0.(6)");
-assertCompare(()=>fractionToDecimal(2, 7), "0.(285714)");
-assertCompare(()=>fractionToDecimal(1, 6), "0.1(6)");
-assertCompare(()=>fractionToDecimal(-50, 8), "-6.25");
-assertCompare(()=>fractionToDecimal(7, -12), "-0.58(3)");
+/**
+ * @return the next smallest number
+ * @return {number}
+ */
+BSTIterator.prototype.next = function() {
+    return this.arr[this.cursor++].val;
+};
+
+/**
+ * @return whether we have a next smallest number
+ * @return {boolean}
+ */
+BSTIterator.prototype.hasNext = function() {
+    return this.cursor<this.arr.length;
+};
+
+let iterator = new BSTIterator(makeTree([7,3,15,null,null,9,20]));
+assertCompare(()=>iterator.next(), 3);
+assertCompare(()=>iterator.next(), 7);
+assertCompare(()=>iterator.hasNext(), true);
+assertCompare(()=>iterator.next(), 9);
+assertCompare(()=>iterator.hasNext(), true);
+assertCompare(()=>iterator.next(), 15);
+assertCompare(()=>iterator.hasNext(), true);
+assertCompare(()=>iterator.next(), 20);
+assertCompare(()=>iterator.hasNext(), false);
+
+iterator = new BSTIterator(makeTree([]));
+assertCompare(()=>iterator.hasNext(), false);
 </script>
 </body>
