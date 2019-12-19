@@ -364,42 +364,30 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-/**
- * @param {TreeNode} root
- */
-var BSTIterator = function(root) {
-    this.cursor = 0;
-    this.arr = inorderTraversal(root);
+var largestNumber = function(nums) {
+    nums = nums.map(v=>`${v}`);
+    nums.sort((a, b)=>{
+        const str1 = `${a}${b}`;
+        const str2 = `${b}${a}`;
+        for(var i = 0, len = str1.length; i<len; i++) {
+            if(str1[i]==str2[i]) {
+                continue;
+            }else if(str1[i]<str2[i]) {
+                return 1;
+            }else {
+                return -1;
+            }
+        }
+    });
+
+    const result = nums.join("").replace(/^0+/, "");
+    return result ? result : "0";
 };
 
-/**
- * @return the next smallest number
- * @return {number}
- */
-BSTIterator.prototype.next = function() {
-    return this.arr[this.cursor++].val;
-};
-
-/**
- * @return whether we have a next smallest number
- * @return {boolean}
- */
-BSTIterator.prototype.hasNext = function() {
-    return this.cursor<this.arr.length;
-};
-
-let iterator = new BSTIterator(makeTree([7,3,15,null,null,9,20]));
-assertCompare(()=>iterator.next(), 3);
-assertCompare(()=>iterator.next(), 7);
-assertCompare(()=>iterator.hasNext(), true);
-assertCompare(()=>iterator.next(), 9);
-assertCompare(()=>iterator.hasNext(), true);
-assertCompare(()=>iterator.next(), 15);
-assertCompare(()=>iterator.hasNext(), true);
-assertCompare(()=>iterator.next(), 20);
-assertCompare(()=>iterator.hasNext(), false);
-
-iterator = new BSTIterator(makeTree([]));
-assertCompare(()=>iterator.hasNext(), false);
+assertCompare(()=>largestNumber([1]), "1");
+assertCompare(()=>largestNumber([10,2]), "210");
+assertCompare(()=>largestNumber([3,30,34,5,9]), "9534330");
+assertCompare(()=>largestNumber([121,12]), "12121");
+assertCompare(()=>largestNumber([0,0]), "0");
 </script>
 </body>
