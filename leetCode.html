@@ -364,30 +364,27 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-var largestNumber = function(nums) {
-    nums = nums.map(v=>`${v}`);
-    nums.sort((a, b)=>{
-        const str1 = `${a}${b}`;
-        const str2 = `${b}${a}`;
-        for(var i = 0, len = str1.length; i<len; i++) {
-            if(str1[i]==str2[i]) {
-                continue;
-            }else if(str1[i]<str2[i]) {
-                return 1;
-            }else {
-                return -1;
-            }
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var findRepeatedDnaSequences = function(s) {
+    const cache = {};
+    const result = [];
+    for(let i = 0, len = s.length-9; i<len; i++) {
+        const str = s.substr(i, 10);
+        cache[str] = (cache[str] || 0) + 1;
+        if(cache[str]==2) {
+            result.push(str);
         }
-    });
+    }
 
-    const result = nums.join("").replace(/^0+/, "");
-    return result ? result : "0";
+    return result;
 };
 
-assertCompare(()=>largestNumber([1]), "1");
-assertCompare(()=>largestNumber([10,2]), "210");
-assertCompare(()=>largestNumber([3,30,34,5,9]), "9534330");
-assertCompare(()=>largestNumber([121,12]), "12121");
-assertCompare(()=>largestNumber([0,0]), "0");
+
+assertCompare(()=>findRepeatedDnaSequences("AA"), []);
+assertCompare(()=>findRepeatedDnaSequences("AAAAAAAAA"), []);
+assertCompare(()=>findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"), ["AAAAACCCCC", "CCCCCAAAAA"]);
 </script>
 </body>
