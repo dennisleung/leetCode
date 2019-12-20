@@ -14,9 +14,9 @@
 Your runtime beats 75.8 % of javascript submissions
 Your memory usage beats 100 % of javascript submissions (36.8 MB)
 
-one-liner solution:
-return nums.sort((a, b) => ('' + b + a) - ('' + a + b) ).join('').replace(/^0*/,'') || '0';
 */
+//one-liner solution:
+//return nums.sort((a, b) => ('' + b + a) - ('' + a + b) ).join('').replace(/^0*/,'') || '0';
 
 var largestNumber = function(nums) {
     nums = nums.map(v=>`${v}`);
