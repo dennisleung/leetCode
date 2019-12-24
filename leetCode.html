@@ -365,63 +365,25 @@ function Node(val,next,random) {
 };
 
 /**
- * @param {character[][]} grid
+ * @param {number} m
+ * @param {number} n
  * @return {number}
  */
-var numIslands = function(grid) {
-    const tmp = (new Array(grid.length)).fill(0).map(v=>[]);
-    const helper = (i, j, color)=>{
-        tmp[i][j] = color;
-        if(i>0 && grid[i-1][j]==1 && !tmp[i-1][j]) {
-            helper(i-1, j, color);
-        }
-        if(j<grid[0].length-1 && grid[i][j+1]==1 && !tmp[i][j+1]) {
-            helper(i, j+1, color);
-        }
-        if(i<grid.length-1 && grid[i+1][j]==1 && !tmp[i+1][j]) {
-            helper(i+1, j, color);
-        }
-        if(j>0 && grid[i][j-1]==1 && !tmp[i][j-1]) {
-            helper(i, j-1, color);
-        }
-    };
-    let color = 1;
-
-    for(let i = 0, iLen = grid.length; i<iLen; i++) {
-        for(let j = 0, jLen = grid[0].length; j<jLen; j++) {
-            if(grid[i][j]==0) {
-                continue;
-            }
-            let c = tmp[i][j] || color++;
-            helper(i, j, color);
-        }
+var rangeBitwiseAnd = function(m, n) {
+    let mask = parseInt(new Array(32).fill(1).join(""), 2);
+    while(m&mask != n&mask) {
+        mask = mask<<1;
     }
-
-    return color-1;
+    return m&mask;
 };
 
-
-assertCompare(()=>numIslands([[1,1,1,1,0],
-[1,1,0,1,0],
-[1,1,0,0,0],
-[0,0,0,0,0]]), 1);
-assertCompare(()=>numIslands([
-    [1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1,1],
-    [1,1,1,1,1]]), 1);
-assertCompare(()=>numIslands([[1,1,0,0,0],
-[1,1,0,0,0],
-[0,0,1,0,0],
-[0,0,0,1,1]]), 3);
-assertCompare(()=>numIslands([[0]]), 0);
-assertCompare(()=>numIslands([[]]), 0);
-assertCompare(()=>numIslands([[1]]), 1);
-assertCompare(()=>numIslands([["1","1","1"],["0","1","0"],["1","1","1"]]), 1);
+assertCompare(()=>rangeBitwiseAnd(5,7), 4);
+assertCompare(()=>rangeBitwiseAnd(0,1), 0);
+assertCompare(()=>rangeBitwiseAnd(0,2147483647), 0);
+assertCompare(()=>rangeBitwiseAnd(1,2147483647), 0);
+assertCompare(()=>rangeBitwiseAnd(2,3), 2);
+assertCompare(()=>rangeBitwiseAnd(1,2), 0);
+assertCompare(()=>rangeBitwiseAnd(3,4), 0);
 
 </script>
 </body>
