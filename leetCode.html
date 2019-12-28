@@ -370,18 +370,33 @@ function Node(val,next,random) {
  * @return {boolean}
  */
 var canFinish = function(numCourses, prerequisites) {
-    const cache = {};
-    for(let [a, b] of prerequisites) {
-        const aArr = cache[a] || [];
-        const bArr = cache[b] || [];
-        if(bArr.indexOf(a)!== -1) {
-            return false;
+    const getMap = function(prerequisites) {
+        const map = {};
+        for(let prerequisity of prerequisites) {
+            const [a, b] = prerequisity;
+            map[b] = map[b] || [];
+            map[b].push(prerequisity);
         }
-        aArr.push(b);
-        cache[a] = aArr;
-    }
 
-    return true;
+        return map;
+    };
+
+    while(true) {
+        const map = getMap(prerequisites);
+        let _prerequisites = [];
+        for(let b in map) {
+            _prerequisites = _prerequisites.concat(map[b].filter(([a, b])=>{
+                return !!map[a];
+            }));
+        }
+        if(!_prerequisites.length) {
+            return true;
+        }else if(prerequisites.length==_prerequisites.length) {
+            return false;
+        }else {
+            prerequisites = _prerequisites;
+        }
+    }
 };
 
 assertCompare(()=>canFinish(2, [[1,0]]), true);
