@@ -365,43 +365,34 @@ function Node(val,next,random) {
 };
 
 /**
- * @param {number} numCourses
- * @param {number[][]} prerequisites
- * @return {boolean}
+ * @param {number} s
+ * @param {number[]} nums
+ * @return {number}
  */
-var canFinish = function(numCourses, prerequisites) {
-    const getMap = function(prerequisites) {
-        const map = {};
-        for(let prerequisity of prerequisites) {
-            const [a, b] = prerequisity;
-            map[b] = map[b] || [];
-            map[b].push(prerequisity);
-        }
-
-        return map;
-    };
-
-    while(true) {
-        const map = getMap(prerequisites);
-        let _prerequisites = [];
-        for(let b in map) {
-            _prerequisites = _prerequisites.concat(map[b].filter(([a, b])=>{
-                return !!map[a];
-            }));
-        }
-        if(!_prerequisites.length) {
-            return true;
-        }else if(prerequisites.length==_prerequisites.length) {
-            return false;
-        }else {
-            prerequisites = _prerequisites;
+var minSubArrayLen = function(s, nums) {
+    let left = 0;
+    let right = 0;
+    let min = Infinity;
+    let sum = 0;
+    while(right<nums.length) {
+        sum += nums[right];
+        if(sum<s) {
+            right++;
+        }else if(sum>=s) {
+            min = Math.min(min, right-left+1);
+            sum -= nums[right];
+            sum -= nums[left];
+            left++;
+            right = Math.max(left, right);
         }
     }
+
+    return min===Infinity ? 0 : min;
 };
 
-assertCompare(()=>canFinish(2, [[1,0]]), true);
-assertCompare(()=>canFinish(2, [[1,0],[0,1]]), false);
-assertCompare(()=>canFinish(3, [[1,0],[0,2],[2,1]]), false);
+assertCompare(()=>minSubArrayLen(7, [2,3,1,2,4,3]), 2);
+assertCompare(()=>minSubArrayLen(1000, [2,3,1,2,4,3]), 0);
+assertCompare(()=>minSubArrayLen(2, [2]), 1);
 
 </script>
 </body>
