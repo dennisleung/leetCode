@@ -364,53 +364,77 @@ function Node(val,next,random) {
    this.random = random;
 };
 
-var findOrder = function(numCourses, prerequisites) {
-    const getMap = function(prerequisites) {//依赖b的数组
-        const map = {};
-        for(let prerequisity of prerequisites) {
-            const [a, b] = prerequisity;
-            map[b] = map[b] || [];
-            map[b].push(prerequisity);
-        }
-
-        return map;
-    };
-
-    const result = [];
-    while(true) {
-        const map = getMap(prerequisites);
-        let _prerequisites = [];
-        for(let b in map) {
-            _prerequisites = _prerequisites.concat(map[b].filter(([a, b])=>{
-                if(map[a]) {
-                    return true;
-                }else {
-                    if(result.indexOf(a)===-1) {
-                        result.unshift(a);
-                    }
-                    return false;
-                }
-            }));
-        }
-        if(!_prerequisites.length) {
-            break;
-        }else if(prerequisites.length==_prerequisites.length) {
-            return [];
-        }else {
-            prerequisites = _prerequisites;
-        }
-    }
-
-    for(let i = 0; i<numCourses; i++) {
-        if(result.indexOf(i)===-1) {
-            result.unshift(i);
-        }
-    }
-    return result;
+var WordDictionary = function() {
+    this.root = {};
 };
 
-assertCompare(()=>findOrder(2, [[1,0]]), [0,1]);
-assertCompare(()=>findOrder(4, [[1,0],[2,0],[3,1],[3,2]]), [0,2,1,3]);//[0,1,2,3]
+WordDictionary.prototype._traverse = function(word, cur=this.root) {
+    if(!word) {
+        return cur;
+    }
+    for(let i = 0, len = word.length; i<len; i++) {
+        ch = word[i];
+        if(!cur) {
+            break;
+        }
+
+        if(ch==".") {
+            for(let subKey in cur) {
+                if(subKey=="isWord") {
+                    continue;
+                }
+                const node = this._traverse(word.slice(i+1), cur[subKey]);
+                if(node) {
+                    return node;
+                }
+            }
+            return null;
+        }else {
+            cur = cur[ch];
+        }
+    }
+
+    return cur;
+};
+
+/**
+ * Adds a word into the data structure. 
+ * @param {string} word
+ * @return {void}
+ */
+WordDictionary.prototype.addWord = function(word) {
+    let cur = this.root;
+    for(let ch of word) {
+        cur[ch] = cur[ch] || {};
+        cur = cur[ch];
+    }
+    cur.isWord = true;
+};
+
+/**
+ * Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. 
+ * @param {string} word
+ * @return {boolean}
+ */
+WordDictionary.prototype.search = function(word) {
+    const node = this._traverse(word);
+    return !!node && !!node.isWord;
+};
+
+const dir = new WordDictionary();
+dir.addWord("bad")
+dir.addWord("dad")
+dir.addWord("mad")
+assertCompare(()=>dir.search("pad"), false);
+assertCompare(()=>dir.search("bad"), true);
+assertCompare(()=>dir.search(".ad"), true);
+assertCompare(()=>dir.search("b.."), true);
+
+const dir = new WordDictionary();
+dir.addWord("a")
+dir.addWord("ab")
+assertCompare(()=>dir.search("a"), true);
+assertCompare(()=>dir.search("a."), true);
 
 </script>
 </body>
