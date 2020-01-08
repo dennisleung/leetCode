@@ -365,30 +365,21 @@ function Node(val,next,random) {
 };
 
 
-var combinationSum3 = function(k, n) {
-    const result = [];
-    const dfs = function(min, left, arr) {
-        if(left<0 || arr.length>k) {
-            return;
+var containsNearbyAlmostDuplicate = function(nums, k, t) {
+    for(let i = 0; i<nums.length; i++) {
+        for(j = i+1, len = Math.min(i+k+1, nums.length); j<len; j++) {
+            if(Math.abs(nums[j]-nums[i])<=t) {
+                return true;
+            }
         }
-        if(left==0 && arr.length==k) {
-            result.push([...arr]);
-        }
-        for(let i = min; i<10; i++) {
-            arr.push(i);
-            dfs(i+1, left-i, arr);
-            arr.pop();
-        }
-    };
-
-    dfs(1, n, []);
-    return result;
+    }
+    
+    return false;
 };
 
-assertCompare(()=>combinationSum3(1, 7), [[7]]);
-assertCompare(()=>combinationSum3(1, 11), []);
-assertCompare(()=>combinationSum3(3, 7), [[1,2,4]]);
-assertCompare(()=>combinationSum3(3, 9), [[1,2,6], [1,3,5], [2,3,4]]);
+assertCompare(()=>containsNearbyAlmostDuplicate([1,2,3,1], 3, 0), true);
+assertCompare(()=>containsNearbyAlmostDuplicate([1,0,1,1], 1, 2), true);
+assertCompare(()=>containsNearbyAlmostDuplicate([1,5,9,1,5,9], 2, 3), false);
 
 </script>
 </body>
