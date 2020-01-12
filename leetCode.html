@@ -365,21 +365,36 @@ function Node(val,next,random) {
 };
 
 
-var containsNearbyAlmostDuplicate = function(nums, k, t) {
-    for(let i = 0; i<nums.length; i++) {
-        for(j = i+1, len = Math.min(i+k+1, nums.length); j<len; j++) {
-            if(Math.abs(nums[j]-nums[i])<=t) {
-                return true;
+var maximalSquare = function(matrix) {
+    if(!matrix || !matrix.length) {
+        return 0;
+    }
+    const dp = new Array(matrix.length).fill(0).map(v=>new Array(matrix[0].length));//表示以i,j为右下定点的最大正方形
+    let max = 0;
+    for(let i = 0; i<matrix.length; i++) {
+        for(let j = 0; j<matrix[0].length; j++) {
+            if(i==0 || j==0) {
+                dp[i][j] = matrix[i][j];
+            }else if(matrix[i][j]==1){
+                dp[i][j] = Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1;
+            }else {
+                dp[i][j] = 0;
             }
+            max = Math.max(max, dp[i][j]);
         }
     }
-    
-    return false;
+
+    return max*max;
 };
 
-assertCompare(()=>containsNearbyAlmostDuplicate([1,2,3,1], 3, 0), true);
-assertCompare(()=>containsNearbyAlmostDuplicate([1,0,1,1], 1, 2), true);
-assertCompare(()=>containsNearbyAlmostDuplicate([1,5,9,1,5,9], 2, 3), false);
+
+assertCompare(()=>maximalSquare([]), 0);
+assertCompare(()=>maximalSquare([[1]]), 1);
+assertCompare(()=>maximalSquare([[0]]), 0);
+assertCompare(()=>maximalSquare([[1, 0, 1, 0, 0],
+[1, 0, 1, 1, 1],
+[1, 1, 1, 1, 1],
+[1, 0, 0, 1, 0]]), 4);
 
 </script>
 </body>
