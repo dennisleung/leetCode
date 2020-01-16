@@ -365,21 +365,8 @@ function Node(val,next,random) {
 };
 
 
-var countNodes = function(root) {
-    let count = 0;;
-    let queue = root ? [root] : [];
-    while(queue.length) {
-        let node = queue.shift();
-        count++;
-        if(node.left) {
-            queue.push(node.left);
-        }
-        if(node.right) {
-            queue.push(node.right);
-        }
-    }
-
-    return count;
+var computeArea = function(A, B, C, D, E, F, G, H) {
+    
 };
 
 
