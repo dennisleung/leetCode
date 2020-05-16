@@ -2,6 +2,7 @@
 
 <body>
     <script>
+
         function ListNode(val) {
             this.val = val;
             this.next = null;
@@ -12,6 +13,13 @@
             this.left = null;
             this.right = null;
         }
+
+        function Node(val, left, right, next) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+            this.next = next;
+        };
 
         const makeLink = (arr) => {
             if (!arr.length) {
@@ -82,23 +90,42 @@
 
         //先序遍历
         const preorderTraversal = function (root) {
+            if (!root) {
+                return [];
+            }
+
             const getLeftChildren = function (node) {
                 if (node.left) {
                     return preorderTraversal(node.left);
                 } else {
                     return [];
                 }
-            };
 
-            const getRightChildren = function (node) {
-                if (node.right) {
-                    return preorderTraversal(node.right);
-                } else {
-                    return [];
+                const makeLink = (arr) => {
+                    if (!arr.length) {
+                        return null;
+                    }
+                    let head = cur = new ListNode();
+                    arr.forEach((v) => {
+                        cur.next = new ListNode(v);
+                        cur = cur.next;
+                    });
+
+                    return head.next;
                 }
             };
 
-            return getLeftChildren(root).concat([root]).concat(getRightChildren(root));
+            return [root].concat(getLeftChildren(root)).concat(getRightChildren(root));
+        };
+
+        const inorderTraversal = function (root, arr = []) {
+            if (root) {
+                root.left && inorderTraversal(root.left, arr);
+                arr.push(root);
+                root.right && inorderTraversal(root.right, arr);
+            }
+
+            return arr;
         };
 
         const getComplement = function (num, bit = 32) {
@@ -117,52 +144,8 @@
                             xArr[i] = "1";
                         }
                     }
-                }
 
-                x = xArr.join("");
-            }
-
-            return x;
-        };
-
-        const deconstructToPrimie = (num) => {
-            const result = [];
-            let cursor = 2;
-            while (num > 1) {
-                if (num % cursor == 0) {
-                    result.push(cursor);
-                    num /= cursor;
-                } else {
-                    cursor++;
-                }
-            }
-
-            return result;
-        };
-
-        const isPrime = (num) => {
-            if (num == 1) {
-                return false;
-            }
-            let cursor = 2;
-            const sqrt = ~~Math.sqrt(num);
-            while (num > 1 && cursor <= sqrt) {
-                if (num % cursor == 0) {
-                    return false;
-                }
-                cursor++;
-            }
-
-            return true;
-        };
-
-        const getDivisors = function (num) {
-            const result = {};
-            for (let i = 1, max = ~~Math.sqrt(num); i <= max; i++) {
-                let another = ~~(num / i);
-                if (i * another == num) {
-                    result[i] = 1;
-                    result[another] = 1;
+                    return head;
                 }
             }
 
@@ -178,11 +161,14 @@
             this.bottomRight = bottomRight;
         };
 
-        const dfs = (root) => {
-            if (!root) {
-                return [];
+        var isPalindrome = function (str) {
+            for (let i = 0, j = str.length - 1; i < j; i++, j--) {
+                if (str[i] != str[j]) {
+                    return false;
+                }
             }
-            return [root].concat(dfs(root.left), dfs(root.right));
+
+            return true;
         };
 
         /**
@@ -214,60 +200,140 @@
             getGroup(arr.slice(mid), 1)
         };
 
-        class Trie {
-            constructor() {
-                this.arr = [];
-                this.isWord = false;
+        /**
+         * 获取阶乘
+         **/
+        const getPermutationSum = function (n) {
+            let result = BigInt(1);
+            for (let i = 2; i <= n; i++) {
+                result *= BigInt(i);
+            }
+            return result;
+        };
+
+        const binarySearch = (nums, target) => {
+            for (let low = 0, high = nums.length - 1; low <= high;) {
+                let mid = Math.floor((low + high) / 2);
+                if (nums[mid] == target) {
+                    return mid;
+                } else if (nums[mid] > target) {
+                    high = mid - 1;
+                } else {
+                    low = mid + 1;
+                }
             }
 
-            insert(word) {
-                if (!word) {
-                    return
-                }
-                const queue = word.split('');
-                let current = this;
-                for (let i = 0; i < word.length; i++) {
-                    const ch = word[i];
-                    const index = ch.charCodeAt(0) - 97;
-                    let next = current.arr[index];
-                    if (!next) {
-                        next = current.arr[index] = new Trie();
+            return -1;
+        };
+
+        const ASSERT = {
+            tasks: [],
+            handler: null,
+            add(task) {
+                this.tasks.push(task);
+                this.run();
+            },
+            run() {
+                this.handler && clearTimeout(this.handler);
+                this.handler = setTimeout(() => {
+                    let newTasks = this.tasks;
+                    const onlyRunTasks = this.tasks.filter(([, , isOnly]) => isOnly);
+                    if (onlyRunTasks.length) {
+                        newTasks = onlyRunTasks;
                     }
-                    current = next;
-                }
-                if (i == word.length - 1) {
-                    next.isWord = true;
-                }
-            }
-
-            search(word) {
-                const node = this._getPathNode(word);
-                return !!(node && node.isWord);
-            }
-
-            startsWith(prefix) {
-                return !!this._getPathNode(prefix);
-            }
-
-            _getPathNode(word) {
-                let current = this;
-                for (let i = 0; i < word.length; i++) {
-                    const next = current.arr[word[i].charCodeAt(0) - 97];
-                    if (!next) {
-                        return null;
+                    let runFailCount = 0;
+                    newTasks.forEach(([aFunc, b], index) => {
+                        const a = aFunc();
+                        const aStr = JSON.stringify(a);
+                        const bStr = JSON.stringify(b);
+                        if (aStr != bStr) {
+                            runFailCount++;
+                            setTimeout(() => {
+                                console.log(`-------------------------- case ${index + 1} START --------------------------------`)
+                                console.log('input:', a)
+                                //console.dir(a)
+                                console.error(`expect ${bStr}`);
+                                console.error(`got    ${aStr}`);
+                                console.log(`-------------------------- case ${index + 1} END --------------------------------`)
+                            }, 0);
+                        }
+                    });
+                    this.tasks = [];
+                    if (runFailCount > 0) {
+                        console.log(`run ${newTasks.length} cases, %c${newTasks.length - runFailCount} passed, %c${runFailCount} failed`, 'color:green', 'color:red');
+                    } else {
+                        console.log(`run ${newTasks.length} cases, %c all passed`, 'color:green');
                     }
-                    current = next;
-                }
-                return current;
+                }, 0);
             }
-        }
+        };
+        const assertCompare = function (a, b) {
+            ASSERT.add([a, b]);
+        };
+        assertCompare.only = function (a, b) {
+            ASSERT.add([a, b, true]);
+        };
 
-        const trie = new Trie();
-        console.log(trie.insert("apple"));
-        console.log(trie.search("apple"));   // returns true
-        console.log(trie.search("app"));     // returns false
-        console.log(trie.startsWith("app")); // returns true
-        console.log(trie.insert("app"));
-        console.log(trie.search("app"));     // returns true
+        /**
+         * 数字->二进制->格雷码
+         **/
+        const num2Gray = function (num) {
+            const numStr = "0" + num.toString(2);
+            let grayCode = "";
+            for (let i = 0; i < numStr.length - 1; i++) {
+                grayCode += (numStr[i] == numStr[i + 1] ? "0" : "1");
+            }
+
+            return grayCode;
+        };
+
+        const binaryTree2Arr = function (root) {
+            if (!root) {
+                return [];
+            }
+            const queue = [root];
+            const result = [];
+            while (queue.length) {
+                let node = queue.shift();
+                if (node) {
+                    result.push(node.val);
+                    queue.push(node.left || null);
+                    queue.push(node.right || null);
+                } else {
+                    result.push(null);
+                }
+            }
+
+            return result;
+        };
+
+        var arr2BST = function (arr) {
+            if (!arr.length) {
+                return null;
+            }
+
+            const rootIndex = Math.floor(arr.length / 2);
+            const root = new TreeNode(arr[rootIndex]);
+            root.left = arr2BST(arr.slice(0, rootIndex));
+            root.right = arr2BST(arr.slice(rootIndex + 1));
+
+            return root;
+        };
+
+        function Node(val, next, random) {
+            this.val = val;
+            this.next = next;
+            this.random = random;
+        };
+
+
+        var computeArea = function (A, B, C, D, E, F, G, H) {
+
+        };
+
+
+        assertCompare(() => countNodes(makeTree([])), 0);
+        assertCompare(() => countNodes(makeTree([1, 2, 3, 4, 5, 6])), 6);
+
     </script>
 </body>
