@@ -1,241 +1,273 @@
 <!DOCTYPE html>
+
 <body>
-<script>
-
-function ListNode(val) {
-    this.val = val;
-    this.next = null;
-}
-
-function TreeNode(val) {
-    this.val = val;
-    this.left = null;
-    this.right = null;
-}
-
-const makeLink = (arr)=>{
-    if(!arr.length) {
-        return null;
-    }
-    let head = cur = new ListNode();
-    arr.forEach((v)=>{
-        cur.next = new ListNode(v);
-        cur = cur.next;
-    });
-
-    return head.next;
-}
-
-const makeTree = (arr)=>{
-    let head = new TreeNode(arr.shift());
-    let nodes = [head];
-    while(arr.length) {
-        let node = nodes.shift();
-        let left = arr.shift();
-        let right = arr.shift();
-        if(left||left===0) {
-            node.left = new TreeNode(left);
-            nodes.push(node.left);
+    <script>
+        function ListNode(val) {
+            this.val = val;
+            this.next = null;
         }
-        if(right||right===0) {
-            node.right = new TreeNode(right);
-            nodes.push(node.right);
+
+        function TreeNode(val) {
+            this.val = val;
+            this.left = null;
+            this.right = null;
         }
-    }
 
-    return head;
-}
+        const makeLink = (arr) => {
+            if (!arr.length) {
+                return null;
+            }
+            let head = cur = new ListNode();
+            arr.forEach((v) => {
+                cur.next = new ListNode(v);
+                cur = cur.next;
+            });
 
-function Node(val,isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
-    this.val = val;
-    this.isLeaf = isLeaf;
-    this.topLeft = topLeft;
-    this.topRight = topRight;
-    this.bottomLeft = bottomLeft;
-    this.bottomRight = bottomRight;
-};
-
-function TreeNode2(val, children) {
-    this.val = val;
-    this.children = children;
-}
-
-const bfs = function(root) {
-    let nodes = [];
-    let queue = [root];
-    while(queue.length) {
-        let node = queue.shift();
-        nodes.push(node);
-        if(node.left) {
-            queue.push(node.left);
+            return head.next;
         }
-        if(node.right) {
-            queue.push(node.right);
-        }
-    }
 
-    return nodes;
-};
-
-//先序遍历
-const preorderTraversal = function(root) {
-    const getLeftChildren = function(node) {
-        if(node.left) {
-            return preorderTraversal(node.left);
-        }else {
-            return [];
-        }
-    };
-
-    const getRightChildren = function(node) {
-        if(node.right) {
-            return preorderTraversal(node.right);
-        }else {
-            return [];
-        }
-    };
-
-    return getLeftChildren(root).concat([root]).concat(getRightChildren(root));
-};
-
-const getComplement = function(num, bit=32) {
-    let x = Math.abs(num).toString(2);
-    x = ((new Array(bit)).fill("0").join("") + x).slice(-32)
-    if(num<0) {
-        let xArr = x.split("");
-        let caret = 1;
-        for(let i = xArr.length-1; i>=0; i--) {
-            xArr[i] = xArr[i]==="1" ? "0" : "1";
-            if(caret) {
-                if(xArr[i]==="1") {
-                    xArr[i] = "0";
-                }else {
-                    caret = 0;
-                    xArr[i] = "1";
+        const makeTree = (arr) => {
+            if (!arr.length) {
+                return null;
+            }
+            let head = new TreeNode(arr.shift());
+            let nodes = [head];
+            while (arr.length) {
+                let node = nodes.shift();
+                let left = arr.shift();
+                let right = arr.shift();
+                if (left || left === 0) {
+                    node.left = new TreeNode(left);
+                    nodes.push(node.left);
                 }
+                if (right || right === 0) {
+                    node.right = new TreeNode(right);
+                    nodes.push(node.right);
+                }
+            }
+
+            return head;
+        }
+
+        function Node(val, isLeaf, topLeft, topRight, bottomLeft, bottomRight) {
+            this.val = val;
+            this.isLeaf = isLeaf;
+            this.topLeft = topLeft;
+            this.topRight = topRight;
+            this.bottomLeft = bottomLeft;
+            this.bottomRight = bottomRight;
+        };
+
+        function TreeNode2(val, children) {
+            this.val = val;
+            this.children = children;
+        }
+
+        const bfs = function (root) {
+            let nodes = [];
+            let queue = [root];
+            while (queue.length) {
+                let node = queue.shift();
+                nodes.push(node);
+                if (node.left) {
+                    queue.push(node.left);
+                }
+                if (node.right) {
+                    queue.push(node.right);
+                }
+            }
+
+            return nodes;
+        };
+
+        //先序遍历
+        const preorderTraversal = function (root) {
+            const getLeftChildren = function (node) {
+                if (node.left) {
+                    return preorderTraversal(node.left);
+                } else {
+                    return [];
+                }
+            };
+
+            const getRightChildren = function (node) {
+                if (node.right) {
+                    return preorderTraversal(node.right);
+                } else {
+                    return [];
+                }
+            };
+
+            return getLeftChildren(root).concat([root]).concat(getRightChildren(root));
+        };
+
+        const getComplement = function (num, bit = 32) {
+            let x = Math.abs(num).toString(2);
+            x = ((new Array(bit)).fill("0").join("") + x).slice(-32)
+            if (num < 0) {
+                let xArr = x.split("");
+                let caret = 1;
+                for (let i = xArr.length - 1; i >= 0; i--) {
+                    xArr[i] = xArr[i] === "1" ? "0" : "1";
+                    if (caret) {
+                        if (xArr[i] === "1") {
+                            xArr[i] = "0";
+                        } else {
+                            caret = 0;
+                            xArr[i] = "1";
+                        }
+                    }
+                }
+
+                x = xArr.join("");
+            }
+
+            return x;
+        };
+
+        const deconstructToPrimie = (num) => {
+            const result = [];
+            let cursor = 2;
+            while (num > 1) {
+                if (num % cursor == 0) {
+                    result.push(cursor);
+                    num /= cursor;
+                } else {
+                    cursor++;
+                }
+            }
+
+            return result;
+        };
+
+        const isPrime = (num) => {
+            if (num == 1) {
+                return false;
+            }
+            let cursor = 2;
+            const sqrt = ~~Math.sqrt(num);
+            while (num > 1 && cursor <= sqrt) {
+                if (num % cursor == 0) {
+                    return false;
+                }
+                cursor++;
+            }
+
+            return true;
+        };
+
+        const getDivisors = function (num) {
+            const result = {};
+            for (let i = 1, max = ~~Math.sqrt(num); i <= max; i++) {
+                let another = ~~(num / i);
+                if (i * another == num) {
+                    result[i] = 1;
+                    result[another] = 1;
+                }
+            }
+
+            return Object.keys(result);
+        };
+
+        function Node(val, isLeaf, topLeft, topRight, bottomLeft, bottomRight) {
+            this.val = val;
+            this.isLeaf = isLeaf;
+            this.topLeft = topLeft;
+            this.topRight = topRight;
+            this.bottomLeft = bottomLeft;
+            this.bottomRight = bottomRight;
+        };
+
+        const dfs = (root) => {
+            if (!root) {
+                return [];
+            }
+            return [root].concat(dfs(root.left), dfs(root.right));
+        };
+
+        /**
+         * @param {Node} root
+         * @return {number[]}
+         */
+        var postorder = function (root) {
+            const result = [];
+            const travels = (node) => {
+                if (!node) {
+                    return;
+                }
+                (node.children || []).forEach((child) => {
+                    travels(child);
+                });
+                result.push(node.val);
+            };
+
+            travels(root);
+            return result;
+        };
+
+        const getGroup = function (arr, count) {
+            let mid = ~~(arr.length / 2);
+            getGroup(arr.slice(0, mid), 1)
+            getGroup(arr.slice(mid), count - 1)
+
+            getGroup(arr.slice(0, mid), count - 1)
+            getGroup(arr.slice(mid), 1)
+        };
+
+        class Trie {
+            constructor() {
+                this.arr = [];
+                this.isWord = false;
+            }
+
+            insert(word) {
+                if (!word) {
+                    return
+                }
+                const queue = word.split('');
+                let current = this;
+                for (let i = 0; i < word.length; i++) {
+                    const ch = word[i];
+                    const index = ch.charCodeAt(0) - 97;
+                    let next = current.arr[index];
+                    if (!next) {
+                        next = current.arr[index] = new Trie();
+                    }
+                    current = next;
+                }
+                if (i == word.length - 1) {
+                    next.isWord = true;
+                }
+            }
+
+            search(word) {
+                const node = this._getPathNode(word);
+                return !!(node && node.isWord);
+            }
+
+            startsWith(prefix) {
+                return !!this._getPathNode(prefix);
+            }
+
+            _getPathNode(word) {
+                let current = this;
+                for (let i = 0; i < word.length; i++) {
+                    const next = current.arr[word[i].charCodeAt(0) - 97];
+                    if (!next) {
+                        return null;
+                    }
+                    current = next;
+                }
+                return current;
             }
         }
 
-        x = xArr.join("");
-    }
-
-    return x;
-};
-
-const deconstructToPrimie = (num)=>{
-    const result = [];
-    let cursor = 2;
-    while(num>1) {
-        if(num%cursor==0) {
-            result.push(cursor);
-            num /= cursor;
-        }else {
-            cursor++;
-        }
-    }
-
-    return result;
-};
-
-const isPrime = (num)=>{
-    if(num==1) {
-        return false;
-    }
-    let cursor = 2;
-    const sqrt = ~~Math.sqrt(num);
-    while(num>1 && cursor<=sqrt) {
-        if(num%cursor==0) {
-            return false;
-        }
-        cursor++;
-    }
-
-    return true;
-};
-
-const getDivisors = function(num) {
-    const result = {};
-    for(let i = 1, max = ~~Math.sqrt(num); i<=max; i++) {
-        let another = ~~(num/i);
-        if(i*another==num) {
-            result[i] = 1;
-            result[another] = 1;
-        }
-    }
-
-    return Object.keys(result);
-};
-
-function Node(val, isLeaf,topLeft,topRight,bottomLeft,bottomRight) {
-    this.val = val;
-    this.isLeaf = isLeaf;
-    this.topLeft = topLeft;
-    this.topRight = topRight;
-    this.bottomLeft = bottomLeft;
-    this.bottomRight = bottomRight;
-};
-
-const dfs = (root)=>{
-    if(!root) {
-        return [];
-    }
-    return [root].concat(dfs(root.left), dfs(root.right));
-};
-
-/**
- * @param {Node} root
- * @return {number[]}
- */
-var postorder = function(root) {
-    const result = [];
-    const travels = (node) => {
-        if(!node) {
-            return;
-        }
-        (node.children||[]).forEach((child)=>{
-            travels(child);
-        });
-        result.push(node.val);
-    };
-
-    travels(root);
-    return result;
-};
-
-const getGroup = function(arr, count) {
-    let mid = ~~(arr.length/2);
-    getGroup(arr.slice(0, mid), 1)
-    getGroup(arr.slice(mid), count-1)
-
-    getGroup(arr.slice(0, mid), count-1)
-    getGroup(arr.slice(mid), 1)
-};
-
-/**
- * @param {number} candies
- * @param {number} num_people
- * @return {number[]}
- */
-var distributeCandies = function(candies, num_people) {
-   let sum = 0;
-   let pos = 0;
-   const result = (new Array(num_people)).fill(0);
-   for(let i = 1; ; i++) {
-        result[pos] += i;
-        sum += i;
-        if(sum>candies) {
-            result[pos] = result[pos] + candies - sum;
-            break;
-        }else if(sum==candies) {
-            break;
-        }
-        pos = (++pos)%num_people;
-   }
-
-   return result;
-};
-console.log(distributeCandies(7, 4));//[1,2,3,1]
-console.log(distributeCandies(10, 3));//[5,2,3]
-console.log(distributeCandies(10**9, 1000));//[5,2,3]
-</script>
+        const trie = new Trie();
+        console.log(trie.insert("apple"));
+        console.log(trie.search("apple"));   // returns true
+        console.log(trie.search("app"));     // returns false
+        console.log(trie.startsWith("app")); // returns true
+        console.log(trie.insert("app"));
+        console.log(trie.search("app"));     // returns true
+    </script>
 </body>
