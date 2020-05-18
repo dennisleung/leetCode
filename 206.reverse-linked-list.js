@@ -37,21 +37,70 @@
  * @param {ListNode} head
  * @return {ListNode}
  */
+// var reverseList = function(head) {
+//     const arr = [];
+//     while(head) {
+//         arr.push(head);
+//         head = head.next;
+//     }
+//     arr.reverse();
+//     head = new ListNode();
+//     cur = head;
+//     for(node of arr) {
+//         node.next = null;
+//         cur.next = node;
+//         cur = node;
+//     }
+
+//     return head.next;
+// };
+
+
+// var reverseList = function(head) {
+//     if(!head) {
+//         return null;
+//     }
+//     let cur = head;
+//     let next = cur.next;
+//     cur.next = null;
+//     while(next) {
+//         let tmp = next.next;
+//         next.next = cur;
+//         cur = next;
+//         next = tmp;
+//     }
+
+//     return cur;
+// };
+
+// var reverseList = function(head) {
+//     if(!head) {
+//         return null;
+//     }
+    
+//     let cur = head;
+//     let pre = null;
+//     while(cur) {
+//         let tmp = cur.next;
+//         cur.next = pre;
+//         pre = cur;
+//         cur = tmp;
+//     }
+
+//     return pre;
+// };
+
 var reverseList = function(head) {
-    const arr = [];
-    while(head) {
-        arr.push(head);
-        head = head.next;
+    if(!head) {
+        return null;
     }
-    arr.reverse();
-    head = new ListNode();
-    cur = head;
-    for(node of arr) {
-        node.next = null;
-        cur.next = node;
-        cur = node;
+    
+    let cur = head;
+    let pre = null;
+    while(cur) {
+        [cur.next, pre, cur] = [pre, cur, cur.next];
     }
 
-    return head.next;
+    return pre;
 };
 

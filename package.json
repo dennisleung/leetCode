@@ -1,0 +1,31 @@
+{
+  "name": "leetcode",
+  "version": "1.0.0",
+  "description": "Daily exercise for logical maintaining on leetCdoe.",
+  "main": "index.test.js",
+  "scripts": {
+    "dev": "node ./babel.js ./index.test.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dennisleung/leetCode.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dennisleung/leetCode/issues"
+  },
+  "homepage": "https://github.com/dennisleung/leetCode#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/register": "^7.9.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^26.0.1",
+    "babel-node": "^0.0.1-security",
+    "babel-preset-env": "^1.7.0",
+    "regenerator-runtime": "^0.13.5"
+  }
+}

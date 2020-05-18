@@ -76,19 +76,37 @@
  * @param {ListNode} head
  * @return {boolean}
  */
+// var hasCycle = function(head) {
+//     if(!head) {//sanity check
+//         return false;
+//     }
+
+//     const s = new Set();
+//     while(head) {
+//         if(s.has(head)) {
+//             return true;
+//         }
+//         s.add(head, 1);
+//         head = head.next;
+//     }
+//     return false;
+// };
+
 var hasCycle = function(head) {
-    if(!head) {//sanity check
+    if(!head) {
         return false;
     }
 
-    const s = new Set();
-    while(head) {
-        if(s.has(head)) {
+    let slow = head;
+    let fast= slow.next;
+    while(fast) {
+        if(slow===fast) {
             return true;
         }
-        s.add(head, 1);
-        head = head.next;
+        slow = slow.next;
+        fast = fast.next && fast.next.next;
     }
+
     return false;
 };
 
