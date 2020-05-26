@@ -1,68 +1,24 @@
-import {ListNode, makeLink} from "./basic.js"
+import { makeLink, ListNode, makeTree } from "./basic.js";
 
-var reverseKGroup = function(head, k) {
-    const helper = function(pre) {
-        let count = 0;
-        let cur = pre.next;
-        while(cur && count++<k) {
-            cur = cur.next;
-        }
-        if(count<k) {
-            return null;
-        }
-        let head = pre.next;
-        let stub = pre.next;
-        cur = stub.next;
-        let i = 0;
-        while(cur && ++i<k) {
-            [head.next, stub, cur.next, cur] = [cur.next, cur, stub, cur.next];
-        }
-        pre.next = stub;
-        
-        return head;
-    };
+// Runtime: 56 ms, faster than 46.66% of JavaScript online submissions for Climbing Stairs.
+// Memory Usage: 32.8 MB, less than 100.00% of JavaScript online submissions for Climbing Stairs.
+var climbStairs = function (n) {
+  const arr = [1, 1];
+  for (let i = 2; i <= n; i++) {
+    arr[i] = arr[i - 1] + arr[i - 2];
+  }
 
-    const root = new ListNode();
-    root.next = head;
-    let pre = root;
-    while(pre) {
-        pre = helper(pre);
-    }
-    
-    return root.next;
+  return arr[n];
 };
 
-test("test1", ()=>{
-    const list = makeLink([]);
-    expect(reverseKGroup(list, 1)).toEqual(makeLink([]));
-})
+test("test1", () => {
+  expect(climbStairs(2)).toEqual(2);
+});
 
-test("test2", ()=>{
-    const list = makeLink([1]);
-    expect(reverseKGroup(list, 1)).toEqual(makeLink([1]));
-})
+test("test2", () => {
+  expect(climbStairs(0)).toEqual(1);
+});
 
-test("test3", ()=>{
-    const list = makeLink([1]);
-    expect(reverseKGroup(list, 2)).toEqual(makeLink([1]));
-})
-
-test("test4", ()=>{
-    const list = makeLink([1,2,3]);
-    expect(reverseKGroup(list, 2)).toEqual(makeLink([2,1,3]));
-})
-
-test("test5", ()=>{
-    const list = makeLink([1,2,3]);
-    expect(reverseKGroup(list, 3)).toEqual(makeLink([3,2,1]));
-})
-
-test("test6", ()=>{
-    const list = makeLink([1,2,3,4,5,6]);
-    expect(reverseKGroup(list, 3)).toEqual(makeLink([3,2,1,6,5,4]));
-})
-
-test("test7", ()=>{
-    const list = makeLink([1,2,3,4,5]);
-    expect(reverseKGroup(list, 3)).toEqual(makeLink([3,2,1,4,5]));
-})
+test("test3", () => {
+  expect(climbStairs(3)).toEqual(3);
+});

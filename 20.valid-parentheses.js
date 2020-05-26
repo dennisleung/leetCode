@@ -83,3 +83,40 @@ var isValid = function(s) {
     return !stack.length;
 };
 
+
+
+test("test1", ()=>{
+    expect(isValid("")).toEqual(true);
+})
+
+test("test2", ()=>{
+    expect(isValid("{")).toEqual(false);
+})
+
+test("test3", ()=>{
+    expect(isValid("{}}")).toEqual(false);
+})
+
+test("test4", ()=>{
+    expect(isValid("{}")).toEqual(true);
+})
+
+test("test5", ()=>{
+    expect(isValid("[]{}()")).toEqual(true);
+})
+
+test("test6", ()=>{
+    expect(isValid("[[[[]")).toEqual(false);
+})
+
+test("test7", ()=>{
+    expect(isValid("[{}]")).toEqual(true);
+})
+
+test("test8", ()=>{
+    expect(isValid("[{]}")).toEqual(false);
+})
+
+test("test8", ()=>{
+    expect(isValid("]][[")).toEqual(false);
+})

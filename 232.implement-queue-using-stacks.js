@@ -47,8 +47,24 @@
 /**
  * Initialize your data structure here.
  */
+class Stack {
+    constructor() {
+        this.stack = [];
+    }
+    push(x) {
+        this.stack.push(x);
+    }
+    pop() {
+        return this.stack.pop();
+    }
+    empty() {
+        return !this.stack.length;
+    }
+}
+
 var MyQueue = function() {
-    this.queue = [];
+    this.input = new Stack();
+    this.output = new Stack();
 };
 
 /**
@@ -57,7 +73,7 @@ var MyQueue = function() {
  * @return {void}
  */
 MyQueue.prototype.push = function(x) {
-    this.queue.push(x);
+    this.input.push(x);
 };
 
 /**
@@ -65,7 +81,8 @@ MyQueue.prototype.push = function(x) {
  * @return {number}
  */
 MyQueue.prototype.pop = function() {
-    return this.queue.splice(0, 1)[0];
+    this._adjust();
+    return this.output.pop();
 };
 
 /**
@@ -73,7 +90,21 @@ MyQueue.prototype.pop = function() {
  * @return {number}
  */
 MyQueue.prototype.peek = function() {
-    return this.queue[0];
+    this._adjust();
+    const peekEl = this.output.pop();
+    this.output.push(peekEl);
+
+    return peekEl;
+};
+
+MyQueue.prototype._adjust = function() {
+    if(!this.output.empty()) {
+        return;
+    }
+
+    while(!this.input.empty()) {
+        this.output.push(this.input.pop());
+    }
 };
 
 /**
@@ -81,15 +112,26 @@ MyQueue.prototype.peek = function() {
  * @return {boolean}
  */
 MyQueue.prototype.empty = function() {
-    return !this.queue.length;
+    return this.input.empty() && this.output.empty();
 };
 
-/** 
- * Your MyQueue object will be instantiated and called as such:
- * var obj = new MyQueue()
- * obj.push(x)
- * var param_2 = obj.pop()
- * var param_3 = obj.peek()
- * var param_4 = obj.empty()
- */
 
+const queue = new MyQueue();
+queue.push(1);
+queue.push(2);
+test("test1", ()=>{
+    expect(queue.peek()).toEqual(1);
+})
+
+test("test2", ()=>{
+    expect(queue.pop()).toEqual(1);
+})
+
+test("test3", ()=>{
+    expect(queue.empty()).toEqual(false);
+})
+
+test("test4", ()=>{
+    queue.pop();
+    expect(queue.empty()).toEqual(true);
+})
