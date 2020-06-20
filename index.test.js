@@ -1,24 +1,33 @@
-import { makeLink, ListNode, makeTree } from "./basic.js";
+import { makeLink, ListNode, makeTree, UFS } from "./basic.js";
 
-// Runtime: 56 ms, faster than 46.66% of JavaScript online submissions for Climbing Stairs.
-// Memory Usage: 32.8 MB, less than 100.00% of JavaScript online submissions for Climbing Stairs.
-var climbStairs = function (n) {
-  const arr = [1, 1];
-  for (let i = 2; i <= n; i++) {
-    arr[i] = arr[i - 1] + arr[i - 2];
+// Runtime: 72 ms, faster than 48.84% of JavaScript online submissions for Find the Duplicate Number.
+// Memory Usage: 36.1 MB, less than 55.24% of JavaScript online submissions for Find the Duplicate Number.
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findDuplicate = function (nums) {
+  let slow = nums[0];
+  let fast = nums[slow];
+  while (slow !== fast) {
+    slow = nums[slow];
+    fast = nums[nums[fast]];
   }
 
-  return arr[n];
+  slow = 0;
+  while (slow != fast) {
+    slow = nums[slow];
+    fast = nums[fast];
+  }
+
+  return slow;
 };
 
 test("test1", () => {
-  expect(climbStairs(2)).toEqual(2);
+  expect(findDuplicate([1, 3, 4, 2, 2])).toEqual(2);
 });
 
 test("test2", () => {
-  expect(climbStairs(0)).toEqual(1);
-});
-
-test("test3", () => {
-  expect(climbStairs(3)).toEqual(3);
+  expect(findDuplicate([3, 1, 3, 4, 2])).toEqual(3);
 });
